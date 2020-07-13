@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcsmith.a  CMakeFiles/libcsmith_a.dir/volatile_runtime.c.o
+/usr/bin/ranlib libcsmith.a

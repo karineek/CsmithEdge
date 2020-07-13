@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kar/csmith/runtime/volatile_runtime.c
+config.h
+-
+volatile_runtime.h
+/home/kar/csmith/runtime/volatile_runtime.h
+
+/home/kar/csmith/runtime/volatile_runtime.h
+stdint.h
+-
+
+config.h
+

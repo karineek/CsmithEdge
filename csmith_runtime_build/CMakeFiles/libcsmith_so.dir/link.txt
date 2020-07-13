@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC   -shared -Wl,-soname,libcsmith.so.0 -o libcsmith.so.0.0.0 CMakeFiles/libcsmith_so.dir/volatile_runtime.c.o 
