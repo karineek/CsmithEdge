@@ -1,0 +1,52 @@
+#### GCC-7, stock csmith, functions, no compiler optimization ####
+modify=0 														# 0-original, 1-modify
+csmith_location=../../../expriments/llvm/llvm-csmith-1/csmith 	# csmith location
+csmith_flags=" --bitfields --packed-struct" 					#" --bitfields --packed-struct --math-notmp" 
+configuration_location=../../Data/comp_confg/compiler_test_B.in # config file locatoin
+outputs_location=../../ 										# where we will put all outputs
+compile_line="-I$csmith_location/runtime -w -O" 				# how we compile it
+
+
+#### GCC-7, stock csmith, macros, no compiler optimization ####
+modify=0 														# 0-original, 1-modify
+csmith_location=../../../expriments/llvm/llvm-csmith-1/csmith 	# csmith location
+csmith_flags=" --bitfields --packed-struct" 					#" --bitfields --packed-struct --math-notmp" 
+configuration_location=../../Data/comp_confg/compiler_test_B.in # config file locatoin
+outputs_location=../../ 										# where we will put all outputs
+compile_line="-I$csmith_location/runtime -DUSE_MATH_MACROS -w -O" 	# how we compile it
+
+
+#### GCC-7, stock csmith, macros no-temp-version, no compiler optimization ####
+modify=0 														# 0-original, 1-modify
+csmith_location=../../../expriments/llvm/llvm-csmith-1/csmith 	# csmith location
+csmith_flags=" --bitfields --packed-struct --math-notmp" 		#" --bitfields --packed-struct --math-notmp" 
+configuration_location=../../Data/comp_confg/compiler_test_B.in # config file locatoin
+outputs_location=../../ 										# where we will put all outputs
+compile_line="-I$csmith_location/runtime -DUSE_MATH_MACROS_NOTMP -w -O" # how we compile it
+
+
+#### GCC-7, modified csmith, functions, no compiler optimization ####
+modify=1 														# 0-original, 1-modify
+csmith_location=../../csmith 									# csmith location
+csmith_flags=" --bitfields --packed-struct" 					#" --bitfields --packed-struct --math-notmp" 
+configuration_location=../../Data/comp_confg/compiler_test_B.in # config file locatoin
+outputs_location=../../ 										# where we will put all outputs
+compile_line="-I../../csmith_runtime_orig -I../../csmith_runtime_orig_build -w -O" #how we compile it
+
+
+#### GCC-7, modified csmith, macros, no compiler optimization ####
+modify=1 														# 0-original, 1-modify
+csmith_location=../../csmith 									# csmith location
+csmith_flags=" --bitfields --packed-struct" 					#" --bitfields --packed-struct --math-notmp" 
+configuration_location=../../Data/comp_confg/compiler_test_B.in # config file locatoin
+outputs_location=../../ 										# where we will put all outputs
+compile_line="-I../../csmith_runtime_orig -I../../csmith_runtime_orig_build -DUSE_MATH_MACROS -w -O" # how we compile it
+
+
+#### GCC-7, modified csmith, macros no-temp-version, no compiler optimization ####
+modify=1 														# 0-original, 1-modify
+csmith_location=../../csmith 									# csmith location
+csmith_flags=" --bitfields --packed-struct --math-notmp" 		#" --bitfields --packed-struct --math-notmp" 
+configuration_location=../../Data/comp_confg/compiler_test_B.in # config file locatoin
+outputs_location=../../ 										# where we will put all outputs
+compile_line="-I../../csmith_runtime_orig -I../../csmith_runtime_orig_build -DUSE_MATH_MACROS_NOTMP -w -O" 	# how we compile it
