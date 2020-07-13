@@ -4,7 +4,25 @@ Experimental data and scripts to reproduce the results reported in ASE-NIER 2020
 
 Tools in use
 ------------
-1. csmith 
-2. gfauto
+1. csmith (clone version: 8115771, 13 of April 2020).
+2. gfauto (clone version: 8d0d03f, 14 of May 2020).
 
-** see subfolders, we modified few files in each.
+** see subfolders, we modified few files in each. Replace the files in these folders with ours.
+
+Coverage scipts 
+---------------
+SETUP: with scripts scripts/install_machine_cov_sw.sh, scripts/0-download-csmith-gcc.sh, scripts/1-install-csmith-gcc-opt-v1.sh. 
+  (i) Run these 3 scripts to setup the environment with tools and gcc last version. 
+ (ii) Copy the files required for csmith and gfauto.
+(iii) Re-compile csmith.
+ (iv) Run dev_shell.sh.template (gfauto).
+ 
+ RUN:
+ Use the scripts in CEdgeSmith/scripts/RRS-v3-gcc/. 
+   (i) Edit the scripts to contain the string of your base folder.
+  (ii) 3-clear_Machine.sh :  clean the machine.
+ (iii) 4_script-s_settings.txt : setup fresh environment.
+  (iv) 5-test-dest-machine.sh : test the setup is OK.
+   (v) 5-compute-coverage_RSS-gfauto-gcc.sh : run the experiments.
+  (vi) 6-collect-data2mars.sh : collect results form all machines if run distributively (we did run distributively on 10 machines).
+ (vii) 7-gen-statistic-gcov-diff-tab_gfauto.sh : run gfauto to generate human readable outputs.
