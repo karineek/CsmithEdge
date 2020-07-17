@@ -31,8 +31,14 @@ Last step, follow the instructions in readme files in subfolders ([Readme file 1
 
 Preparing the data
 ------------------
-
-
+Each Csmith compiler test-case has a relaxed version. This verion is created by first generating a list of location in the test case of calls to safe-math wrapptes that are must-be-safe calls. We relaxe any other call to safe-math wrapper if not on this list. We generate these lists via this script:
+```
+/scripts/RSS-v2-general/RSS3_1_extract_mustBsafe_list.sh <reference-compiler> <seeds-file>
+```
+You can use our wrapper script to generate the data:
+```
+./scripts/RSS-v2-general/3-prepare-modification-lists.sh
+```
 
 Coverage scipts 
 ---------------
