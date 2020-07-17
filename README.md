@@ -9,6 +9,18 @@ Tools in use
 
 ** see subfolders, we modified few files in each. Replace the files in these folders with ours.
 
+Setting the environment
+-----------------------
+
+Download gcc and csmith:
+```
+./script/RSS-v2-general/0-download-csmith-gcc.sh
+```
+The script pulls source code and required packages into a temporary forlder (printed at the end of the script). This temporary folder is the input of the next script that compile and install gcc and csmith:
+```
+./script/RSS-v2-general/1-install-csmith-gcc-opt-v0.sh <temp-folder-output-of-script-0>
+```
+
 Coverage scipts 
 ---------------
 SETUP: with scripts scripts/install_machine_cov_sw.sh, scripts/0-download-csmith-gcc.sh, scripts/1-install-csmith-gcc-opt-v1.sh. 
