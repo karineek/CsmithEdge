@@ -26,3 +26,8 @@ SETUP: with scripts scripts/install_machine_cov_sw.sh, scripts/0-download-csmith
    (v) 5-compute-coverage_RSS-gfauto-gcc.sh : run the experiments.
   (vi) 6-collect-data2mars.sh : collect results form all machines if run distributively (we did run distributively on 10 machines).
  (vii) 7-gen-statistic-gcov-diff-tab_gfauto.sh : run gfauto to generate human readable outputs.
+
+Diff-testing scripts
+--------------------
+Generating Pairs of programs (csmith,CEdgeSmith) by:
+./scripts/RRS-v2-gen-prog-pairs/4-get-results-compiler-seeds_gen_mod_c_only.sh (seeds are taken from seeds_out_test.txt in the same folder the script is)
