@@ -39,7 +39,7 @@ You can use our wrapper script to generate the data:
 ```
 ./scripts/RSS-v2-general/3-prepare-modification-lists.sh
 ```
-We kept the safe-lists files used for the experiments in the paper in [scripts/RSS-v2-general/seedsSafeLists] (https://github.com/karineek/CEdgeSmith/tree/master/scripts/RSS-v2-general/seedsSafeLists).
+We kept the safe-lists files used for the experiments in the paper in [scripts/RSS-v2-general/seedsSafeLists](https://github.com/karineek/CEdgeSmith/tree/master/scripts/RSS-v2-general/seedsSafeLists).
 
 Coverage scipts 
 ---------------
