@@ -1,8 +1,10 @@
 # We use gfauto to measure coverage.
 
 ## Getting the repository: 
+```
 git clone https://github.com/google/graphicsfuzz.git
-Then
+```
+and then
 ```
 cd graphicsfuzz/gfauto/ 
 ./dev_shell.sh.template
