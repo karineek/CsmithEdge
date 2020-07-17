@@ -26,6 +26,9 @@ Then remove the temporary folder from script 0:
 ```
 ** Note: the scripts requires editing "working_folder=/home/user42" to your working folder. **
 
+Last step, follow the instructions in readme files in subfolders [Readme file 1](https://github.com/karineek/CEdgeSmith/blob/master/csmith/README.md) [Readme file 2](https://github.com/karineek/CEdgeSmith/blob/master/gfauto/README.md) to install csmith and gfauto to work properly with our scripts.
+
+
 Preparing the data
 ------------------
 
