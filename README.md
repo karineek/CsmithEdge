@@ -20,6 +20,7 @@ The script pulls source code and required packages into a temporary forlder (pri
 ```
 ./script/RSS-v2-general/1-install-csmith-gcc-opt-v0.sh <temp-folder-output-of-script-0>
 ```
+** Note: both scripts requires editing "working_folder=/home/user42" to your working folder. **
 
 Coverage scipts 
 ---------------
