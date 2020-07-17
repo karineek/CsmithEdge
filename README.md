@@ -26,6 +26,11 @@ Then remove the temporary folder from script 0:
 ```
 ** Note: the scripts requires editing "working_folder=/home/user42" to your working folder. **
 
+Preparing the data
+------------------
+
+
+
 Coverage scipts 
 ---------------
 SETUP: with scripts scripts/install_machine_cov_sw.sh, scripts/0-download-csmith-gcc.sh, scripts/1-install-csmith-gcc-opt-v1.sh. 
