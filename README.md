@@ -14,13 +14,17 @@ Setting the environment
 
 Download gcc and csmith:
 ```
-./script/RSS-v2-general/0-download-csmith-gcc.sh
+./script/0-download-csmith-gcc.sh
 ```
 The script pulls source code and required packages into a temporary forlder (printed at the end of the script). This temporary folder is the input of the next script that compile and install gcc and csmith:
 ```
-./script/RSS-v2-general/1-install-csmith-gcc-opt-v0.sh <temp-folder-output-of-script-0>
+./script/1-install-csmith-gcc-opt-v0.sh <temp-folder-output-of-script-0>
 ```
-** Note: both scripts requires editing "working_folder=/home/user42" to your working folder. **
+Then remove the temporary folder from script 0:
+```
+./script/2-clean-tmp.sh <temp-folder-output-of-script-0>
+```
+** Note: the scripts requires editing "working_folder=/home/user42" to your working folder. **
 
 Coverage scipts 
 ---------------
