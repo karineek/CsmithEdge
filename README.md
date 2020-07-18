@@ -48,8 +48,8 @@ You can use our wrapper script to generate the data:
 ```
 We kept the safe-lists files used for the experiments in the paper in [scripts/RSS-v2-general/seedsSafeLists](https://github.com/karineek/CEdgeSmith/tree/master/scripts/RSS-v2-general/seedsSafeLists). To construct these lists we used [earlier version of Csmith](https://github.com/karineek/CEdgeSmith/blob/master/scripts/csmith_version_gen_seeds.txt) and copied the required changes from Csmith version 8115771 (that is, the safe_math and safe_math_macros headers). 
 
-Coverage scipts 
----------------
+Measuring coverage 
+------------------
 SETUP: with scripts scripts/install_machine_cov_sw.sh, scripts/0-download-csmith-gcc.sh, scripts/1-install-csmith-gcc-opt-v1.sh. 
   (i) Run these 3 scripts to setup the environment with tools and gcc last version. 
  (ii) Copy the files required for csmith and gfauto.
