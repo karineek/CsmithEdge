@@ -1,0 +1,7 @@
+/*
+ * This is a RANDOMLY GENERATED PROGRAM.
+ *
+ * Generator: csmith 2.4.0
+ * Git version: d619b03
+ * Options:   --seed 3747116391 --bitfields --packed-struct
+ */
