@@ -26,6 +26,13 @@ Then remove the temporary folder from script 0:
 ```
 ** Note: the scripts requires editing "working_folder=/home/user42" to your working folder. **
 
+**Troubleshooting**: if you get errors during build of GCC from source as the following
+"configure: error: Building GCC requires GMP 4.2+, MPFR 3.1.0+ and MPC 0.8.0+.
+ Try the --with-gmp, --with-mpfr and/or --with-mpc options to specify"
+run before script-1:
+```
+run 0-reinstall-csmith-gcc.sh <temp-folder-output-of-script-0>.
+```
 Last step, follow the instructions in readme files in subfolders ([Readme file 1](https://github.com/karineek/CEdgeSmith/blob/master/csmith/README.md) and [Readme file 2](https://github.com/karineek/CEdgeSmith/blob/master/gfauto/README.md)) to install csmith and gfauto to work properly with our scripts.
 
 
