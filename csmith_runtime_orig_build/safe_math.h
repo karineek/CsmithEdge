@@ -946,7 +946,7 @@ FUNC_NAME(rshift_func_uint64_t_u_u)(uint64_t left, unsigned int right LOG_INDEX)
 
 
 
-/*
+
 #ifdef __STDC__
 
 
@@ -1186,7 +1186,7 @@ FUNC_NAME(div_func_double_f_f)(double sf1, double sf2 LOG_INDEX)
 
 
 #endif
-*/
+
 
 
 
