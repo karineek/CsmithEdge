@@ -9,6 +9,38 @@ Tools in use
 
 ** see subfolders, we modified few files in each. Replace the files in these folders with ours.
 
+Setting the environment
+-----------------------
+
+Download gcc and csmith:
+```
+./script/0-download-csmith-gcc.sh
+```
+The script pulls source code and required packages into a temporary forlder (printed at the end of the script). This temporary folder is the input of the next script that compile and install gcc and csmith:
+```
+./script/1-install-csmith-gcc-opt-v0.sh <temp-folder-output-of-script-0>
+```
+Then remove the temporary folder from script 0:
+```
+./script/2-clean-tmp.sh <temp-folder-output-of-script-0>
+```
+** Note: the scripts requires editing "working_folder=/home/user42" to your working folder. **
+
+Last step, follow the instructions in readme files in subfolders ([Readme file 1](https://github.com/karineek/CEdgeSmith/blob/master/csmith/README.md) and [Readme file 2](https://github.com/karineek/CEdgeSmith/blob/master/gfauto/README.md)) to install csmith and gfauto to work properly with our scripts.
+
+
+Preparing the data
+------------------
+Each Csmith compiler test-case has a relaxed version. This verion is created by first generating a list of location in the test case of calls to safe-math wrapptes that are must-be-safe calls. We relaxe any other call to safe-math wrapper if not on this list. We generate these lists via this script:
+```
+/scripts/RSS-v2-general/RSS3_1_extract_mustBsafe_list.sh <reference-compiler> <seeds-file>
+```
+You can use our wrapper script to generate the data:
+```
+./scripts/RSS-v2-general/3-prepare-modification-lists.sh
+```
+We kept the safe-lists files used for the experiments in the paper in [scripts/RSS-v2-general/seedsSafeLists](https://github.com/karineek/CEdgeSmith/tree/master/scripts/RSS-v2-general/seedsSafeLists).
+
 Coverage scipts 
 ---------------
 SETUP: with scripts scripts/install_machine_cov_sw.sh, scripts/0-download-csmith-gcc.sh, scripts/1-install-csmith-gcc-opt-v1.sh. 
