@@ -14,15 +14,15 @@ Setting the environment
 
 Download gcc and csmith:
 ```
-./script/0-download-csmith-gcc.sh
+./scripts/0-download-csmith-gcc.sh
 ```
 The script pulls source code and required packages into a temporary forlder (printed at the end of the script). This temporary folder is the input of the next script that compile and install gcc and csmith:
 ```
-./script/1-install-csmith-gcc-opt-v0.sh <temp-folder-output-of-script-0>
+./scripts/1-install-csmith-gcc-opt-v0.sh <temp-folder-output-of-script-0>
 ```
 Then remove the temporary folder from script 0:
 ```
-./script/2-clean-tmp.sh <temp-folder-output-of-script-0>
+./scripts/2-clean-tmp.sh <temp-folder-output-of-script-0>
 ```
 ** Note: the scripts requires editing "working_folder=/home/user42" to your working folder. **
 
@@ -31,7 +31,7 @@ Then remove the temporary folder from script 0:
  Try the --with-gmp, --with-mpfr and/or --with-mpc options to specify"
 run before script-1:
 ```
-run 0-reinstall-csmith-gcc.sh <temp-folder-output-of-script-0>.
+./scripts/0-reinstall-csmith-gcc.sh <temp-folder-output-of-script-0>.
 ```
 Last step, follow the instructions in readme files in subfolders ([Readme file 1](https://github.com/karineek/CEdgeSmith/blob/master/csmith/README.md) and [Readme file 2](https://github.com/karineek/CEdgeSmith/blob/master/gfauto/README.md)) to install csmith and gfauto to work properly with our scripts.
 
