@@ -51,8 +51,8 @@ do
 			export CXXFLAGS='-g -O0 --coverage -ftest-coverage -fprofile-arcs'
 			export LDFLAGS='-lgcov --coverage -ftest-coverage -fprofile-arcs'
 
-			./../gcc-source/configure --disable-multilib --disable-bootstrap --enable-coverage=noopt --enable-targets='X86' --enable-languages='c,c++,lto,objc,obj-c++' --with-gmp=/tmp/gcc --with-mpfr=/tmp/gcc --with-mpc=/tmp/gcc --with-isl=/tmp/isl --prefix=$working_folder/gcc-csmith-$i/gcc-install/ CFLAGS_FOR_TARGET='-g -O0 --coverage -ftest-coverage -fprofile-arcs' CXXFLAGS_FOR_TARGET='-g -O0 --coverage -ftest-coverage -fprofile-arcs' > $working_folder/gcc-csmith-$i/compilation_info/config_output.txt 2>&1
-
+			./../gcc-source/configure --disable-multilib --disable-bootstrap --enable-coverage=noopt --enable-targets='X86' --enable-languages='c,c++,lto,objc,obj-c++' --with-gmp=/tmp/gcc/ --with-mpfr=/tmp/gcc/ --with-mpc=/tmp/gcc/ --with-isl=/tmp/isl --prefix=$working_folder/gcc-csmith-$i/gcc-install/ CFLAGS_FOR_TARGET='-g -O0 --coverage -ftest-coverage -fprofile-arcs' CXXFLAGS_FOR_TARGET='-g -O0 --coverage -ftest-coverage -fprofile-arcs' > $working_folder/gcc-csmith-$i/compilation_info/config_output.txt 2>&1
+		
 		 	make -j$(nproc) > $working_folder/gcc-csmith-$i/compilation_info/build_output.txt 2>&1
 			make -j$(nproc) install > $working_folder/gcc-csmith-$i/compilation_info/install_output.txt 2>&1
 			#### WE KEEP build, install and source folders sperated. ####
