@@ -65,3 +65,15 @@ SETUP: with scripts scripts/install_machine_cov_sw.sh, scripts/0-download-csmith
    (v) 5-compute-coverage_RSS-gfauto-gcc.sh : run the experiments.
   (vi) 6-collect-data2mars.sh : collect results form all machines if run distributively (we did run distributively on 10 machines).
  (vii) 7-gen-statistic-gcov-diff-tab_gfauto.sh : run gfauto to generate human readable outputs.
+
+ 
+Additional scripts
+------------------
+To generate pairs of test-cases (Csmith and CEdgeSmith with the same seed), use the following script
+```
+./scripts/RRS-v2-gen-prog-pairsRSS4_1-compiler_test_r.sh 0 1 <seed_file> <csmith-folder-inCEdgesmith> ../../Data/comp_confg/compiler_test_D.in <output-location> <CEdgeSmith-runtime-folders> <test-cases-compile-line-options> <csmith-flags>
+``` 
+or update the parameters in a wrapper script: 4-get-results-compiler-seeds_gen_mod_c_only.sh, and run
+```
+./scripts/RRS-v2-gen-prog-pairs/4-get-results-compiler-seeds_gen_mod_c_only.sh
+```
