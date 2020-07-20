@@ -1,15 +1,11 @@
 #!/bin/bash 
 process_number=$1
-machine_number=$2
 baseD=/home/user42
 working_folder=$baseD/gcc-csmith-$process_number
 gitL=$baseD/git/RRS_EXPR
 marsLocation=/data/compiler-testing-RRS
 zipMachine=gcc-csmith-1.PLOTylK.tar.gz
-
-#modify=0 # 0 or 1
-#dateLast=13052020
-#csmithmode=macr # func, macr
+#zipMachine=gcc-csmith-$process_number.PLOTylK.tar.gz
 
 if [ -z "$1" ]
   then
