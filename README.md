@@ -70,30 +70,28 @@ We tested that all data was ready for the experiment by running
 ```
 ./CEdgeSmith/RRS-v3-gcc/5-test-dest-machine.sh <process-id> 
 ```
-Note1: Repeat per-precess (the number is set before in script-1 in nb_processes) if you run the experiment in parallel. We just set it to 1.
+Note1: Repeat per-precess (the number is set before in script-1 in nb_processes), if you run the experiment in parallel. We just set it to 1.
 Note2: The different parameters we used in our experiments (for Csmith, Csmith-macros, CEdgeSmith, and CEdgeSmith-macros) are in 4_script-s_settings.txt. You can use it to alter scripts-5 to measure coverage for each of the tools with macros or functions math-safe wrappers. 
 
 We measure coverage by running scipt 5-compute-coverage_RSS-gfauto-gcc.sh and generate a report with 7-gen-statistic-gcov-diff-tab_gfauto.sh. The scripts have regular mode and distribute mode. You need to run with at least two different settings (taken from 4_script-s_settings.txt) to generate a report; for example to comapre the coverage between Csmith and CEdgeSmith-macros.
+
 **Regular mode**: Run script-5 to generate compiler test-cases and measure coverage,
 ```
 ./CEdgeSmith/RRS-v3-gcc/5-compute-coverage_RSS-gfauto-gcc.sh <process-id> 
 ```
-this script prints in the end the output folder where the coverage results are.
-Run this script twice in different locations (each with a fresh build of gcc), and compare the coverage
+this script prints in the end the output folder where the coverage results are. If you use only one process per-machine, set process-id to be 1. Run this script twice in different locations (each with a fresh build of gcc), and compare the coverage
 ```
 ./CEdgeSmith/RRS-v3-gcc/7-gen-statistic-gcov-diff-tab_gfauto.sh <cov-results-folder-1> <cov-results-folder-2> <output-file-name>
 ```
-**Distribute mode**:
-(v) 5-compute-coverage_RSS-gfauto-gcc.sh : run the experiments.
-   ./5-compute-coverage_RSS-gfauto-gcc.sh 1
-   
-   ./5-compute-coverage_RSS-gfauto-gcc.sh 1 ==> seed file 1
-
-We used machine-id between 1-10, to avoid overlapping of data collected from each machine. If you use a single machine, just set it to 1.
-
-(vi) 6-collect-data2mars.sh : collect results form all machines if run distributively (we did run distributively on 10 machines).
- (vii) 7-gen-statistic-gcov-diff-tab_gfauto.sh : run gfauto to generate human readable outputs.
-
+**Distribute mode**: Run script-5 to generate compiler test-cases and measure coverage in eahc of the machine. To use different set of seeds each time we also send the range of seeds to-be-read per-machine. Run script-5, in each machine:
+```
+./CEdgeSmith/RRS-v3-gcc/6-collect-data2mars.sh
+```
+We used machine-id between 1-20 (giving 2 ids to collect coverage data per machine) this to avoid overlapping of the data collected from each machine. After all machines are done, aggregate the data with script-6
+```
+./CEdgeSmith/RRS-v3-gcc/5-compute-coverage_RSS-gfauto-gcc.sh <process-id> <machine-id> <range-from> <range-to>
+```
+then run script-7 as in the regular mode to generate human readable outputs with gfauto.
  
 Additional scripts
 ------------------
