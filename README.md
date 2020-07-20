@@ -83,7 +83,7 @@ this script prints in the end the output folder where the coverage results are. 
 ```
 ./CEdgeSmith/scripts/RRS-v3-gcc/7-gen-statistic-gcov-diff-tab_gfauto.sh <cov-results-folder-1> <cov-results-folder-2> <output-file-name>
 ```
-**Distribute mode**: Run script-5 to generate compiler test-cases and measure coverage in eahc of the machine. To use different set of seeds each time we also send the range of seeds to-be-read per-machine. Run script-5, in each machine:
+**Distribute mode**: Run script-5 to generate compiler test-cases and measure coverage in eahc of the machine. To use different set of seeds each time we also send the range of seeds to-be-read per-machine. Run script-5 per-machine:
 ```
 ./CEdgeSmith/scripts/RRS-v3-gcc/6-collect-data2mars.sh <process-id> <machine-id>
 ```
