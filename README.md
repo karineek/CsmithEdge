@@ -62,12 +62,15 @@ Afterwards, setup the environment and the additional tools. In our experiments, 
 
 **Generate compiler test-cases with CEdgeSmith and measure coverage**: use the scripts in CEdgeSmith/scripts/RRS-v3-gcc/. Edit **all** the scripts to point to your base home folder and to the location of the tools in your machine(s).
 
-We prepared the build of gcc once and used it to re-build the other machines, you can use this script to do so (but you don't have if you run script-1 in the same machine you are going to measure coverage!),
+We prepared the build of gcc once and used it to re-build the other machines, you can use this script to do so (but you don't have if you run script-1 in the same machine you are going to measure coverage!)
 ```
 ./CEdgeSmith/RRS-v3-gcc/3-clear_Machine.sh <process-id>
 ```
-We tested that all data was ready for the experiment by running ./CEdgeSmith/RRS-v3-gcc/5-test-dest-machine.sh <process-id>. 
-Note1: Repeat per-precess (the number is set before in script-1 in nb_processes) if you run the experiment in parallel. We just set it to 1.
+. We tested that all data was ready for the experiment by running 
+```
+./CEdgeSmith/RRS-v3-gcc/5-test-dest-machine.sh <process-id> 
+```
+. Note1: Repeat per-precess (the number is set before in script-1 in nb_processes) if you run the experiment in parallel. We just set it to 1.
 Note2: The different parameters we used in our experiments (for Csmith, Csmith-macros, CEdgeSmith, and CEdgeSmith-macros) are in 4_script-s_settings.txt. You can use it to alter scripts-5 to measure coverage for each of the tools with macros or functions math-safe wrappers. 
 
 We used machine-id between 1-10, to avoid overlapping of data collected from each machine. If you use a single machine, just set it to 1.
