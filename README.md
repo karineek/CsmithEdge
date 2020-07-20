@@ -16,7 +16,7 @@ Download gcc and csmith:
 ```
 ./CEdgeSmith/scripts/0-download-csmith-gcc.sh
 ```
-The script pulls source code and required packages into a temporary forlder (printed at the end of the script). This temporary folder is the input of the next script that compile and install gcc and csmith:
+The script pulls source code and required packages into a temporary folder (printed at the end of the script). This temporary folder is the input of the next script that compiles and installs gcc and csmith:
 ```
 ./CEdgeSmith/scripts/1-install-csmith-gcc-opt-v0.sh <temp-folder-output-of-script-0>
 ```
@@ -27,20 +27,20 @@ Then remove the temporary folder from script 0:
 ** Note: the scripts requires editing "working_folder=/home/user42" to your working folder. **
 
 **Troubleshooting**: each stage log can be found in gcc-csmith-$i/compilation_info folder.
-If you get errors during build of GCC from source as the following
+If you get errors during the build of GCC from source as the following
 "configure: error: Building GCC requires GMP 4.2+, MPFR 3.1.0+ and MPC 0.8.0+.
  Try the --with-gmp, --with-mpfr and/or --with-mpc options to specify"
 run before script-1:
 ```
 ./CEdgeSmith/scripts/0-reinstall-csmith-gcc.sh <temp-folder-output-of-script-0>.
 ```
-Last step, follow the instructions in readme files in subfolders ([Readme file 1](https://github.com/karineek/CEdgeSmith/blob/master/csmith/README.md) and [Readme file 2](https://github.com/karineek/CEdgeSmith/blob/master/gfauto/README.md)) to install csmith and gfauto to work properly with our scripts.
+The last step, follow the instructions in readme-files in subfolders ([Readme file 1](https://github.com/karineek/CEdgeSmith/blob/master/csmith/README.md) and [Readme file 2](https://github.com/karineek/CEdgeSmith/blob/master/gfauto/README.md)) to install csmith and gfauto to work properly with our scripts.
 
-These scripts prepare a fresh copy of gcc source and build for measuring coverage. You can prepare a set of folders to run the coverage experiments distributively by changing the nb_processes variable in script-1. The folder gcc-csmith-0 is not for use (we use it only as part of the compilation procees).
+These scripts prepare a fresh copy of gcc source and build for measuring coverage. You can prepare a set of folders to run the coverage experiments distributively by changing the nb_processes variable in script-1. The folder gcc-csmith-0 is not for use (we use it only as part of the compilation process).
 
 Preparing the data
 ------------------
-Each Csmith compiler test-case has a relaxed version. This verion is created by first generating a list of location in the test case of calls to safe-math wrapptes that are must-be-safe calls. We relaxe any other call to safe-math wrapper if not on this list. We generate these lists via this script:
+Each Csmith compiler test-case has a relaxed version. This version is created by first generating a list of location in the test case of calls to safe-math wrappers that are must-be-safe calls. We relaxed any other call to safe-math wrapper if not on this list. We generate these lists via this script:
 ```
 /CEdgeSmith/scripts/RSS-v2-general/RSS3_1_extract_mustBsafe_list.sh <reference-compiler> <seeds-file>
 ```
@@ -48,17 +48,17 @@ You can use our wrapper script to generate the data:
 ```
 ./CEdgeSmith/scripts/RSS-v2-general/3-prepare-modification-lists.sh
 ```
-We kept the safe-lists files used for the experiments in the paper in [scripts/RSS-v2-general/seedsSafeLists](https://github.com/karineek/CEdgeSmith/tree/master/scripts/RSS-v2-general/seedsSafeLists). To construct these lists we used [earlier version of Csmith](https://github.com/karineek/CEdgeSmith/blob/master/scripts/csmith_version_gen_seeds.txt) and copied the required changes from Csmith version 8115771 (that is, the safe_math and safe_math_macros headers). 
+We kept the safe-lists files used for the experiments in the paper in [scripts/RSS-v2-general/seedsSafeLists](https://github.com/karineek/CEdgeSmith/tree/master/scripts/RSS-v2-general/seedsSafeLists). To construct these lists we used [an earlier version of Csmith](https://github.com/karineek/CEdgeSmith/blob/master/scripts/csmith_version_gen_seeds.txt) and copied the required changes from Csmith version 8115771 (that is, the safe_math and safe_math_macros headers). 
 
 Measuring coverage 
 ------------------
 **SETUP**: As described above in setup the environment and tools we use sections. 
-To install the required packaged for the tools we use run
+To install the required packaged for the tools we use, run
 ```
 ./CEdgeSmith/scripts/installcomp.sh
 ./CEdgeSmith/scripts/install_machine_cov_sw.sh
 ```
-Afterwards, setup the environment and the additioanl tools. In our experiments, we prepared 10 idential machines and ran the expriments distributively.
+Afterwards, setup the environment and the additional tools. In our experiments, we prepared 10 identical machines and ran the experiments distributively.
 We explain next how to measure coverage in 'n' machines and aggregate the results in the end.
 
 
