@@ -1,3 +1,6 @@
+Simple example
+--------------
+
 cd CEdgeSmith
 ** Prepare the machine and data - see readme file **
 
@@ -23,3 +26,32 @@ DONE. RESULTS AVAILABLE IN /home/user42/gcc-csmith-1/coverage_processed-1/x-4 (1
 ** Skip script 6 as all are on the same machine. **
 
 ./7-gen-statistic-gcov-diff-tab_gfauto.sh /home/user42/gcc-csmith-1/coverage_processed-1/x-4 /home/user42/gcc-csmith-2/coverage_processed-0/x-4 output_table_CEdgeSmithMacros_CsmithFunc.tsv
+
+
+Experiments we used
+-------------------
+
+We ran these (each per machine):
+```
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 0 0 10000 > part_1.txt 2>&1 &            comment: machine 40-105       
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 2 10000 20000 > part_1.txt 2>&1 &        comment: machine 40-133
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 4 20000 30000 > part_1.txt 2>&1 &        comment: machine 40-137
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 6 30000 40000 > part_1.txt 2>&1 &        comment: machine 40-141
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 8 40000 50000 > part_1.txt 2>&1 &        comment: machine 40-142
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 10 50000 60000 > part_1.txt 2>&1 &       comment: machine 40-151
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 12 60000 70000 > part_1.txt 2>&1 &       comment: machine 40-166
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 14 70000 80000 > part_1.txt 2>&1 &       comment: machine 40-174
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 16 80000 90000 > part_1.txt 2>&1 &       comment: machine 40-175
+nohup ./5-compute-coverage_RSS-gfauto.sh 1 18 90000 100000 > part_1.txt 2>&1 &      comment: machine 40-206
+```
+
+Then we ran:
+```
+scp CEdgeSmith/scripts/RRS-v3-gcc/part_1.txt user@server:/data/compiler-testing-RRS/gcc-res-func-1-01012020/script_output-40-105.txt
+scp __logger_covM__home_user42_gcc-csmith-1_gcc-install_bin_clang_seeds-1.txt user@server:/data/compiler-testing-RRS/gcc-res-func-1-01012020/__logger_covM__home_user42_gcc-csmith-1_gcc-install_bin_clang_seeds-1-40-105.txt
+
+scp -r coverage_gcda_files user@server:/data/compiler-testing-RRS/gcc-res-func-1-01012020/res-40-105/ 
+scp -r coverage_processed-1 user@server:/data/compiler-testing-RRS/gcc-res-func-1-01012020/res-40-105/ 
+```
+This per machine (x10).
+
