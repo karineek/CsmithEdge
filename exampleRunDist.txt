@@ -22,3 +22,4 @@ DONE. RESULTS AVAILABLE IN /home/user42/gcc-csmith-1/coverage_processed-1/x-4 (1
 ** Use /home/user42/gcc-csmith-1/coverage_processed-1/x-1,2,3,4 to generate the results. ***
 ** Skip script 6 as all are on the same machine. **
 
+./7-gen-statistic-gcov-diff-tab_gfauto.sh /home/user42/gcc-csmith-1/coverage_processed-1/x-4 /home/user42/gcc-csmith-2/coverage_processed-0/x-4 output_table_CEdgeSmithMacros_CsmithFunc.tsv
