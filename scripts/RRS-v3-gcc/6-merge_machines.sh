@@ -1,10 +1,18 @@
 #!/bin/bash 
-process_number=1
+process_number=$1
+ids_per_machine=$2
 modify=1
 working_folder=/home/user42/gcc-csmith-$process_number
 coverage_processed=$working_folder/coverage_processed-$modify
 coverage_processed_merged=$coverage_processed-merged
 
+## We support only ids per machine == 2.
+if [ ! "$ids_per_machine" -eq 2 ]; then
+	echo ">> Error: script currently supports only 2 ids to collect coverage data per machine. For a diffent size, please add an Implementation."
+	exit
+fi
+
+## Start the script
 time1=$(date +"%T")
 echo "--> MERGE COVERAGE... ("$time1")"
 (

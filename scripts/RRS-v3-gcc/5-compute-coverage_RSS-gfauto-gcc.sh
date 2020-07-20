@@ -34,17 +34,13 @@ if [ -z "$1" ]
 fi
 
 time1=$(date +"%T")
-echo "EVOLUTION OF LLVM COVERAGE WHEN COMPILING "$nb_progs_to_gen" CSMITH PROGRAMS BY STEPS OF "$nb_progs_to_gen_per_step
+echo "EVOLUTION OF GCC COVERAGE WHEN COMPILING "$nb_progs_to_gen" CSMITH PROGRAMS BY STEPS OF "$nb_progs_to_gen_per_step
 if [ "$#" -eq 3 ]; then
 	i=$2 		# Restore counters
 	nb_gen_progs=$3	# Restore from seed (one before we crushed)
 	echo "--> RESTORE COVERAGE DATA...("$i","$nb_gen_progs","$nb_progs_to_gen","$time1")" 
 else
 	rm -f $working_folder/seeds-$process_number.txt
-	rm -rf $working_folder/llvm-source/tools/clang/test
-	rm -rf $working_folder/llvm-source/tools/clang/unittests
-	rm -rf $working_folder/llvm-source/tools/clang/docs
-	rm -rf $working_folder/llvm-source/tools/clang/www
 	rm -rf $working_folder/coverage_processed-$modify
 	rm -rf $working_folder/coverage_gcda_files/application_run-$modify
 	
@@ -79,8 +75,10 @@ ln -sf liblto_plugin.so.0.0.0 liblto_plugin.so.0
 
 ## Assure we are using the gcov in the gcc built:
 usrLib=$working_folder/gcc-install
-rm -f /usr/local/bin/gcov /usr/bin/gcov 
-ln -s $usrLib/bin/gcov /usr/bin/gcov
+sudo rm -f /usr/local/bin/gcov /usr/bin/gcov 
+sudo ln -s $usrLib/bin/gcov /usr/bin/gcov
+#rm -f /usr/local/bin/gcov /usr/bin/gcov 
+#ln -s $usrLib/bin/gcov /usr/bin/gcov
 
 # Back to original folder
 cd $current_folder
@@ -152,5 +150,7 @@ time2=$(date +"%T")
 echo "DONE. RESULTS AVAILABLE IN $working_folder/coverage_processed-$modify/x-$i ($time2)"
 
 ## Revert back all gcc changes: restore gcov
-rm -f /usr/local/bin/gcov /usr/bin/gcov 
-ln -s /usr/bin/gcov-9 /usr/bin/gcov
+sudo rm -f /usr/local/bin/gcov /usr/bin/gcov 
+sudo ln -s /usr/bin/gcov-9 /usr/bin/gcov
+#rm -f /usr/local/bin/gcov /usr/bin/gcov 
+#ln -s /usr/bin/gcov-9 /usr/bin/gcov
