@@ -57,7 +57,8 @@ To install the required packaged for the tools we use run
 ./scripts/installcomp.sh
 ./scripts/install_machine_cov_sw.sh
 ```
-Afterwards, setup the environment and the additioanl tools.
+Afterwards, setup the environment and the additioanl tools. In our experiments, we prepared 10 idential machines and ran the expriments distributively.
+We explain next how to measure coverage in 'n' machines and aggregate the results in the end.
  
  RUN:
  Use the scripts in CEdgeSmith/scripts/RRS-v3-gcc/. 
