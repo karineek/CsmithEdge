@@ -25,11 +25,36 @@ DONE. RESULTS AVAILABLE IN /home/user42/gcc-csmith-1/coverage_processed-1/x-4 (1
 ** Use /home/user42/gcc-csmith-1/coverage_processed-1/x-1,2,3,4 to generate the results. ***
 ** Skip script 6 as all are on the same machine. **
 
+```
 ./7-gen-statistic-gcov-diff-tab_gfauto.sh /home/user42/gcc-csmith-1/coverage_processed-1/x-4 /home/user42/gcc-csmith-2/coverage_processed-0/x-4 output_table_CEdgeSmithMacros_CsmithFunc.tsv
+```
+This outputs statistics and a tsv file. The statistics look like this:
+4 output_tbl.tsv
+rm: cannot remove 'output_tbl.tsv': No such file or directory
+ >> End extracting data for 1980:1980 files.
+#line 1 ................. ==> 3686324
+#line 2 ................. ==> 3686324
+#line 1 HIT ............. ==> 188265
+#line 2 HIT ............. ==> 191778
+LH1 U LH2 ............... ==> 191778
+LH1 U LH2 (with c1!=c2) . ==> 174595
+LH1 /\ LH2 (with c1==c2)  ==> 17183
+LH1\LH2 ................. ==> 0
+LH2\LH1 ................. ==> 3513
+LH1 > LH2 ............... ==> 0
+LH1 < LH2 ............... ==> 178107
+LH1 >>x1 LH2 .............. ==> 0
+LH1 <<x1 LH2 .............. ==> 44775
+LH1 >>x4 LH2 .............. ==> 0
+LH1 <<x4 LH2 .............. ==> 1
 
+and output_tbl.tsv contains a line per file:
+>> file name,#line 1,#line 2,#line 1 hit,#line 2 hit,LH1 U LH2,LH1 U LH2 (with c1!=c2),LH1 /\ LH2 (with c1==c2),LH1/LH2,LH2/LH1,LH1 > LH2,LH1 < LH2,LH1 > LH2(x1),LH1 < LH2(x1),LH1 >> LH2(x4),LH1 << LH2(x4),Flag(LH1/LH2 != LH2/LH1)
+>> /cov.out/home/user42/gcc-csmith-0/gcc-install/include/c++/11.0.0/bits/allocated_ptr.h,104,104,0,0,0,0,0,0,0,0,0,0,0,0,0,X 
+>> /cov.out/home/user42/gcc-csmith-0/gcc-install/include/c++/11.0.0/bits/allocator.h,323,323,0,0,0,0,0,0,0,0,0,0,0,0,0,X 
 
-Experiments we used
--------------------
+Experiments commands we used
+----------------------------
 
 We ran these (each per machine):
 ```
