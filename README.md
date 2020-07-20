@@ -83,13 +83,18 @@ this script prints in the end the output folder where the coverage results are. 
 ```
 ./CEdgeSmith/scripts/RRS-v3-gcc/7-gen-statistic-gcov-diff-tab_gfauto.sh <cov-results-folder-1> <cov-results-folder-2> <output-file-name>
 ```
-**Distribute mode**: Run script-5 to generate compiler test-cases and measure coverage in eahc of the machine. To use different set of seeds each time we also send the range of seeds to-be-read per-machine. Run script-5 per-machine:
+**Distribute mode**: Run script-5 to generate compiler test-cases and measure coverage in each of the machines. To use different set of seeds each time we also add the range of seeds to-be-read per-machine to the parameters of the script. Run script-5 per-machine:
+```
+./CEdgeSmith/scripts/RRS-v3-gcc/5-compute-coverage_RSS-gfauto-gcc.sh <process-id> <machine-id> <range-from> <range-to>
+```
+We used machine-id between 1-20 (giving 2 ids to collect coverage data per machine) this to avoid overlapping of the data collected from each machine. After all machines are done, aggregate the data with scripts-6. Move all data to a single machine:
 ```
 ./CEdgeSmith/scripts/RRS-v3-gcc/6-collect-data2mars.sh <process-id> <machine-id>
 ```
-We used machine-id between 1-20 (giving 2 ids to collect coverage data per machine) this to avoid overlapping of the data collected from each machine. After all machines are done, aggregate the data with script-6
+and aggregate the coverage data after all the data is stored on a single machine
 ```
-./CEdgeSmith/scripts/RRS-v3-gcc/5-compute-coverage_RSS-gfauto-gcc.sh <process-id> <machine-id> <range-from> <range-to>
+./<location of graphicsfuzz/gfauto folder>/dev_shell.sh.template
+./CEdgeSmith/scripts/RRS-v3-gcc/6-merge_machines.sh <process-id>
 ```
 then run script-7 as in the regular mode to generate human readable outputs with gfauto.
  
