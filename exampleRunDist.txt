@@ -1,0 +1,24 @@
+cd CEdgeSmith
+** Prepare the machine and data - see readme file **
+
+cd scripts/RRS-v3-gcc/
+user42@user42-VirtualBox:~/git/CEdgeSmith/scripts/RRS-v3-gcc$ ./5-compute-coverage_RSS-gfauto-gcc.sh 1 0 0 10
+EVOLUTION OF GCC COVERAGE WHEN COMPILING 10 CSMITH PROGRAMS BY STEPS OF 5
+--> RESETING COVERAGE DATA...(0,0,10,10:04:34)
+--> COMPILING 5 PROGRAMS (5 REMAINING)... (10:04:34)
+--> MEASURING COVERAGE... (10:04:54)
+--> COMPILING 5 PROGRAMS (0 REMAINING)... (10:05:25)
+--> MEASURING COVERAGE... (10:05:49)
+user42@user42-VirtualBox:~/git/CEdgeSmith/scripts/RRS-v3-gcc$ ./5-compute-coverage_RSS-gfauto-gcc.sh 1 2 10 20
+EVOLUTION OF GCC COVERAGE WHEN COMPILING 10 CSMITH PROGRAMS BY STEPS OF 5
+--> RESETING COVERAGE DATA...(2,10,20,10:43:59)
+[sudo] password for user42: 
+--> COMPILING 5 PROGRAMS (5 REMAINING)... (10:44:01)
+--> MEASURING COVERAGE... (10:44:36)
+--> COMPILING 5 PROGRAMS (0 REMAINING)... (10:45:06)
+--> MEASURING COVERAGE... (10:45:27)
+DONE. RESULTS AVAILABLE IN /home/user42/gcc-csmith-1/coverage_processed-1/x-4 (10:45:58)
+
+** Use /home/user42/gcc-csmith-1/coverage_processed-1/x-1,2,3,4 to generate the results. ***
+** Skip script 6 as all are on the same machine. **
+
