@@ -94,7 +94,7 @@ We used machine-id between 1-20 (giving 2 ids to collect coverage data per machi
 and aggregate the coverage data after all the data is stored on a single machine
 ```
 ./<location of graphicsfuzz/gfauto folder>/dev_shell.sh.template
-./CEdgeSmith/scripts/RRS-v3-gcc/6-merge_machines.sh <process-id>
+./CEdgeSmith/scripts/RRS-v3-gcc/6-merge_machines.sh <process-id> <ids-per-machine>
 ```
 then run script-7 as in the regular mode to generate human readable outputs with gfauto.
  
