@@ -36,7 +36,7 @@ run before script-1:
 ```
 The last step, follow the instructions in readme-files in subfolders ([Readme file 1](https://github.com/karineek/CEdgeSmith/blob/master/csmith/README.md) and [Readme file 2](https://github.com/karineek/CEdgeSmith/blob/master/gfauto/README.md)) to install csmith and gfauto to work properly with our scripts.
 
-These scripts prepare a fresh copy of gcc source and build for measuring coverage. You can prepare a set of folders to run the coverage experiments distributively by changing the nb_processes variable in script-1. The folder gcc-csmith-0 is not for use (we use it only as part of the compilation process).
+These scripts prepare a fresh copy of gcc source and build for measuring coverage. You can prepare a set of folders to run the coverage experiments in parallel on the same machine by changing the nb_processes variable in script-1. The folder gcc-csmith-0 is not for use (we use it only as part of the compilation process).
 
 Preparing the data
 ------------------
@@ -58,7 +58,7 @@ To install the required packaged for the tools we use, run
 ./CEdgeSmith/scripts/installcomp.sh
 ./CEdgeSmith/scripts/install_machine_cov_sw.sh
 ```
-Afterwards, setup the environment and the additional tools. In our experiments, we prepared 10 identical machines and ran the experiments distributively.
+Afterwards, setup the environment and the additional tools. In our experiments, we prepared 10 identical machines (with a single process on each) and ran the experiments distributively.
 We explain next how to measure coverage in 'n' machines and aggregate the results in the end.
 
 
@@ -74,6 +74,10 @@ We tested that all data was ready for the experiment by running ./CEdgeSmith/RRS
 The different parameters we used in our experiments (for Csmith, Csmith-macros, CEdgeSmith, and CEdgeSmith-macros) are in 4_script-s_settings.txt. You can use it to alter scripts-5 to measure coverage for each of the tools with macros or functions math-safe wrappers.
 
    (v) 5-compute-coverage_RSS-gfauto-gcc.sh : run the experiments.
+   ./5-compute-coverage_RSS-gfauto-gcc.sh 1
+   
+   ./5-compute-coverage_RSS-gfauto-gcc.sh 1 ==> seed file 1
+   
 (vi) 6-collect-data2mars.sh : collect results form all machines if run distributively (we did run distributively on 10 machines).
  (vii) 7-gen-statistic-gcov-diff-tab_gfauto.sh : run gfauto to generate human readable outputs.
 
