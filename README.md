@@ -42,7 +42,7 @@ Preparing the data
 ------------------
 Each Csmith compiler test-case has a relaxed version. This version is created by first generating a list of location in the test case of calls to safe-math wrappers that are must-be-safe calls. We relaxed any other call to safe-math wrapper if not on this list. We generate these lists via this script:
 ```
-/CEdgeSmith/scripts/RSS-v2-general/RSS3_1_extract_mustBsafe_list.sh <reference-compiler> <seeds-file>
+./CEdgeSmith/scripts/RSS-v2-general/RSS3_1_extract_mustBsafe_list.sh <reference-compiler> <seeds-file>
 ```
 You can use our wrapper script to generate the data:
 ```
