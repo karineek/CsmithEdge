@@ -62,10 +62,14 @@ Afterwards, setup the environment and the additional tools. In our experiments, 
 We explain next how to measure coverage in 'n' machines and aggregate the results in the end.
 
 
-**Generate compiler test-cases with CEdgeSmith and measure coverage**: use the scripts in CEdgeSmith/scripts/RRS-v3-gcc/. 
+**Generate compiler test-cases with CEdgeSmith and measure coverage**: use the scripts in CEdgeSmith/scripts/RRS-v3-gcc/. Edit **all** the scripts to point to your base home folder and to the location of the tools in your machine(s).
 
-   (i) Edit **all** the scripts to point to your base home folder and to the location of the tools in your machine(s).  
-  (ii) 3-clear_Machine.sh : clean the machine.
+We prepared the compilation of gcc once and use it to re-build the other machines, you can use this script to do so (but you don't have if you run script-1 in the same machine you are going to measure coverage!),
+```
+./CEdgeSmith/RRS-v3-gcc/3-clear_Machine.sh <machine-id>
+```
+We used machine-id between 1-10, to avoid overlapping of data collected from each machine. If you use a single machine, just set it to 1.
+
  (iii) 4_script-s_settings.txt : setup fresh environment.
   (iv) 5-test-dest-machine.sh : test the setup is OK.
    (v) 5-compute-coverage_RSS-gfauto-gcc.sh : run the experiments.
