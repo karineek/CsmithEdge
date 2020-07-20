@@ -51,11 +51,13 @@ We kept the safe-lists files used for the experiments in the paper in [scripts/R
 
 Measuring coverage 
 ------------------
-SETUP: with scripts scripts/install_machine_cov_sw.sh, scripts/0-download-csmith-gcc.sh, scripts/1-install-csmith-gcc-opt-v1.sh. 
-  (i) Run these 3 scripts to setup the environment with tools and gcc last version. 
- (ii) Copy the files required for csmith and gfauto.
-(iii) Re-compile csmith.
- (iv) Run dev_shell.sh.template (gfauto).
+**SETUP***: As described above in setup the environment and tools we use sections. 
+To install the required packaged for the tools we use run
+```
+./scripts/installcomp.sh
+./scripts/install_machine_cov_sw.sh
+```
+Afterwards, setup the environment and the additioanl tools.
  
  RUN:
  Use the scripts in CEdgeSmith/scripts/RRS-v3-gcc/. 
