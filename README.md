@@ -85,7 +85,7 @@ this script prints in the end the output folder where the coverage results are. 
 ```
 **Distribute mode**: Run script-5 to generate compiler test-cases and measure coverage in eahc of the machine. To use different set of seeds each time we also send the range of seeds to-be-read per-machine. Run script-5, in each machine:
 ```
-./CEdgeSmith/RRS-v3-gcc/6-collect-data2mars.sh
+./CEdgeSmith/RRS-v3-gcc/6-collect-data2mars.sh <process-id> <machine-id>
 ```
 We used machine-id between 1-20 (giving 2 ids to collect coverage data per machine) this to avoid overlapping of the data collected from each machine. After all machines are done, aggregate the data with script-6
 ```
