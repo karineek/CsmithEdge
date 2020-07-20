@@ -73,12 +73,18 @@ We tested that all data was ready for the experiment by running
 Note1: Repeat per-precess (the number is set before in script-1 in nb_processes) if you run the experiment in parallel. We just set it to 1.
 Note2: The different parameters we used in our experiments (for Csmith, Csmith-macros, CEdgeSmith, and CEdgeSmith-macros) are in 4_script-s_settings.txt. You can use it to alter scripts-5 to measure coverage for each of the tools with macros or functions math-safe wrappers. 
 
-We used machine-id between 1-10, to avoid overlapping of data collected from each machine. If you use a single machine, just set it to 1.
+We measure coverage by running scipt 5-compute-coverage_RSS-gfauto-gcc.sh and generate the report with 7-gen-statistic-gcov-diff-tab_gfauto.sh. The scripts have regular mode and distributive mode.
+
+Regular mode:
+./5-compute-coverage_RSS-gfauto-gcc.sh <process-id> 
+
    (v) 5-compute-coverage_RSS-gfauto-gcc.sh : run the experiments.
    ./5-compute-coverage_RSS-gfauto-gcc.sh 1
    
    ./5-compute-coverage_RSS-gfauto-gcc.sh 1 ==> seed file 1
-   
+
+We used machine-id between 1-10, to avoid overlapping of data collected from each machine. If you use a single machine, just set it to 1.
+
 (vi) 6-collect-data2mars.sh : collect results form all machines if run distributively (we did run distributively on 10 machines).
  (vii) 7-gen-statistic-gcov-diff-tab_gfauto.sh : run gfauto to generate human readable outputs.
 
