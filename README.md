@@ -2,6 +2,8 @@
 
 Experimental data and scripts to reproduce the results reported in ASE-NIER 2020.
 
+Reuslts and data appeared in the paper along with additional details can be found [here](https://github.com/karineek/CEdgeSmith/tree/master/results).
+
 Tools in use
 ------------
 1. csmith (clone version: 8115771, 13 of April 2020).
