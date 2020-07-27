@@ -1,4 +1,6 @@
-# We use gfauto to measure coverage.
+# Download and Install gfauto
+
+We use gfauto to measure coverage. We modify the dev_shell script.
 
 ## Getting the repository: 
 ```
