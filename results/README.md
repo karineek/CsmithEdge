@@ -1,4 +1,7 @@
-Raw results collected from 10 machines.
+Results Experiments during March-May 2020 (ASE 2020)
+====================================================
+
+Raw results collected from 10 machines. We used this data to create the graphs in ASE 2020 nier paper.
 
 Files:
 * cov_tables.xlsx: full results from the machines.
