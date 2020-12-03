@@ -22,3 +22,4 @@ nohup ./5-compute-coverage_RSS-gfauto-gcc.sh 1 14 70000 80000 > part_1.txt 2>&1 
 nohup ./5-compute-coverage_RSS-gfauto-gcc.sh 1 16 80000 90000 > part_1.txt 2>&1 &
 nohup ./5-compute-coverage_RSS-gfauto-gcc.sh 1 18 90000 100000 > part_1.txt 2>&1 &
 ```
+Bugs found: 94809, 93744.
