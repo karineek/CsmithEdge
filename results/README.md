@@ -27,4 +27,6 @@ Bugs found in GCC: 94809, 93744, 96369, 96549 and 96760
 
 Bug found in LLVM: 47578
 
-We also found two compiler crashes in gcc-10 (Ubuntu 10.1.0-2ubuntu1 18.04) 10.1.0, but these were fixed in gcc-10 (Ubuntu 10.2.0-5ubuntu1 20.04) 10.2.0, before we reported these. You can test it by downloading crash_3172827853.zip and crash_4231343982.zip, and test it with gcc 10.1.
+Compiler Crash in GCC-10.1: seeds 3172827853 and 4231343982.
+
+Note: We found two compiler crashes in gcc-10 (Ubuntu 10.1.0-2ubuntu1 18.04) 10.1.0, but these were fixed in gcc-10 (Ubuntu 10.2.0-5ubuntu1 20.04) 10.2.0, before we reported these. You can test it by downloading crash_3172827853.zip and crash_4231343982.zip, and test it with gcc 10.1.
