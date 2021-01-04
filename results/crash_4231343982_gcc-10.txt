@@ -1,0 +1,58 @@
+ ============= START ITR (19:56:52,4231343982) =============
+>> ulimit -St 300; clang-10 -O0 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -O1 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -O2 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -O3 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -Os -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; gcc-10 -O1 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; gcc-10 -O2 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+gcc-10: internal compiler error: CPU time limit exceeded signal terminated program cc1
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <file:///usr/share/doc/gcc-10/README.Bugs> for instructions.
+>> ulimit -St 300; gcc-10 -O3 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; gcc-10 -Os -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; gcc-10 -O0 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -O0 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -O1 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -O2 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -O3 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -Os -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; gcc-10 -O1 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; gcc-10 -O2 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+gcc-10: internal compiler error: CPU time limit exceeded signal terminated program cc1
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <file:///usr/share/doc/gcc-10/README.Bugs> for instructions.
+>> ulimit -St 300; gcc-10 -O3 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; gcc-10 -Os -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; gcc-10 -O0 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -O0 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -O1 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -O2 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -O3 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -Os -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; gcc-10 -O1 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; gcc-10 -O2 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+gcc-10: internal compiler error: CPU time limit exceeded signal terminated program cc1
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <file:///usr/share/doc/gcc-10/README.Bugs> for instructions.
+>> ulimit -St 300; gcc-10 -O3 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; gcc-10 -Os -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; gcc-10 -O0 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ temp_edge.c
+>> ulimit -St 300; clang-10 -O0 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -O1 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -O2 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -O3 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; clang-10 -Os -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; gcc-10 -O1 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; gcc-10 -O2 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+gcc-10: internal compiler error: CPU time limit exceeded signal terminated program cc1
+Please submit a full bug report,
+with preprocessed source if appropriate.
+See <file:///usr/share/doc/gcc-10/README.Bugs> for instructions.
+>> ulimit -St 300; gcc-10 -O3 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; gcc-10 -Os -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> ulimit -St 300; gcc-10 -O0 -w -I/home/user42/RRS_EXPR/csmith/build/../RRS_runtime_test/ -I/home/user42/RRS_EXPR/csmith/build/runtime/ -DUSE_MATH_MACROS temp_edge.c
+>> (4231343982) | #line csmith: 0 | #lines wa: 2938 | Delta: n/a | Valid: n/a | timeS: 19:56:52 | timeE: 20:17:04
