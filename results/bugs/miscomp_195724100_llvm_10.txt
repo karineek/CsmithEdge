@@ -1,6 +1,8 @@
 Buggy: LLVM-10, 9, 6.0 with -O2, -O3, -Os with macros only
 Fixed: LLVM-11, 12, 13
 
+Looks like a problem related to ASAN and MSAN, but it was hard to reduce
+
 Runs:
 =====
 

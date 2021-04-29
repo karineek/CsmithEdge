@@ -1,0 +1,150 @@
+Buggy: gcc-9,8,7
+Fixed: gcc-10,gcc-11
+
+All optimization level, only with macros
+
+
+=============================
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O0 -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+auser42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42data/RRS/csmith/build/runtime/ -w -O0 -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os -DUSE_MATH_MACROS; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+-user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/ata/RRS/csmith/build/runtime/ -w -O0 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+muser42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/ata/RRS/csmith/build/runtime/ -w -O0 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+suser42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/ata/RRS/csmith/build/runtime/ -w -O0 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os -DUSE_MATH_MACROS; ./a.out
+checksum = ABA686A2
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+/user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/cmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O0 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O0 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O0 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-9 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O0 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-8 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ 
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O0 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out
+checksum = CF80DE83
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ gcc-7 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test2102666936M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out
+checksum = CF80DE83
+
+
+
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../gcc-csmith-0/gcc-install/bin/gcc --version
+gcc (GCC) 11.0.0 20200825 (experimental)
+Copyright (C) 2020 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+user42@srg08:~/data/RRS/scripts/creduce$ gcc-7 --version
+gcc-7 (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+user42@srg08:~/data/RRS/scripts/creduce$ gcc-8 --version
+gcc-8 (Ubuntu 8.4.0-1ubuntu1~18.04) 8.4.0
+Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+user42@srg08:~/data/RRS/scripts/creduce$ gcc-9 --version
+gcc-9 (Ubuntu 9.3.0-11ubuntu0~18.04.1) 9.3.0
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+user42@srg08:~/data/RRS/scripts/creduce$ gcc-10 --version
+gcc-10 (Ubuntu 10.3.0-1ubuntu1~18.04~1) 10.3.0
+Copyright (C) 2020 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+user42@srg08:~/data/RRS/scripts/creduce$ 
