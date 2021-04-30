@@ -1,0 +1,99 @@
+Buggy: LLVM-11, 10, 9, 6.0 with -O2, -O3, -Os with macros and functions
+Fixed: 12, 13
+
+Runs:
+=====
+
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes_safe/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes_safe/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O0 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes_safe/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes_safe/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes_safe/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes_safe/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out 
+checksum = 3E3287CD
+
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out 
+Floating point exception (core dumped)
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out 
+Floating point exception (core dumped)
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out 
+Floating point exception (core dumped)
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O1 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-10 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O0 ; ./a.out 
+checksum = 3E3287CD
+
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../llvm-csmith-11/llvm-install/usr/local/bin/clang /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out 
+Floating point exception (core dumped)
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../../llvm-csmith-7/llvm-install/usr/local/bin/clang /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../../llvm-csmith-7/llvm-install/usr/local/bin/clang /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../../llvm-csmith-7/llvm-install/usr/local/bin/clang /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../../llvm-csmith-8/llvm-install/usr/local/bin/clang /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../../llvm-csmith-8/llvm-install/usr/local/bin/clang /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out 
+checksum = 3E3287CD
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../../llvm-csmith-8/llvm-install/usr/local/bin/clang /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out 
+checksum = 3E3287CD
+
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-6.0 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 ; ./a.out 
+Floating point exception (core dumped)
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-6.0 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 ; ./a.out 
+Floating point exception (core dumped)
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-6.0 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os ; ./a.out 
+Floating point exception (core dumped)
+
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-6.0 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -Os -DUSE_MATH_MACROS ; ./a.out 
+Floating point exception (core dumped)
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-6.0 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O3 -DUSE_MATH_MACROS ; ./a.out 
+Floating point exception (core dumped)
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-6.0 /home/user42/data/RRS/scripts/RSS-v2-general/gcc-7-mainRes/__test196215554M.c -I/home/user42/data/RRS/csmith/RRS_runtime_test/ -I/home/user42/data/RRS/csmith/build/runtime/ -w -O2 -DUSE_MATH_MACROS ; ./a.out 
+Floating point exception (core dumped)
+
+Compilers:
+==========
+
+user42@srg08:~/data/RRS/scripts/creduce$ clang-9 --version
+clang version 9.0.0-2~ubuntu18.04.2 (tags/RELEASE_900/final)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+
+user42@srg08:~/data/RRS/scripts/creduce$ clang-10 --version
+clang version 10.0.0-4ubuntu1~18.04.2 
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+
+user42@srg08:~/data/RRS/scripts/creduce$ ../../../llvm-csmith-7/llvm-install/usr/local/bin/clang --version
+clang version 12.0.0
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/user42/data/RRS/scripts/creduce/../../../llvm-csmith-7/llvm-install/usr/local/bin
+
+user42@srg08:~/data/RRS/scripts/creduce$ ../../../llvm-csmith-8/llvm-install/usr/local/bin/clang --version
+clang version 13.0.0
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/user42/data/RRS/scripts/creduce/../../../llvm-csmith-8/llvm-install/usr/local/bin
+
+InstalledDir: /home/user42/data/RRS/git/CsmithEdge/results/bugs/../../../../../llvm-csmith-8/llvm-install/usr/local/bin
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ ../../../../llvm-csmith-11/llvm-install/usr/local/bin/clang --version
+clang version 11.0.0
+Target: x86_64-unknown-linux-gnu
+Thread model: posix
+InstalledDir: /home/user42/data/RRS/git/CsmithEdge/results/bugs/../../../../llvm-csmith-11/llvm-install/usr/local/bin
+
+user42@srg08:~/data/RRS/git/CsmithEdge/results/bugs$ clang-6.0 --version
+clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)
+Target: x86_64-pc-linux-gnu
+Thread model: posix
+InstalledDir: /usr/bin
+
