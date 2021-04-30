@@ -1,3 +1,7 @@
+****
+We reported this bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96369 
+****
+
 Buggy: gcc-9,8,7
 Fixed: gcc-10,gcc-11
 
