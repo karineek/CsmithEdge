@@ -134,7 +134,7 @@ function check_wt_FramaC {
 		## -plevel. . . . . . . . . . . . . . . . . . . .	==> precise when the total number of locations to read or write is less than the value of -plevel option
 		## -eva-precision . . . . . . . . . . . . . . . .	==> setting a global trade-off between precision and analysis time from 0 (fast but imprecise) to 11 (accurate but slow) 
 		## -val-warn-undefined-pointer-comparison pointer	==> pointer comparison alarms are emitted only on comparisons involving lvalues with pointer type
-		## -no-val-alloc-returns-null 						==> supposes that malloc never fails
+		## -no-val-alloc-returns-null 				==> supposes that malloc never fails
 		## -eva-builtin malloc:Frama_C_malloc_fresh . . .	==> enables builtins for the malloc function of the standard library < NOT SUPPORTED >
 	    	## -eva-builtin free:Frama_C_free . . .	. . . . .	==> enables builtins for the free function of the standard library < NOT SUPPORTED >
 		## -warn-signed-overflow. . . . . . . . . . . . .	==> check that the analyzed code does not overflow on integer operations
@@ -287,10 +287,10 @@ function gen_test_case {
 # 2 --> --dangling-ptr-deref-prob
 # 3-end --> array to a file: $wa_probs (0,1,2,3 as 3,4,5,6)
 function gen_probs_WA {
-	sizeWA=$1		# Size of the array to generate
+	sizeWA=$1	# Size of the array to generate
 	seed_curr=$2	# current seed
 	threshold=$3	# threshold to ativate WA options
-	probArr=()		# Start with an empty array
+	probArr=()	# Start with an empty array
 	
 	## Create the probablities ##
 	#############################
@@ -310,7 +310,7 @@ function gen_probs_WA {
 		fi
 	done
 	# Bug in csmith, try to avoid it; /home/user42/git/csmith/build/src/csmith --dangling-ptr-deref-prob 1 --seed 2517861355
-	#							      /home/user42/git/csmith/build/src/csmith  --seed 2120095187  --null-ptr-deref-prob 1
+	#                                 /home/user42/git/csmith/build/src/csmith  --seed 2120095187  --null-ptr-deref-prob 1
 	# ad-hoc patch
 	if [[ ${probArr[1]} -gt 990 ]]; then
 		probArr[1]=990
@@ -519,25 +519,26 @@ probArrRangesTo=(1000 1000 1000 1 1 350 500 250 1000 1000)
 
 #
 ### EXEC & BUILD LOCATION
-csmith_exec=$base/CsmithEdge/csmith/build/src/csmith
-csmith_build=$base/CsmithEdge/csmith/build
-csmith_exec_wa=$base/CsmithEdge/csmith/build/src/csmith
-csmith_build_wa=$base/CsmithEdge/csmith/build
 csmith_location=$base/CsmithEdge/csmith
-framac_run_folder=$base/CsmithEdge/scripts/csmith_stat/Frama-C-zone
+csmith_build=$csmith_location/build
+csmith_exec=$csmith_build/src/csmith
+csmith_build_wa=$csmith_location/build
+csmith_exec_wa=$csmith_build_wa/src/csmith
+scripts_location=$base/CsmithEdge/scripts/diffTesting_rate
+framac_run_folder=$scripts_location/Frama-C-zone
 #
 ### ARGS
 csmith_args="$CSMITH_USER_OPTIONS --annotated-arith-wrappers"
-wa_probs=$base/CsmithEdge/scripts/diffTesting_rate/seedsProbs/probs_WeakenSafeAnalyse_test.txt
-rrs_folder=$base/CsmithEdge/scripts/diffTesting_rate/seedsProbs/seedsSafeLists
+wa_probs=$scripts_location/seedsProbs/probs_WeakenSafeAnalyse_test.txt
+rrs_folder=$scripts_location/seedsProbs/seedsSafeLists
 wa_args="$csmith_args --relax-anlayses-conditions --relax-anlayses-prob $wa_probs"
 wa_local_args=""
 
 ## Additionl flags and vars
 probfile_curr=""
-time_out_flag=0	# If hit once timeout, skip all
+time_out_flag=0		# If hit once timeout, skip all
 time_out_flag_edge=0	# to test if a csmithEdge's testcase failed
-flag_dang_ptr=0	# Only if created dangling pointers shall call Frama-c
+flag_dang_ptr=0		# Only if created dangling pointers shall call Frama-c
 same_result_flage=0	# if results are the same from two compilers
 maxRRS=0
 curr_folder=`pwd`
