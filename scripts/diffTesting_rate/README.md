@@ -11,3 +11,7 @@ Run:
 to generate and perform differential testing with Csmith.
 
 Run:
+```
+./2-gen-com-run-O2-opt.sh <csmithedge-gitrepo-path> <seeds-file>
+```
+to generate and perform differential testing with CsmithEdge with optimizations.
