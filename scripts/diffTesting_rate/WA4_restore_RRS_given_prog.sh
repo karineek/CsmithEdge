@@ -7,7 +7,8 @@ lastline=$2
 if [ ! -z "$lastline" ]
 then
 	declare -i lastindex=0;
-    declare -i lastindexlen=0;
+	declare -i lastindexlen=0;
+	
 	## Find last index
 	for (( i=0; i<${#lastline}; i++ )); do 
         if [ "${lastline:$i:1}" == "_" ]; then
@@ -20,7 +21,6 @@ then
 					num=${lastline:$j:1}
 				done
 				lastindexlen=$j-$lastindex
-				#echo "Found index" $lastindex " to " $(( lastindexlen + lastindex ))
 			fi
 		fi
 	done
@@ -76,7 +76,6 @@ rm -f $testcaseRes
 # 1. Check no error
 res=`cat /tmp/err | wc -l`
 rm /tmp/err
-#echo "Result error counter is" $res
 if (($res > 0)); 
 	then
 	echo 'Skip the test' $testcaseRes 'due to timeout/error.'
@@ -88,12 +87,11 @@ else
 		then
 		echo 'Skip the test' $testcaseRes 'due to an error (no checksum).'
 	else
-       	# 3. Test if the list is complete
+       		# 3. Test if the list is complete
 		# Test if there is a large loop and we had to cut the info.
 		cat /tmp/out | grep 'Condition' | sort | uniq | head -9999 > $testcaseRes
-       	rm /tmp/out
+       		rm /tmp/out
 		LC=`cat $testcaseRes | wc -l`
-        	#echo "There are " $LC " conditions"
 		if (($LC >= 9999)); 
 			then
 			echo '(error) Not all locations written to' $testcaseRes
@@ -134,12 +132,12 @@ rm $testcase
 # Single iteration, requires a compiler and a seed
 CSMITH_USER_OPTIONS=" --bitfields --packed-struct"
 # Basic parameters
-compiler=$1		# Compiler to test
-seed=$2 		# File with all the seeds to use
-folder=$3 		# folder for all the results
-testfile=$4		# testcase we have
-csmith_location=$5	# Csmith location
+compiler=$1			# Compiler to test
+seed=$2 			# File with all the seeds to use
+folder=$3 			# folder for all the results
+testfile=$4			# testcase we have
+csmith_location=$5		# Csmith location
  
 # Run a Single case:
-get_test $seed $testfile	## Run a single test
+get_test $seed $testfile	# Run a single test
 
