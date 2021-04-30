@@ -1,11 +1,11 @@
 #!/bin/bash 
-baseD=$1					# /home/user42
+baseD=$1					# e.g., /home/user42
+nb_progs_to_gen=$2				# e.g., 100000
 base=$baseD/RRS_EXPR 				# $baseD/git/RRS_EXPR
 csmith_location=$base/csmith			# csmith location
 genrator=$csmith_location/build/src/csmith	# build
 outputs_location=../../ 			# where we will put all outputs
 csmith_flags=" --bitfields --packed-struct "
-nb_progs_to_gen=100000
 i=0
 
 prog=csmith_test.c
