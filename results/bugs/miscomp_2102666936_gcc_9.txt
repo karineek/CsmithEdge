@@ -1,4 +1,10 @@
-Buggy: gcc-9,8,7
+****
+We reported this bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94809	
+in: gcc/tree.c
+****
+
+
+Buggy: gcc-9,8,7 (fixed in 10)
 Fixed: gcc-10,gcc-11
 
 All optimization level, only with macros
