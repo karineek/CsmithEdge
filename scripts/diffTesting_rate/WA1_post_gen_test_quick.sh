@@ -519,18 +519,17 @@ probArrRangesTo=(1000 1000 1000 1 1 350 500 250 1000 1000)
 
 #
 ### EXEC & BUILD LOCATION
-#csmith_exec=$base/csmith/build/src/csmith
-csmith_exec=$base/RRS_EXPR/csmith/build/src/csmith
-csmith_build=$base/RRS_EXPR/csmith/build
-csmith_exec_wa=$base/RRS_EXPR/csmith/build/src/csmith
-csmith_build_wa=$base/RRS_EXPR/csmith/build
-csmith_location=$base/RRS_EXPR/csmith
-framac_run_folder=$base/RRS_EXPR/scripts/csmith_stat/Frama-C-zone
+csmith_exec=$base/CsmithEdge/csmith/build/src/csmith
+csmith_build=$base/CsmithEdge/csmith/build
+csmith_exec_wa=$base/CsmithEdge/csmith/build/src/csmith
+csmith_build_wa=$base/CsmithEdge/csmith/build
+csmith_location=$base/CsmithEdge/csmith
+framac_run_folder=$base/CsmithEdge/scripts/csmith_stat/Frama-C-zone
 #
 ### ARGS
 csmith_args="$CSMITH_USER_OPTIONS --annotated-arith-wrappers"
-wa_probs=$base/RRS_EXPR/scripts/csmith_stat/seedsProbs/probs_WeakenSafeAnalyse_test.txt
-rrs_folder=$base/RRS_EXPR/scripts/csmith_stat/seedsProbs/seedsSafeLists
+wa_probs=$base/CsmithEdge/scripts/diffTesting_rate/seedsProbs/probs_WeakenSafeAnalyse_test.txt
+rrs_folder=$base/CsmithEdge/scripts/diffTesting_rate/seedsProbs/seedsSafeLists
 wa_args="$csmith_args --relax-anlayses-conditions --relax-anlayses-prob $wa_probs"
 wa_local_args=""
 
