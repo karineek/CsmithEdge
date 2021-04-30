@@ -26,12 +26,9 @@ function keep_required_safe {
 			else
 				locF=$loc
 		    fi
-			#echo "[$loc]"
 		done
-		#echo "location is: [$locF]"
-		#echo "Function number is: [$funcF]"
 
-        #Replace the rest of the calls to unsafe macros
+		#Replace the rest of the calls to unsafe macros
 		keyword_raw='/* ___REMOVE_SAFE__OP *//*'$locF'*//* ___SAFE__OP */('
 		keyword_regexp="$(printf '%s' "$keyword_raw" | sed -e 's/[]\/$*.^|[]/\\&/g')"
 
@@ -73,7 +70,8 @@ function modify_test {
 ################### MAIN ###############################
 # Basic parameters
 seed=$1		# File with all the seeds to use
-testfile=$2		# original testcase
+testfile=$2	# original testcase
+
 # Check if second parameter is a number
 re='^[0-9]+$'
 if ! [[ $seed =~ $re ]] ; then
