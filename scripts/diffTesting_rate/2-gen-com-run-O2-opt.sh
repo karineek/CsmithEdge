@@ -1,8 +1,8 @@
-#!/bin/bash 
-i=$1
-baseD=/home/user42
-base=$baseD/RRS_EXPR # $baseD/git/RRS_EXPR
-nb_progs_to_gen=50000
+#!/bin/bash
+baseD=$1		# e.g., /home/user42
+nb_progs_to_gen=$2	# e.g., 100000
+i=$3			# e.g., 1
+base=$baseD/RRS_EXPR 	# $baseD/git/RRS_EXPR
 
 ######################################## Start Cov. ########################################
 # Loop over compilation and coverage measurement
