@@ -1,4 +1,8 @@
-Buggy: gcc-9,8,7
+****
+We reported this bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96369 
+****
+
+Buggy: gcc-9,8,7 (fixed in gcc-10)
 Fixed: gcc-10,gcc-11
 
 O1,O2,O3,Os optimization level, only with macros
