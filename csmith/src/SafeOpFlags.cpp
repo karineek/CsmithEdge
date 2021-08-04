@@ -42,6 +42,7 @@
 #include "Probabilities.h"
 #include "DepthSpec.h"
 #include "CGOptions.h"
+#include "WeakenSafeAnalysesMgr.h"
 
 using namespace std;
 
@@ -289,11 +290,11 @@ SafeOpFlags::~SafeOpFlags()
 	// Nothing to do
 }
 
+// Add annotation for RRS
 std::string 
-SafeOpFlags::InjectedCodeTestR() const
+SafeOpFlags::annotate_arith_code_wrapper() const
 {
-	static unsigned int __counter_index = 0; __counter_index++;
-	return "/* ___REMOVE_SAFE__OP *//*"+std::to_string(__counter_index-1)+"*//* ___SAFE__OP */";
+	return WeakenSafeAnalysesMgr::GetInstance()->annotate_arith_code_wrapper();
 }
 
 std::string
@@ -308,7 +309,7 @@ SafeOpFlags::safe_float_func_string(enum eBinaryOps op) const
 		default: assert(0); break;
 	}
 	s += "func_float_f_f";
-    s += InjectedCodeTestR();
+	s += annotate_arith_code_wrapper();
 	return s;
 
 }
@@ -337,7 +338,7 @@ SafeOpFlags::to_string(enum eBinaryOps op) const
 	OutputOp1(oss);
 	(op == eLShift || op == eRShift) ? OutputOp2(oss) : OutputOp1(oss);
 	s += oss.str();	
-    s += InjectedCodeTestR();
+	s += annotate_arith_code_wrapper();
 	return s;
 }
 
@@ -356,7 +357,7 @@ SafeOpFlags::to_string(enum eUnaryOps op) const
 	OutputSize(oss);
 	OutputOp1(oss);
 	s += oss.str();
-	s += InjectedCodeTestR();	
+	s += annotate_arith_code_wrapper();	
 	return s;
 }
 

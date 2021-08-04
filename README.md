@@ -6,7 +6,7 @@ Results and data appeared in the paper along with additional details, can be fou
 
 Tools in use
 ------------
-1. csmith (clone version: 8115771, 13 of April 2020).
+1. csmith (clone version: d0b585a, 31 of May 2020).
 2. gfauto (clone version: 8030f33, 15 of July 2021).
 3. Python 3.8.10
 

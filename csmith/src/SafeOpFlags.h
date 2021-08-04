@@ -112,7 +112,7 @@ private:
 
 	SafeOpFlags &operator=(const SafeOpFlags &flags); //unimplemented;
 
- 	std::string InjectedCodeTestR() const;
+	std::string annotate_arith_code_wrapper() const; // Add annotation for RRS
 };
 
 #endif //SAFEOPFLAGS_H
