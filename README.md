@@ -1,13 +1,14 @@
 # CsmithEdge
 
-Experimental data and scripts to reproduce the results reported in ASE-NIER 2020.
+Experimental data and scripts to reproduce the results reported for CsmithEdge (updated to July 2021).
 
 Results and data appeared in the paper along with additional details, can be found [here](https://github.com/karineek/CsmithEdge/tree/master/results).
 
 Tools in use
 ------------
 1. csmith (clone version: 8115771, 13 of April 2020).
-2. gfauto (clone version: 8d0d03f, 14 of May 2020).
+2. gfauto (clone version: 8030f33, 15 of July 2021).
+3. Python 3.8.10
 
 ** see subfolders, we modified few files in each. Replace the files in these folders with ours.
 
