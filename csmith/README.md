@@ -27,6 +27,8 @@ src/StatementGoto.h
 src/StatementIf.cpp
 src/Variable.cpp
 src/VariableSelector.cpp
+src/WeakenSafeAnalysesMgr.h
+src/WeakenSafeAnalysesMgr.cpp
 ```
 
 ## Build CsmithEdge
