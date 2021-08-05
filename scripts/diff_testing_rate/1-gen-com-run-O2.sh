@@ -1,8 +1,7 @@
 #!/bin/bash 
-baseD=$1					# e.g., /home/user42
+base=$1					# e.g., /home/user42
 nb_progs_to_gen=$2				# e.g., 100000
 timeout_bound=$3				# csmith-generated programs timeout when diff-testing
-base=$baseD/CsmithEdge 			# $baseD/git/RRS_EXPR
 csmith_location=$base/csmith			# csmith location
 genrator=$csmith_location/build/src/csmith	# build
 csmith_flags=" --bitfields --packed-struct "
