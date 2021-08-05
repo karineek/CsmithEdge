@@ -73,7 +73,7 @@ function general_report {
 		if [[ $time_out_flag_edge -eq 1 ]]; then
 			tool="CSMITH-WA"
 			prog=temp_edge.c
-			check_plain_rrs $tool $prog $csmith_build_wa "$curr_folder/PlainRRS2.txt" "gcc-10 -O2 -w"
+			check_plain_rrs $tool $prog $csmith_build "$curr_folder/PlainRRS2.txt" "gcc-10 -O2 -w"
 			diff_lines_Plain=`diff -y --suppress-common-lines $curr_folder/Plain2.txt $curr_folder/PlainRRS2.txt`
                         if [ -z "$diff_lines_Plain" ]; then
 				echo ">> Same result (in timeout!)"
@@ -90,8 +90,8 @@ function general_report {
 		err_rrs=`grep "error" rrs.log | wc -l`
 		if [[ $err_rrs -eq 0 ]] ; then				 
 			./WA5_restore_testcase_given_prog.sh $seed $prog
-			check_plain_rrs $tool $progM $csmith_build_wa "$curr_folder/PlainRRS1.txt" "clang-10 -O2 -w"		
-			check_plain_rrs $tool $progM $csmith_build_wa "$curr_folder/PlainRRS2.txt" "gcc-10 -O2 -w"
+			check_plain_rrs $tool $progM $csmith_build "$curr_folder/PlainRRS1.txt" "clang-10 -O2 -w"		
+			check_plain_rrs $tool $progM $csmith_build "$curr_folder/PlainRRS2.txt" "gcc-10 -O2 -w"
 			diff_lines_Plain=`diff -y --suppress-common-lines $curr_folder/PlainRRS1.txt $curr_folder/PlainRRS2.txt`
 			if [ -z "$diff_lines_Plain" ]; then
 				echo ">> Same result"
@@ -116,8 +116,8 @@ function check_plain_rrs {
 	# PLAIN
 	{
 		rm -f a.out
-		ulimit -St 300; $compilerP -I$build_folder/../RRS_runtime_test/ -I$build_folder/runtime/ $prog
-		ulimit -St 50; ./a.out > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
+		(ulimit -St 300; $compilerP -I$build_folder/../RRS_runtime_test/ -I$build_folder/runtime/ $prog)
+		(ulimit -St $timeout_bound; ./a.out) > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
 		rm -f a.out
 		timeout=`cat $printoutput | wc -l`
 		if [[ $timeout -eq 0 ]]; then
@@ -232,9 +232,8 @@ function check_plain {
 	# PLAIN
 	{
 		rm -f a.out
-		ulimit -St 300; clang-10 -O0 -w -I$build_folder/../runtime/ -I$build_folder/runtime/ $prog
-		#echo "ulimit -St 50; ./a.out > $printoutput 2>&1"
-		ulimit -St 50; ./a.out > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
+		(ulimit -St 300; clang-10 -O0 -w -I$build_folder/../runtime/ -I$build_folder/runtime/ $prog)
+		(ulimit -St $timeout_bound; ./a.out) > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
 		rm -f a.out
 		timeout=`cat $printoutput | wc -l`
 		if [[ $timeout -eq 0 ]]; then
@@ -337,12 +336,10 @@ function gen_test_case {
 	prog=$2			#program name
 	genrator=$3			#csmith_exec
 	args=$4			#csmith_args
-	test_name=$5			#Csmith tests
-	dumpfile_inGene=$6		#dump123
 	
 	# set, clean, and generate
 	cd $curr_folder; rm -f $prog
-	ulimit -St 150; $genrator $args $CSMITH_USER_OPTIONS --seed $curr_seed > $prog
+	(ulimit -St 150; $genrator $args $CSMITH_USER_OPTIONS --seed $curr_seed > $prog)
 }
 
 ## Generate probablity per test-case
@@ -506,7 +503,7 @@ function test_single_seed {
 	# Building original test-case #
 	progA=temp_orig.c
 	tool="CSMITH"
-	gen_test_case $seed $progA $csmith_exec "$csmith_args" "$tool-tests" $dump123
+	gen_test_case $seed $progA $csmith_build/src/csmith "$csmith_args" ## "$tool-tests"
 	linesCsmithProg=`cat $progA | wc -l`
 	
 	###################################
@@ -514,7 +511,7 @@ function test_single_seed {
 	progB=temp_edge.c
 	tool="CSMITH-WA"
 	gen_probs_WA $probSize $seed 500 # 7 $seed 500, but for testing took other parameters (300)
-	gen_test_case $seed $progB $csmith_exec_wa "$wa_local_args" "$tool-tests" $dump123
+	gen_test_case $seed $progB $csmith_build/src/csmith "$wa_local_args" ## "$tool-tests"
 	linesWAProg=`cat $progB | wc -l`
 	if [[ $linesWAProg -eq 14 ]]; then ## Error in generation
 		touch $rrs_folder/'__test'$seed'INVALID'
@@ -540,10 +537,10 @@ function test_single_seed {
 		tool="CSMITH-WA"
 
 		## Plain
-		check_plain	$tool $prog $csmith_build_wa $curr_folder/Plain2.txt
+		check_plain	$tool $prog $csmith_build $curr_folder/Plain2.txt
 		if [[ $time_out_flag -eq 0 ]]; then ## Only if did not crash
 			gen_RRS_mix_prob $prog $probfile_curr
-			is_valid_program $tool $prog "$csmith_build_wa" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
+			is_valid_program $tool $prog "$csmith_build" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
 		else
 			touch $curr_folder/ASANres2.txt $curr_folder/MSANres2.txt $curr_folder/UBSANres2.txt $framac_run_folder/Fres2.txt
 		fi
@@ -584,38 +581,33 @@ function clean_itr {
 ####################################### Start Main #######################################
 CSMITH_USER_OPTIONS=" --bitfields --packed-struct "
 seed=$1 		# File with all the seeds to use - shall be only good seeds here!
-base=$2			# base folder
-dump123=$3 		# Where to dump123 all results
+base=$2		# base folder
+timeout_bound=$3	# csmith-generated programs timeout when diff-testing
 
 probSize=10
 probArrRangesFrom=(0 0 0 0 0 0 0 0 150 0)
 probArrRangesTo=(1000 1000 1000 1 1 350 500 250 1000 1000)
-					
-#
-### EXEC & BUILD LOCATION
 
 ### EXEC & BUILD LOCATION
 csmith_location=$base/CsmithEdge/csmith
 csmith_build=$csmith_location/build
-csmith_exec=$csmith_build/src/csmith
-csmith_build_wa=$csmith_location/build
-csmith_exec_wa=$csmith_build_wa/src/csmith
-scripts_location=$base/CsmithEdge/scripts/diffTesting_rate
-framac_run_folder=$scripts_location/Frama-C-zone
-#
+scripts_location=$base/CsmithEdge/scripts/diff_testing_rate
+
 ### ARGS
 csmith_args="$CSMITH_USER_OPTIONS --annotated-arith-wrappers"
 wa_probs=$scripts_location/seedsProbs/probs_WeakenSafeAnalyse_test.txt
 rrs_folder=$scripts_location/seedsProbs/seedsSafeLists
+framac_run_folder=$scripts_location/Frama-C-zone
 wa_args="$csmith_args --relax-anlayses-conditions --relax-anlayses-prob $wa_probs"
 wa_local_args=""
+mkdir -p $rrs_folder
 
 ## Additionl flags and vars
 diff_lines_progs=0	# to test if the programs are the same (and then we don't need validation)
-probfile_curr=""
-time_out_flag=0		# If hit once timeout, skip all
+probfile_curr=""	# 
+time_out_flag=0	# If hit once timeout, skip all
 time_out_flag_edge=0	# to test if a csmithEdge's testcase failed
-flag_dang_ptr=0		# Only if created dangling pointers shall call Frama-c
+flag_dang_ptr=0	# Only if created dangling pointers shall call Frama-c
 same_result_flage=0	# if results are the same from two compilers
 maxRRS=0
 curr_folder=`pwd`

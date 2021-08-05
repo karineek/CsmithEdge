@@ -8,8 +8,10 @@ Tools in use
 ------------
 1. csmith (clone version: d0b585a, 31 of May 2020).
 2. gfauto (clone version: 8030f33, 15 of July 2021).
-3. Python 3.8.10
-4. cmake 
+3. Frama-c 22.0 (Titanium)
+4. Python version 3.8.10
+5. cmake version 3.16.3 
+
 ** see subfolders, we modified few files in each. Replace the files in these folders with ours.
 
 Setting the environment
