@@ -2,9 +2,10 @@
 
 ############################################# REPORT and DEBUG DATA #############################################
 function general_report {
+	## Init:
 	testValid=1
 	cd $curr_folder
-	
+
 	ASANfail=0
 	MSANfail=0
 	UBSANfail=0
@@ -136,7 +137,7 @@ function check_wt_FramaC {
 		## -val-warn-undefined-pointer-comparison pointer	==> pointer comparison alarms are emitted only on comparisons involving lvalues with pointer type
 		## -no-val-alloc-returns-null 				==> supposes that malloc never fails
 		## -eva-builtin malloc:Frama_C_malloc_fresh . . .	==> enables builtins for the malloc function of the standard library < NOT SUPPORTED >
-	    	## -eva-builtin free:Frama_C_free . . .	. . . . .	==> enables builtins for the free function of the standard library < NOT SUPPORTED >
+	    	## -eva-builtin free:Frama_C_free . . . . . . . .	==> enables builtins for the free function of the standard library < NOT SUPPORTED >
 		## -warn-signed-overflow. . . . . . . . . . . . .	==> check that the analyzed code does not overflow on integer operations
 		## -warn-unsigned-overflow. . . . . . . . . . . . 	==> check that the analyzed code does not overflow on unsigned integer operations
 		## -val . . . . . . . . . . . . . . . . . . . . .	==> Run value analysis plug-in
@@ -161,8 +162,8 @@ function check_plain {
 	# PLAIN
 	{
 		rm -f a.out
-		ulimit -St 300; $compilerP -I$build_folder/../RRS_runtime_test/ -I$build_folder/runtime/ $prog
-		ulimit -St 50; ./a.out > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
+		(ulimit -St 300; $compilerP -I$build_folder/../RRS_runtime_test/ -I$build_folder/runtime/ $prog)
+		(ulimit -St $timeout_bound; ./a.out) > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
 		rm -f a.out
 		timeout=`cat $printoutput | wc -l`
 		if [[ $timeout -eq 0 ]]; then
@@ -196,7 +197,6 @@ function check_wt_ASAN {
 			time_out_flag=1
 			echo "($tool) Recognized timeout (ASAN), skip other sanitizers and checkers!" 
 		fi
-
 	}
 	else
 		touch $printoutput
@@ -223,7 +223,6 @@ function check_wt_MSAN {
 			time_out_flag=1
 			echo "($tool) Recognized timeout (MSAN), skip other sanitizers and checkers!" 
 		fi
-
 	}
 	else
 		touch $printoutput
@@ -253,7 +252,6 @@ function check_wt_UBSAN {
 		cat $printoutput | grep ".c:" | grep -ve "SUMMARY: " -ve " misaligned address 0" > $printoutput.tmp
 		cp $printoutput.tmp $printoutput
 		rm $printoutput.tmp
-
 	}
 	else
 		touch $printoutput
@@ -264,21 +262,14 @@ function check_wt_UBSAN {
 ############################################################# GENERATE TEST-CASE #############################################################
 ## Generate a test-case
 function gen_test_case {
-	curr_seed=$1		#seed
-	prog=$2			#program name
-	genrator=$3		#csmith_exec
-	args=$4			#csmith_args
-	test_name=$5		#Csmith tests
+	curr_seed=$1	#seed
+	prog=$2	#program name
+	genrator=$3	#csmith_exec
+	args=$4	#csmith_args
 	
 	# set, clean, and generate
 	cd $curr_folder; rm -f $prog
-	ulimit -St 150; $genrator $args $CSMITH_USER_OPTIONS --seed $curr_seed > $prog 2> /tmp/err
-
-	res=`cat /tmp/err | wc -l`
-	rm /tmp/err
-	if (($res > 0)); then
-		exit ## error in the generator, exit
-	fi
+	(ulimit -St 150; $genrator $args $CSMITH_USER_OPTIONS --seed $curr_seed > $prog) 2> /tmp/err
 }
 
 ## Generate probablity per test-case
@@ -318,8 +309,6 @@ function gen_probs_WA {
 	if [[ ${probArr[2]} -gt 990 ]]; then
 		probArr[2]=990
 	fi
-	## Keep all probablities
-	debugProbs=$( IFS=$','; echo "${probArr[*]}" )
 
 	## Create the command line call to Csmith ##
 	############################################
@@ -446,7 +435,7 @@ function test_single_seed {
 	progM=__test$seed"M.c"
 	tool="CSMITH-WA"
 	gen_probs_WA $probSize $seed 500 # 7 $seed 500, but for testing took other parameters (300)
-	gen_test_case $seed $progB $csmith_exec_wa "$wa_local_args" "$tool-tests"
+	gen_test_case $seed $progB $csmith_build/src/csmith "$wa_local_args" "$tool-tests"
 	linesWAProg=`cat $progB | wc -l`
 	if [[ $linesWAProg -eq 0 ]]; then
 		echo "(empty file) Skips test-case for $seed"
@@ -469,8 +458,8 @@ function test_single_seed {
 			./WA5_restore_testcase_given_prog.sh $seed $prog
 		
 			## Plain
-			check_plain	$tool $progM $csmith_build_wa "$curr_folder/Plain2.txt" "clang-10 -O2 -w"		
-			check_plain	$tool $progM $csmith_build_wa "$curr_folder/Plain3.txt" "gcc-10 -O2 -w"
+			check_plain	$tool $progM $csmith_build "$curr_folder/Plain2.txt" "clang-10 -O2 -w"		
+			check_plain	$tool $progM $csmith_build "$curr_folder/Plain3.txt" "gcc-10 -O2 -w"
 			diff_lines_Plain=`diff -y --suppress-common-lines $curr_folder/Plain2.txt $curr_folder/Plain3.txt`
 			if [ -z "$diff_lines_Plain" ]; then
 				echo ">> Skip UB DETECTOR - Same result"
@@ -478,21 +467,21 @@ function test_single_seed {
 				cat $curr_folder/Plain2.txt
                 		cat $curr_folder/Plain3.txt
 			else
-				is_valid_program $tool $progB "$csmith_build_wa" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
+				is_valid_program $tool $progB "$csmith_build" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
 			fi
 		else
 			## hit timeout - skip
-			check_plain	$tool $progB $csmith_build_wa "$curr_folder/Plain2.txt" "clang-10 -O2 -w"
-			check_plain	$tool $progB $csmith_build_wa "$curr_folder/Plain3.txt" "gcc-10 -O2 -w"
+			check_plain	$tool $progB $csmith_build "$curr_folder/Plain2.txt" "clang-10 -O2 -w"
+			check_plain	$tool $progB $csmith_build "$curr_folder/Plain3.txt" "gcc-10 -O2 -w"
 		 	diff_lines_Plain=`diff -y --suppress-common-lines $curr_folder/Plain2.txt $curr_folder/Plain3.txt`
-                        if [ -z "$diff_lines_Plain" ]; then
+                       if [ -z "$diff_lines_Plain" ]; then
 				echo ">> Skip UB DETECTOR - Same result (RRS FAILED)"
-                                same_result_flage=1
+				same_result_flage=1
 				cat $curr_folder/Plain2.txt
                 		cat $curr_folder/Plain3.txt
 			else
-                                is_valid_program $tool $progB "$csmith_build_wa" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
-                        fi
+                                is_valid_program $tool $progB "$csmith_build" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
+                      	fi
 			failedRRS=1
 		fi
 		rm $curr_folder/Plain3.txt
@@ -501,7 +490,6 @@ function test_single_seed {
 		time_out_flag_edge=$time_out_flag
 	fi
 }
-
 ## Clear all flies before exit
 function clean_itr {
 	cd $curr_folder
@@ -509,33 +497,33 @@ function clean_itr {
 }
 
 ####################################### Start Main #######################################
-CSMITH_USER_OPTIONS=" --bitfields --packed-struct --annotated-arith-wrappers "
-seed=$1		# File with all the seeds to use - shall be only good seeds here!
+CSMITH_USER_OPTIONS=" --bitfields --packed-struct "
+seed=$1 		# File with all the seeds to use - shall be only good seeds here!
 base=$2		# base folder
+timeout_bound=$3	# csmith-generated programs timeout when diff-testing
 
 probSize=10
 probArrRangesFrom=(0 0 0 0 0 0 0 0 150 0)
 probArrRangesTo=(1000 1000 1000 1 1 350 500 250 1000 1000)
 
-#
 ### EXEC & BUILD LOCATION
-csmith_location=$base/CsmithEdge/csmith
+csmith_location=$base/csmith
 csmith_build=$csmith_location/build
-csmith_exec=$csmith_build/src/csmith
-csmith_build_wa=$csmith_location/build
-csmith_exec_wa=$csmith_build_wa/src/csmith
-scripts_location=$base/CsmithEdge/scripts/diffTesting_rate
-framac_run_folder=$scripts_location/Frama-C-zone
-#
+scripts_location=$base/scripts/diff_testing_rate
 ### ARGS
 csmith_args="$CSMITH_USER_OPTIONS --annotated-arith-wrappers"
 wa_probs=$scripts_location/seedsProbs/probs_WeakenSafeAnalyse_test.txt
 rrs_folder=$scripts_location/seedsProbs/seedsSafeLists
+framac_run_folder=$scripts_location/Frama-C-zone
 wa_args="$csmith_args --relax-anlayses-conditions --relax-anlayses-prob $wa_probs"
 wa_local_args=""
 
+mkdir -p $rrs_folder
+cd $scripts_location
+
 ## Additionl flags and vars
-probfile_curr=""
+diff_lines_progs=0	# Not in use here
+probfile_curr=""	# 
 time_out_flag=0		# If hit once timeout, skip all
 time_out_flag_edge=0	# to test if a csmithEdge's testcase failed
 flag_dang_ptr=0		# Only if created dangling pointers shall call Frama-c
@@ -551,8 +539,9 @@ rm -f probfile_curr $wa_probs
 #########################################
 # Collect data for testing current seed #
 test_single_seed
-##########################
-# Print Report and clean #
+################
+# Print Report #
 cd $curr_folder
 general_report
+# cleaning before exit
 clean_itr

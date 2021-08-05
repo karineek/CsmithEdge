@@ -10,9 +10,8 @@ function general_report {
 	MSANfail=0
 	UBSANfail=0
 	FRAMAcfail=0
+
 	## General stat.
-	total=$(($total+1))
-	
 	if [[ $diff_lines_progs -eq 0 ]]; then
 		testValid=1
         elif [[ $diff_lines_progs -eq 1 ]]; then
@@ -197,7 +196,7 @@ function check_wt_FramaC {
 		fi
 		cp $output.tmp $output
 		rm $output.tmp
-		
+
 		cd $curr_folder
 
 		#frama-c -cpp-extra-args="-I$csmith_folder -C -Dvolatile= -E -I."  prog.c 
@@ -332,10 +331,10 @@ function check_wt_UBSAN {
 ############################################################# GENERATE TEST-CASE #############################################################
 ## Generate a test-case
 function gen_test_case {
-	curr_seed=$1			#seed
-	prog=$2			#program name
-	genrator=$3			#csmith_exec
-	args=$4			#csmith_args
+	curr_seed=$1		#seed
+	prog=$2		#program name
+	genrator=$3		#csmith_exec
+	args=$4		#csmith_args
 	
 	# set, clean, and generate
 	cd $curr_folder; rm -f $prog
@@ -371,7 +370,7 @@ function gen_probs_WA {
 		fi
 	done
 	# Bug in csmith, try to avoid it; /home/user42/git/csmith/build/src/csmith --dangling-ptr-deref-prob 1 --seed 2517861355
-	#							      /home/user42/git/csmith/build/src/csmith  --seed 2120095187  --null-ptr-deref-prob 1
+	#                                 /home/user42/git/csmith/build/src/csmith  --seed 2120095187  --null-ptr-deref-prob 1
 	# ad-hoc patch
 	if [[ ${probArr[1]} -gt 990 ]]; then
 		probArr[1]=990
@@ -589,10 +588,9 @@ probArrRangesFrom=(0 0 0 0 0 0 0 0 150 0)
 probArrRangesTo=(1000 1000 1000 1 1 350 500 250 1000 1000)
 
 ### EXEC & BUILD LOCATION
-csmith_location=$base/CsmithEdge/csmith
+csmith_location=$base/csmith
 csmith_build=$csmith_location/build
-scripts_location=$base/CsmithEdge/scripts/diff_testing_rate
-
+scripts_location=$base/scripts/diff_testing_rate
 ### ARGS
 csmith_args="$CSMITH_USER_OPTIONS --annotated-arith-wrappers"
 wa_probs=$scripts_location/seedsProbs/probs_WeakenSafeAnalyse_test.txt
@@ -600,14 +598,16 @@ rrs_folder=$scripts_location/seedsProbs/seedsSafeLists
 framac_run_folder=$scripts_location/Frama-C-zone
 wa_args="$csmith_args --relax-anlayses-conditions --relax-anlayses-prob $wa_probs"
 wa_local_args=""
+
 mkdir -p $rrs_folder
+cd $scripts_location
 
 ## Additionl flags and vars
 diff_lines_progs=0	# to test if the programs are the same (and then we don't need validation)
 probfile_curr=""	# 
-time_out_flag=0	# If hit once timeout, skip all
+time_out_flag=0		# If hit once timeout, skip all
 time_out_flag_edge=0	# to test if a csmithEdge's testcase failed
-flag_dang_ptr=0	# Only if created dangling pointers shall call Frama-c
+flag_dang_ptr=0		# Only if created dangling pointers shall call Frama-c
 same_result_flage=0	# if results are the same from two compilers
 maxRRS=0
 curr_folder=`pwd`
@@ -615,7 +615,7 @@ curr_folder=`pwd`
 timeS=$(date +"%T")
 echo " ============= START ITR (seed=$seed) ($timeS) ============="
 probfile_curr=$wa_probs$seed
-rm -f probfile_curr $wa_prob
+rm -f probfile_curr $wa_probs
 #########################################
 # Collect data for testing current seed #
 test_single_seed
