@@ -35,8 +35,11 @@ src/WeakenSafeAnalysesMgr.cpp
 
 Clone Csmith here and compile with our version of classes in src folder. The folders RRS_runtime_gen and RRS_runtime_test are copies of the regular Csmith runtime folder with our modifications for each stage of the dynamic analysis for remove redundant math safe wrappers for arithmetic operators, when RRS_runtime_gen: required to run the analysis and RRS_runtime_test: required to run the test cases with the analysis result.
 
-Then from root folder of csmith, build the Csmith with our modifications as before: 
+Run these commands from the main folder of this project:
 ```
+git clone https://github.com/csmith-project/csmith.git
+cd ./csmith
+git checkout d0b585afb1a3de8c11f33c355bbba739dcf1d01a 
 mkdir build
 cd build
 cmake ../
