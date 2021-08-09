@@ -1,0 +1,8 @@
+--bitfields --packed-struct
+0
+0
+0
+0
+0
+0
+-I$csmith_location/$runtime -I$csmith_location/build/runtime
