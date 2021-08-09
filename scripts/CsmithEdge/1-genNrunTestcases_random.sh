@@ -13,7 +13,7 @@ echo " - date: $(date '+%Y-%m-%d at %H:%M.%S')"
 echo " - host name $(hostname -f)"
 echo " - script path: $(readlink $0)"
 base=$1	# Project main folder
-datelog=$2	
+datelog=$2	# Date 
 seeds_min=$3	# Where to start from
 seeds_max=$4	# How many seeds to iterate on
 
@@ -23,9 +23,12 @@ output=$base_script_WA2/output
 seedsProbs=$base_script_WA2/seedsProbs
 rrs_folder=$seedsProbs/seedsSafeLists
 log_folder=$base_script_WA2/loggers
-refernceCompiler=clang-10
+refernceCompiler=$5
 testedCompilerA=$5
 testedCompilerB=$6
+
+## Lazy or regular?
+lazy=$7	# lazy=1
 
 # Clean before start
 clean_itr "$base_script_WA2"
@@ -90,8 +93,6 @@ do
 
 	### Inner loop per seed
 	seeds=../../Data/seeds_all/random_seeds_out$i.txt	
-	##seeds=../../Data/seeds_all/seeds_out$i.txt
-	##seeds='../../Data/seeds_good/seeds_out'$i'_sample.txt'
 	touch $seeds
 	for j in {0..100000}
 	do
@@ -103,7 +104,7 @@ do
 		## Tested if not already known to be a bad seed
 		fileinvalid=$rrs_folder/'__test'$seed'INVALID'
 		if [ -f "$fileinvalid" ] ; then
-			echo ">> (ERROR) Testcase creation previously failed. Bad seed <$seed>."
+			echo " >> (ERROR) Testcase creation failed. Bad seed <$seed> with file <$fileinvalid>."
 			echo " >> (Warning) bad seed $seed previously detected. Skip testcase." >> "$generallogger"
 			continue
 		fi
@@ -115,14 +116,18 @@ do
 		safelist=$rrs_folder/'__test'$seed'Results'
 
 		## Generate WA test-case:
-		ulimit -St 9999; ./WA1_post_gen_test.sh $seed $base $output "$duringGenlogger" "$loggerRef" >> "$generallogger" 2>&1
+		if [[ "$lazy" == "0" ]] ; then
+			(ulimit -St 9999; ./WA1_gen_test.sh $seed $base $output "$duringGenlogger" "$loggerRef" $testedCompilerA) >> "$generallogger" 2>&1
+		else
+			(ulimit -St 9999; ./WA1_gen_test_lazy.sh $seed $base $output "$duringGenlogger" "$loggerRef" $testedCompilerA $testedCompilerB) >> "$generallogger" 2>&1
+		fi
+		
 		clean_itr "$base_script_WA2" ## Clean before continue
 		fileinvalid=$rrs_folder/'__test'$seed'INVALID'
 		if [ -f "$fileinvalid" ] ; then
-			echo ">> (ERROR) Testcase creation failed. Bad seed <$seed>."
+			echo " >> (ERROR) Testcase creation failed. Bad seed <$seed> with file <$fileinvalid>."
 			echo " >> (Warning) bad seed $seed detected during configuration file generation. Skip testcase." >> "$generallogger"
-			rm -f "$fileinvalid"
-			rm -f "$confgFile"
+			rm $confgFile; rm $fileinvalid ## Remove trace, do not need it when doing quick
 			continue
 		fi
 		if [ ! -f "$confgFile" ] ; then
@@ -141,8 +146,8 @@ do
 			echo ">> (ERROR) Configuration file <$confgFile> is faulty (probably extra empty line) <size=$sizeConfg>." 
 			exit
 		fi
-		## Apply RRS on it (generate a list of must-be-safe locations)
-		ulimit -St 9999; ./WA2_dynamic_analysis_RRS.sh $refernceCompiler $seed $base_expr $output "$annotated_testcase" "$safelist" "$confgFile" >> "$generallogger" 2>&1
+		## Apply RRS on it (generate a list of must-be-safe locations)		
+		(ulimit -St 9999; ./DA2_math_unsafe_list.sh $refernceCompiler $seed $base "$annotated_testcase" "$safelist" "$confgFile") >> "$generallogger" 2>&1
 		if [ ! -f "$safelist" ] ; then
 			echo ">> (ERROR) Testcase creation failed. Bad seed <$seed>."
 			touch $fileinvalid
@@ -150,7 +155,7 @@ do
 			continue
 		fi
 		## Generate modified testcase
-		ulimit -St 9999; ./RSS5_2_constructModifyTests.sh "$seed" "$annotated_testcase" "$safelist" "$confgFile" "$output" >> "$generallogger" 2>&1
+		(ulimit -St 9999; ./3-constructModifyTests.sh "$seed" "$annotated_testcase" "$safelist" "$confgFile" "$output") >> "$generallogger" 2>&1
 		if [ ! -f "$confgFile" ] || [ ! -f "$annotated_testcase" ] || [ ! -f "$modified_testcase" ] || [ ! -f "$safelist" ] ; then
 			echo ">> (ERROR) Testcase creation failed. One or more files are missing <$confgFile> <$annotated_testcase> <$modified_testcase> <$safelist>." 
 			exit
@@ -162,21 +167,20 @@ do
 		compile_line=""
 		runtime="runtime"
 		Orig_confgFile=$seedsProbs/'probs_OrigSafeAnalyse_test.txt'
-		ulimit -St 9999; ./RSS5_3-compiler_test.sh "$refernceCompiler" "$seed" "$annotated_testcase" "$Orig_confgFile" "$loggerV3" "$compile_line" "$compilerflags" "$output" "$csmith_location" "$runtime" >> "$generallogger" 2>&1
+		(ulimit -St 9999; ./4-compiler_test.sh "$refernceCompiler" "$seed" "$annotated_testcase" "$Orig_confgFile" "$loggerV3" "$compile_line" "$compilerflags" "$output" "$csmith_location" "$runtime") >> "$generallogger" 2>&1
 		## WA only functions
 		compilerflags=" -w -O2 "
 		compile_line=""
 		runtime="RRS_runtime_test"
-		ulimit -St 9999; ./RSS5_3-compiler_test.sh "$testedCompilerA" "$seed" "$annotated_testcase" "$Orig_confgFile" "$loggerV0" "$compile_line" "$compilerflags" "$output" "$csmith_location" "$runtime" >> "$generallogger" 2>&1
+		(ulimit -St 9999; ./4-compiler_test.sh "$testedCompilerA" "$seed" "$annotated_testcase" "$Orig_confgFile" "$loggerV0" "$compile_line" "$compilerflags" "$output" "$csmith_location" "$runtime") >> "$generallogger" 2>&1
 		## WA+RRS macros
 		compilerflags=" -w -O2 "
 		compile_line=""
 		runtime="RRS_runtime_test"
-		ulimit -St 9999; ./RSS5_3-compiler_test.sh "$testedCompilerA" "$seed" "$modified_testcase" "$confgFile" "$loggerV1" "$compile_line" "$compilerflags" "$output" "$csmith_location" "$runtime" >> "$generallogger" 2>&1
-		ulimit -St 9999; ./RSS5_3-compiler_test.sh "$testedCompilerB" "$seed" "$modified_testcase" "$confgFile" "$loggerV2" "$compile_line" "$compilerflags" "$output" "$csmith_location" "$runtime" >> "$generallogger" 2>&1
+		(ulimit -St 9999; ./4-compiler_test.sh "$testedCompilerA" "$seed" "$modified_testcase" "$confgFile" "$loggerV1" "$compile_line" "$compilerflags" "$output" "$csmith_location" "$runtime") >> "$generallogger" 2>&1
+		(ulimit -St 9999; ./4-compiler_test.sh "$testedCompilerB" "$seed" "$modified_testcase" "$confgFile" "$loggerV2" "$compile_line" "$compilerflags" "$output" "$csmith_location" "$runtime") >> "$generallogger" 2>&1
 
 		## Cleaning (to save space, can be removed if have space)
-		rm -f $safelist
 		rm -f $modified_testcase
 		rm -f $annotated_testcase
 	done < "$seeds"

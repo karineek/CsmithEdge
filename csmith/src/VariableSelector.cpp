@@ -1487,7 +1487,9 @@ VariableSelector::itemize_array(CGContext& cg_context, const ArrayVariable* av)
 				const FunctionInvocation* fi = new FunctionInvocationBinary(op_wk, ev, new Constant(get_int_type(), StringUtils::int2str(offset)), 0);
 				if (op_wk>0) WeakenSafeAnalysesMgr::GetInstance()->weaken_analysis_add_affected_funcs(fi);
 				ev = new ExpressionFuncall(*fi);
+#ifdef WA_RRS_DEBUG
 				cout << "/* Try to pick different op " << op_wk << "*/\n";
+#endif
 			} else {
 				// Original code	
 				const FunctionInvocation* fi = new FunctionInvocationBinary(eAdd, ev, new Constant(get_int_type(), StringUtils::int2str(offset)), 0);

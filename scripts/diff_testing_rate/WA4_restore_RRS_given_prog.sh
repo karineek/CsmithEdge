@@ -8,7 +8,6 @@ if [ ! -z "$lastline" ]
 then
 	declare -i lastindex=0;
 	declare -i lastindexlen=0;
-	
 	## Find last index
 	for (( i=0; i<${#lastline}; i++ )); do 
         if [ "${lastline:$i:1}" == "_" ]; then
@@ -86,6 +85,7 @@ else
 	if (($checksumEx == 0)); 
 		then
 		echo 'Skip the test' $testcaseRes 'due to an error (no checksum).'
+		touch $folder/'__'$testcaseName'INVALID'
 	else
        		# 3. Test if the list is complete
 		# Test if there is a large loop and we had to cut the info.
@@ -137,7 +137,7 @@ seed=$2 			# File with all the seeds to use
 folder=$3 			# folder for all the results
 testfile=$4			# testcase we have
 csmith_location=$5		# Csmith location
-timeout_bound=$3		# csmith-generated programs timeout when diff-testing
+timeout_bound=$6		# csmith-generated programs timeout when diff-testing
  
 # Run a Single case:
 get_test $seed $testfile	# Run a single test

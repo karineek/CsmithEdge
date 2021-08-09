@@ -47,12 +47,12 @@ function general_report {
 
 	## General stat.
 	total=$(($total+1))
-	if [[ $time_out_flag_edge -eq 1 ]]; then	## save time, if gets time out skips all sanitizers and checkers and marks as not-valid test
-		testValid=0
-	elif [[ $totalRiskProbs -gt 3000 ]]; then
-		testValid=0
-	elif [[ $diff_lines_progs -lt 50 ]]; then
+	if [[ $diff_lines_progs == 0 ]]; then
+		testValid=1	# nothing crashed, same code, hence valid
+	elif [[ $diff_lines_progs == 1 ]]; then
 		testValid=1	# same code, two different way to reproduce it!
+	elif [[ $time_out_flag_edge -eq 1 ]] || [[ $same_res -eq 0 ]] ; then	
+		testValid=0	## save time, if gets time out skips all sanitizers and checkers and marks as not-valid test
 	else
 		## Check the reports:	
 		cut $framac_run_folder/Fres1.txt -d':' -f 3- > $framac_run_folder/cutFres1.txt
@@ -242,9 +242,9 @@ function check_wt_FramaC {
 		## -plevel. . . . . . . . . . . . . . . . . . . .	==> precise when the total number of locations to read or write is less than the value of -plevel option
 		## -eva-precision . . . . . . . . . . . . . . . .	==> setting a global trade-off between precision and analysis time from 0 (fast but imprecise) to 11 (accurate but slow) 
 		## -val-warn-undefined-pointer-comparison pointer	==> pointer comparison alarms are emitted only on comparisons involving lvalues with pointer type
-		## -no-val-alloc-returns-null 						==> supposes that malloc never fails
+		## -no-val-alloc-returns-null . . . . . . . . . .	==> supposes that malloc never fails
 		## -eva-builtin malloc:Frama_C_malloc_fresh . . .	==> enables builtins for the malloc function of the standard library < NOT SUPPORTED >
-	    ## -eva-builtin free:Frama_C_free . . .	. . . . .	==> enables builtins for the free function of the standard library < NOT SUPPORTED >
+	    	## -eva-builtin free:Frama_C_free . . . . . . . .	==> enables builtins for the free function of the standard library < NOT SUPPORTED >
 		## -warn-signed-overflow. . . . . . . . . . . . .	==> check that the analyzed code does not overflow on integer operations
 		## -warn-unsigned-overflow. . . . . . . . . . . . 	==> check that the analyzed code does not overflow on unsigned integer operations
 		## -val . . . . . . . . . . . . . . . . . . . . .	==> Run value analysis plug-in
@@ -255,34 +255,6 @@ function check_wt_FramaC {
 		touch $output
 		echo "Skips Frama-c for $tool"
 	fi
-}
-
-
-## Checks modified code for crashing compiler - no diff-test
-function check_compilation {
-	tool=$1
-	prog=$2
-	build_folder=$3
-	compiler=$4
-
-	## Can compile it?
-	rm -f a.out
-	echo ">> ulimit -St 300; $compiler -I$build_folder/../runtime/ -I$build_folder/runtime/ $prog"
-	ulimit -St 300; $compiler -I$build_folder/../runtime/ -I$build_folder/runtime/ $prog
-}
-
-function check_compilations_all {
-	prog=temp_edge.c
-	tool="CSMITH-WA"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler1"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler2"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler3"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler4"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler5"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler6"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler7"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler8"
-	check_compilation $tool $prog $csmith_build_wa "$test_compiler9"
 }
 
 ## Checks modified code for seg-fault (DEBUG)
@@ -397,7 +369,7 @@ function check_wt_UBSAN {
 function gen_test_case {
 	curr_seed=$1			#seed
 	prog=$2					#program name
-	genrator=$3				#csmith_exec
+	genrator=$3				#tool_exec
 	args=$4					#csmith_args
 	test_name=$5			#Csmith tests
 	dumpfile_inGene=$6		#dump123
@@ -578,7 +550,7 @@ function test_single_seed {
 	# Building original test-case #
 	progA=temp_orig.c
 	tool="CSMITH"
-	gen_test_case $seed $progA $csmith_exec "$csmith_args" "$tool-tests" $dump123
+	gen_test_case $seed $progA $tool_exec "$csmith_args" "$tool-tests" $dump123
 	linesCsmithProg=`cat $progA | wc -l`
 	
 	###################################
@@ -586,7 +558,7 @@ function test_single_seed {
 	progB=temp_edge.c
 	tool="CSMITH-WA"
 	gen_probs_WA $probSize $seed 500 # 7 $seed 500, but for testing took other parameters (300)
-	gen_test_case $seed $progB $csmith_exec_wa "$wa_local_args" "$tool-tests" $dump123
+	gen_test_case $seed $progB $tool_exec "$wa_local_args" "$tool-tests" $dump123
 	linesWAProg=`cat $progB | wc -l`
 	if [[ $linesWAProg -eq 14 ]]; then ## Error in generation
 		touch $rrs_folder/'__test'$seed'INVALID'
@@ -602,13 +574,6 @@ function test_single_seed {
 		## Skip --> invalid test for diff-testing
 		gen_RRS_mix_prob $prog $probfile_curr
 		echo "(same code) Skips validation for $seed"
-	#elif [[ $diff_lines_progs -lt 50 ]]; then
-	#	## Skip --> invalid test for diff-testing
-	#	echo "(similar code) Skips validation for $seed"
-	elif [[ $totalRiskProbs -gt 3000 ]]; then
-		## Try to crash the compiler --> invalid test for diff-testing
-		echo "(risky code) Skips validation for $seed"
-		check_compilations_all
 	else
 		#####################################
 		# Validating new relaxed test-cases #
@@ -619,10 +584,10 @@ function test_single_seed {
 		tool="CSMITH-WA"
 
 		## Plain
-		check_plain	$tool $prog $csmith_build_wa $curr_folder/Plain2.txt
+		check_plain	$tool $prog $tool_build $curr_folder/Plain2.txt
 		if [[ $time_out_flag -eq 0 ]]; then ## Only if did not crash
 			gen_RRS_mix_prob $prog $probfile_curr
-			is_valid_program $tool $prog "$csmith_build_wa" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
+			is_valid_program $tool $prog "$tool_build" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
 		else
 			touch $curr_folder/ASANres2.txt $curr_folder/MSANres2.txt $curr_folder/UBSANres2.txt $framac_run_folder/Fres2.txt
 			## cp $curr_folder/temp_edge.c $outputF/__test_invalid$seed.c
@@ -646,20 +611,17 @@ function test_single_seed {
 				## No problem detected in the new testcase, no need to compare it to the old one!
 				echo "(valid code) Skips validation against original testcase for $seed"
 			else
-				check_plain	$tool $prog $csmith_build $curr_folder/Plain1.txt
+				check_plain	$tool $prog $tool_build $curr_folder/Plain1.txt
 				if [[ $time_out_flag -eq 0 ]]; then ## Only if did not crash
-					is_valid_program $tool $prog "$csmith_build" ASANres1.txt MSANres1.txt UBSANres1.txt Fres1.txt
+					is_valid_program $tool $prog "$tool_build" ASANres1.txt MSANres1.txt UBSANres1.txt Fres1.txt
 				fi
 			fi
 		else
-			check_plain	$tool $prog $csmith_build $curr_folder/Plain1.txt	## Crashed, then we just get the result
+			check_plain	$tool $prog $tool_build $curr_folder/Plain1.txt	## Crashed, then we just get the result
 		fi
 		touch $curr_folder/ASANres1.txt $curr_folder/MSANres1.txt $curr_folder/UBSANres1.txt $framac_run_folder/Fres1.txt
 		## Keep the flag regarding timeout
 		time_out_flag_orig=$time_out_flag
-
-		## Try to crash the compiler (Done for risky test-cases + regular test-cases)
-		check_compilations_all
 	fi
 }
 
@@ -685,7 +647,7 @@ function restore {
 
 				isWA=`grep "relax-anlayses-prob" "$probfile_curr" | wc -l`
 				if [[ "$isWA" -eq "0" ]]; then
-					gen_test_case $seed temp.c $csmith_exec "$csmith_args" "Csmith-tests" $dump123
+					gen_test_case $seed temp.c $tool_exec "$csmith_args" "Csmith-tests" $dump123
 				else
 					## Get location of probablities file
 					cmd=`head -1 $probfile_curr`
@@ -696,7 +658,7 @@ function restore {
 
 					## Generate the modified testcase
 					wa_local_args=$cmd 
-					gen_test_case $seed temp.c $csmith_exec_wa "$wa_local_args" "WA-tests" $dump123
+					gen_test_case $seed temp.c $tool_exec "$wa_local_args" "WA-tests" $dump123
 				fi
 				
 				## Keep the modified version because it is good
@@ -723,33 +685,20 @@ seed=$1 			# File with all the seeds to use - shall be only good seeds here!
 base=$2			# base folder
 outputF=$3			# Output folder of the programs
 dump123=$4 			# Where to dump123 all results
-testcaselogger=$5 	# Keep reference results
+testcaselogger=$5 		# Keep reference results
+compA=$6		# Reference compilerA
 
 debugflag=1
 debugProbs=""
 probSize=10
-probArrRangesFrom=(0 0 0 0 0 0 0 0 0 0)
-probArrRangesTo=(1000 1000 1000 1 1 1000 1000 1000 1000 1000)
-#probArrRangesFrom=(   0    0    0 0 0   0   0   0  300    0)
-#probArrRangesTo=  (1000 1000 1000 1 1 350 500 250 1000 1000)
-#                   RRS  Null Dang 0 1 2   3   4   5	6					
-ref_compiler="clang-10 -O0 -w"
-test_compiler1="clang-10 -O1 -w"
-test_compiler2="clang-10 -O2 -w"
-test_compiler3="clang-10 -O3 -w"
-test_compiler4="clang-10 -Os -w"
-test_compiler5="gcc-10 -O1 -w"
-test_compiler6="gcc-10 -O2 -w"
-test_compiler7="gcc-10 -O3 -w"
-test_compiler8="gcc-10 -Os -w"
-test_compiler9="gcc-10 -O0 -w"
+probArrRangesFrom=(0 0 0 0 0 0 0 0 150 0)
+probArrRangesTo=(1000 1000 1000 1 1 350 500 250 1000 1000)
+#                   RRS  Null Dang 0 1 2   3   4   5	6
 
 #
 ### EXEC & BUILD LOCATION
-csmith_exec=$base/csmith/build/src/csmith
-csmith_build=$base/csmith/build
-csmith_exec_wa=$base/csmith/build/src/csmith
-csmith_build_wa=$base/csmith/build
+tool_build=$base/csmith/build
+tool_exec=$tool_build/src/csmith
 framac_run_folder=$base/scripts/CsmithEdge/Frama-C-zone
 #
 ### ARGS

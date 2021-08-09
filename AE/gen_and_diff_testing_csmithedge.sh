@@ -6,7 +6,7 @@ compA=$3
 compB=$4
 
 ## Check we have two parameters
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 4 ]; then
 	echo "Illegal number of parameters. Please enter base folder and 0 or 1 (csmithedge or lazy)."
 	exit 1
 fi
@@ -25,11 +25,5 @@ fi
 
 ## Run the tests
 cd $base/scripts/CsmithEdge
-if [[ "$modify" == "0" ]]
-	then
-	./1-genNrunTestcases_random.sh $base 1 1 $date_str $compA $compB
-else
-	./1-genNrunTestcases_random_quick.sh $base 1 1 $date_str $compA $compB
-fi
-
+./1-genNrunTestcases_random.sh $base $date_str 1 1 $compA $compB $lazy
 echo "DONE."
