@@ -1,7 +1,30 @@
 # CsmithEdge - AE
 
+Before starting, please check you have all the requirements installed.
+
+You can do this by running this script, which will also clone Csmith into this project.
+```
+./setupReq.sh <path to CsmithEdge folder>
+```
+for example:
+```
+./setupReq.sh /home/user42/git
+```
+
 ## Generating Tests (section 4 in general)
 
+CsmithEdge (regular and lazy) diff-testing with two compilers (A and B): 
+```
+./gen_and_diff_testing_csmithedge.sh <base-folder> <Reg. or lazy> <compiler A> <compiler B>
+```
+For example, diff-testing with regular CsmithEdge, clang-10 and gcc-10:
+```
+./gen_and_diff_testing_csmithedge.sh /home/user42/git/CsmithEdge/ 0 clang-10 gcc-10
+```
+or lazy CsmithEdge with gcc-11 and clang-12
+```
+./gen_and_diff_testing_csmithedge.sh /home/user42/git/CsmithEdge/ 1 gcc-11 clang-12
+```
 
 ## Rate of differential testing (Section 4.2 in the paper)
 

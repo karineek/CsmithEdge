@@ -1,23 +1,58 @@
 #!/bin/bash
 
 ############################################# REPORT and DEBUG DATA #############################################
+## Debug data
+function print_debug_data {
+	echo "---> $seed" >> "$dump123"
+
+	# Log ASAN-C output
+	echo "CSMITH ASAN" >> "$dump123"
+	cat $curr_folder/ASANres1.txt >> "$dump123"
+	echo "CSMITH-WA ASAN" >> "$dump123"
+	cat $curr_folder/ASANres2.txt >> "$dump123"
+
+	# Log MSAN-C output
+	echo "CSMITH MSAN" >> "$dump123"
+	cat $curr_folder/MSANres1.txt >> "$dump123"
+	echo "CSMITH-WA MSAN" >> "$dump123"
+	cat $curr_folder/MSANres2.txt >> "$dump123"
+
+	# Log UBSAN-C output
+	echo "CSMITH UBSAN" >> "$dump123"
+	cat $curr_folder/UBSANres1.txt >> "$dump123"
+	echo "CSMITH-WA UBSAN" >> "$dump123"
+	cat $curr_folder/UBSANres2.txt >> "$dump123"
+
+	# Log FRAMA-C output
+	echo "CSMITH FRAMA-C" >> $dump123
+	cat $framac_run_folder/Fres1.txt >> $dump123
+	echo "CSMITH-WA FRAMA-C" >> $dump123
+	cat $framac_run_folder/Fres2.txt >> $dump123
+
+	# Update counters
+	fileTest=$framac_run_folder/Fres2.txt
+
+	# Log Plain result
+	echo "CSMITH-WA Result" >> "$dump123"
+	cat $curr_folder/Plain2.txt >> "$dump123"
+
+	## END counters update
+}
+
+## Report all
 function general_report {
 	## Init:
 	testValid=1
 	cd $curr_folder
 
-	ASANfail=0
-	MSANfail=0
-	UBSANfail=0
-	FRAMAcfail=0
-
 	## General stat.
-	if [[ $diff_lines_progs -eq 0 ]]; then
-		testValid=1
-        elif [[ $diff_lines_progs -eq 1 ]]; then
-		testValid=1
-	elif [[ $time_out_flag_edge -eq 1 ]]; then	## save time, if gets time out skips all sanitizers and checkers and marks as not-valid test
+	total=$(($total+1))
+	if [[ $time_out_flag_edge -eq 1 ]]; then	## save time, if gets time out skips all sanitizers and checkers and marks as not-valid test
 		testValid=0
+	elif [[ $totalRiskProbs -gt 3000 ]]; then
+		testValid=0
+	elif [[ $diff_lines_progs -lt 50 ]]; then
+		testValid=1	# same code, two different way to reproduce it!
 	else
 		## Check the reports:	
 		cut $framac_run_folder/Fres1.txt -d':' -f 3- > $framac_run_folder/cutFres1.txt
@@ -34,6 +69,7 @@ function general_report {
 		FramaCresSize2=`cat $framac_run_folder/cutFres2.txt  | wc -l`
 
 		## ASAN failed?
+		ASANfail=0
 		if [ ! -z "$diff_lines_ASAN" ] && [[ $ASANresSize2 -gt 1 ]]; then
 			ASANfail=1
 		fi
@@ -41,6 +77,7 @@ function general_report {
 			ASANfail=1	
 		fi
 		## MSAN failed?
+		MSANfail=0
 		if [ ! -z "$diff_lines_MSAN" ] && [[ $MSANresSize2 -gt 1 ]]; then
 			MSANfail=1
 		fi
@@ -48,10 +85,16 @@ function general_report {
 			MSANfail=1	
 		fi
 		## UBSAN failed?
+		UBSANfail=0
+		##if [ ! -z "$diff_lines_UBSAN" ] && [ ! -z "$UBSANresSize2" ]; then
 		if [ ! -z "$diff_lines_UBSAN" ] && [ $UBSANresSize2 -gt 0 ]; then
 			UBSANfail=1
 		fi
+		#if [[ $UBSANresSize2 -eq 0 ]]; then
+		#	UBSANfail=1	
+		#fi
 		## FRAMA-C failed?
+		FRAMAcfail=0
 		if [ ! "$FramaCresSize2" -eq "0" ]; then
 			if [ ! -z "$diff_lines_FramaC" ] && [ $FramaCresSize2 -gt 0 ]; then
 				FRAMAcfail=1
@@ -65,70 +108,63 @@ function general_report {
 
 	## Report if valid: $seed
 	is_valid="YES"
-	err_rrs=0
 	if [[ $testValid == 0 ]]; then
 		is_valid="NO"
+		## Don't keep the set of parameters if not valid!
+		rm -f $probfile_curr
+		touch $probfile_curr 
 
-		if [[ $time_out_flag_edge -eq 1 ]]; then
-			tool="CSMITH-WA"
-			prog=temp_edge.c
-			check_plain_rrs $tool $prog $csmith_build "$curr_folder/PlainRRS2.txt" "gcc-10 -O2 -w"
-			diff_lines_Plain=`diff -y --suppress-common-lines $curr_folder/Plain2.txt $curr_folder/PlainRRS2.txt`
-                        if [ -z "$diff_lines_Plain" ]; then
-				echo ">> Same result (in timeout!)"
-                                same_result_flage=1
-                                cat $curr_folder/Plain2.txt
-                                cat $curr_folder/PlainRRS2.txt
-                        fi
-		fi
+		## Mark as bad seed, so won't spend more time on it!
+		fileinvalid=$rrs_folder/'__test'$seed'INVALID'
+		touch $fileinvalid
+		echo ">> Invalid Testcase! <$fileinvalid> <probs=$totalRiskProbs,diff=$diff_lines_progs,timeout=$time_out_flag_edge>"
+
+		sizeX=`cat $probfile_curr | wc -l`
 	else
-		## Diff testing: if valid is YES
-		tool="CSMITH-WA"
-		progM=__test$seed"M.c"
-		(./WA4_restore_RRS_given_prog.sh "clang-10" "$seed" "$rrs_folder" $prog $csmith_location $timeout_bound) > rrs.log 2>&1
-		err_rrs=`grep "error" rrs.log | wc -l`
-		if [[ $err_rrs -eq 0 ]] ; then				 
-			(./WA5_restore_testcase_given_prog.sh $seed $prog)
-			check_plain_rrs $tool $progM $csmith_build "$curr_folder/PlainRRS1.txt" "clang-10 -O2 -w"		
-			check_plain_rrs $tool $progM $csmith_build "$curr_folder/PlainRRS2.txt" "gcc-10 -O2 -w"
-			diff_lines_Plain=`diff -y --suppress-common-lines $curr_folder/PlainRRS1.txt $curr_folder/PlainRRS2.txt`
-			if [ -z "$diff_lines_Plain" ]; then
-				echo ">> Same result"
-				same_result_flage=1
-				cat $curr_folder/PlainRRS1.txt
-				cat $curr_folder/PlainRRS2.txt
-			fi
-		fi
+		## Keep the modified version because it is good
+		cp $curr_folder/temp_edge.c $outputF/__test_annotated$seed.c
+
+		## Print result
+		cat $curr_folder/Plain2.txt >> $testcaselogger
+		## Print result to logger --> to skip O0 level
+		filesize=`stat --printf="%s" $outputF/__test_annotated$seed.c`
+		echo "seed= $seed, size= $filesize" >> $testcaselogger
+		echo "---" >> $testcaselogger
 	fi
-	timeE=$(date +"%T")
-	echo ">> ($seed) | #line csmith: $linesCsmithProg | #lines wa: $linesWAProg | Delta: $diff_lines_progs | Valid: $is_valid | ASAN: $ASANfail | MSAN: $MSANfail | UBSAN: $UBSANfail | FRAMAC: $FRAMAcfail | FaildRRS: $err_rrs | TIMEOUT: $time_out_flag_edge | timeS: $timeS | timeE: $timeE"
+
+	## Report line:
+	print_line $seed $linesCsmithProg $linesWAProg $diff_lines_progs $is_valid
 }
 
-## Checks modified code for seg-fault (DEBUG)
-function check_plain_rrs {
-	tool=$1
-	prog=$2
-	build_folder=$3
-	printoutput=$4
-	compilerP=$5
+## Print report per seed
+function print_line {
+	seed=$1
+	linesCsmithProg=$2 
+	linesWAProg=$3 
+	diff_lines=$4
+	is_valid=$5
+	timeE=$(date +"%T")
+	echo ">> ($seed) | #line csmith: $linesCsmithProg | #lines wa: $linesWAProg | Delta: $diff_lines | Valid: $is_valid | timeS: $timeS | timeE: $timeE"
 
-	# PLAIN
-	{
-		rm -f a.out
-		(ulimit -St 300; $compilerP -I$build_folder/../RRS_runtime_test/ -I$build_folder/runtime/ $prog)
-		(ulimit -St $timeout_bound; ./a.out) > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
-		rm -f a.out
-		timeout=`cat $printoutput | wc -l`
-		if [[ $timeout -eq 0 ]]; then
-			time_out_flag=1
-			echo "Recognized timeout, skip all sanitizers and checkers!"
+	if [[ $debugflag == 1 ]]; then
+		### DEBUG SAN DATA ###
+		if [[ $totalRiskProbs -gt 3000 ]]; then
+			echo ">> RISKY CODE" >> $dump123			
+		elif [[ $diff_lines_progs == 0 ]]; then
+			echo ">> SAME CODE" >> $dump123	
+		elif [[ $diff_lines_progs == 1 ]]; then
+			echo ">> SAME CODE (with different parameters)" >> $dump123	
+		elif [[ $diff_lines_progs -lt 50 ]]; then
+			echo ">> SIMILAR CODE (with different parameters)" >> $dump123	
+		elif [[ $time_out_flag_edge -eq 1 ]]; then
+			echo ">> Invalid or timeout recieved when validating test case" >> $dump123
+		else
+			print_debug_data
 		fi
-		errorGen=`grep "No such file or directory" $printoutput | wc -l`
-		if [[ $errorGen -eq 1 ]]; then
-			time_out_flag=1
-			echo "Recognized error in generating this test-case, skip all sanitizers and checkers!"
-		fi
-	}
+		### Prints additional data and parameters ###
+		echo ">> (Probs array) $debugProbs | (Args) $wa_local_args" >> $dump123
+		echo ">> ($seed) | #line csmith: $linesCsmithProg | #lines wa: $linesWAProg | Delta: $diff_lines | Valid: $is_valid | timeS: $timeS | timeE: $timeE" >> $dump123
+	fi
 }
 
 ############################################# TESTCASE VALIDATION #############################################
@@ -175,7 +211,7 @@ function check_wt_FramaC {
 		cd $framac_run_folder
 		
 		sed 's/volatile/ /g' $progOrig > $progRMv
-		ulimit -St 300; frama-c -eva -slevel 100 -plevel 256 -eva-precision 5 -val-warn-undefined-pointer-comparison pointer -no-val-alloc-returns-null -warn-signed-overflow -val -no-val-show-progress -machdep x86_64 $progRMv > $output 2>&1
+		ulimit -St 300; frama-c -eva -eva-slevel 100 -eva-plevel 256 -eva-precision 5 -eva-warn-undefined-pointer-comparison pointer -eva-no-alloc-returns-null -warn-signed-overflow -eva-no-show-progress -machdep x86_64 $progRMv > $output 2>&1
 		rm -f $progRMv
 
 		## Frama-C installation can easiliy be broken, test it:
@@ -190,13 +226,13 @@ function check_wt_FramaC {
 		#notes=`cat $output | grep -e "alarms generated by the analysis" -e "invalid memory access" -e "access out of bounds index"`
 		sed -i ':a;N;$!ba;s/\n / /g' $output
 		if [[ $flag_dang_ptr -eq 1 ]]; then
-			cat $output | grep ".c:" | grep -ve "starting to merge loop iterations" -ve "Automatic loop unrolling" -ve "function strcmp" -ve "Values at end of function" -ve "Trace partitioning superposing" -ve "valid_read(argv" -ve "∈" -ve "but got argument of type 'uint" -ve "but got argument of type 'int" -ve "Warning:   unsigned overflow. assert " -ve "assertion 'Eva,unsigned_overflow' got final status invalid." -ve " unsigned overflow." -ve "escaping" > $output.tmp
+			cat $output | grep ".c:" | grep -ve "starting to merge loop iterations" -ve "Automatic loop unrolling" -ve "function strcmp" -ve "Values at end of function" -ve "Trace partitioning superposing" -ve "valid_read(argv" -ve "∈" -ve "but got argument of type 'uint" -ve "but got argument of type 'int" -ve "Warning:   unsigned overflow. assert " -ve "assertion 'Eva,unsigned_overflow' got final status invalid." -ve " unsigned overflow." -ve "escaping" -ve"Old style" -ve"Neither code nor specification for function" -ve"Assuming no side effects beyond"  -ve'Warning:   pointer comparison.  assert \\pointer_comparable' -ve'Unexpected error (Z.Overflow)' -ve'cannot properly split on' > $output.tmp
 		else
-			cat $output | grep ".c:" | grep -ve "starting to merge loop iterations" -ve "Automatic loop unrolling" -ve "function strcmp" -ve "Values at end of function" -ve "Trace partitioning superposing" -ve "valid_read(argv" -ve "∈" -ve "but got argument of type 'uint" -ve "but got argument of type 'int" -ve "Warning:   unsigned overflow. assert " -ve "assertion 'Eva,unsigned_overflow' got final status invalid." -ve " unsigned overflow." -ve "escaping" -ve "Eva,dangling_pointer" > $output.tmp
+			cat $output | grep ".c:" | grep -ve "starting to merge loop iterations" -ve "Automatic loop unrolling" -ve "function strcmp" -ve "Values at end of function" -ve "Trace partitioning superposing" -ve "valid_read(argv" -ve "∈" -ve "but got argument of type 'uint" -ve "but got argument of type 'int" -ve "Warning:   unsigned overflow. assert " -ve "assertion 'Eva,unsigned_overflow' got final status invalid." -ve " unsigned overflow." -ve "escaping" -ve "Eva,dangling_pointer" -ve"Old style" -ve"Neither code nor specification for function" -ve"Assuming no side effects beyond" -ve'Warning:   pointer comparison.  assert \\pointer_comparable' -ve'Unexpected error (Z.Overflow)' -ve'cannot properly split on' > $output.tmp
 		fi
 		cp $output.tmp $output
 		rm $output.tmp
-
+		
 		cd $curr_folder
 
 		#frama-c -cpp-extra-args="-I$csmith_folder -C -Dvolatile= -E -I."  prog.c 
@@ -206,9 +242,9 @@ function check_wt_FramaC {
 		## -plevel. . . . . . . . . . . . . . . . . . . .	==> precise when the total number of locations to read or write is less than the value of -plevel option
 		## -eva-precision . . . . . . . . . . . . . . . .	==> setting a global trade-off between precision and analysis time from 0 (fast but imprecise) to 11 (accurate but slow) 
 		## -val-warn-undefined-pointer-comparison pointer	==> pointer comparison alarms are emitted only on comparisons involving lvalues with pointer type
-		## -no-val-alloc-returns-null 				==> supposes that malloc never fails
+		## -no-val-alloc-returns-null 						==> supposes that malloc never fails
 		## -eva-builtin malloc:Frama_C_malloc_fresh . . .	==> enables builtins for the malloc function of the standard library < NOT SUPPORTED >
-	    	## -eva-builtin free:Frama_C_free . . . . . . . .	==> enables builtins for the free function of the standard library < NOT SUPPORTED >
+	    ## -eva-builtin free:Frama_C_free . . .	. . . . .	==> enables builtins for the free function of the standard library < NOT SUPPORTED >
 		## -warn-signed-overflow. . . . . . . . . . . . .	==> check that the analyzed code does not overflow on integer operations
 		## -warn-unsigned-overflow. . . . . . . . . . . . 	==> check that the analyzed code does not overflow on unsigned integer operations
 		## -val . . . . . . . . . . . . . . . . . . . . .	==> Run value analysis plug-in
@@ -221,6 +257,34 @@ function check_wt_FramaC {
 	fi
 }
 
+
+## Checks modified code for crashing compiler - no diff-test
+function check_compilation {
+	tool=$1
+	prog=$2
+	build_folder=$3
+	compiler=$4
+
+	## Can compile it?
+	rm -f a.out
+	echo ">> ulimit -St 300; $compiler -I$build_folder/../runtime/ -I$build_folder/runtime/ $prog"
+	ulimit -St 300; $compiler -I$build_folder/../runtime/ -I$build_folder/runtime/ $prog
+}
+
+function check_compilations_all {
+	prog=temp_edge.c
+	tool="CSMITH-WA"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler1"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler2"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler3"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler4"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler5"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler6"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler7"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler8"
+	check_compilation $tool $prog $csmith_build_wa "$test_compiler9"
+}
+
 ## Checks modified code for seg-fault (DEBUG)
 function check_plain {
 	tool=$1
@@ -231,8 +295,8 @@ function check_plain {
 	# PLAIN
 	{
 		rm -f a.out
-		(ulimit -St 300; clang-10 -O0 -w -I$build_folder/../runtime/ -I$build_folder/runtime/ $prog)
-		(ulimit -St $timeout_bound; ./a.out) > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
+		ulimit -St 300; clang-10 -O0 -w -I$build_folder/../runtime/ -I$build_folder/runtime/ $prog
+		ulimit -St 50; ./a.out > $printoutput 2>&1 ## Csmith original paper offered 5 seconds.
 		rm -f a.out
 		timeout=`cat $printoutput | wc -l`
 		if [[ $timeout -eq 0 ]]; then
@@ -331,14 +395,16 @@ function check_wt_UBSAN {
 ############################################################# GENERATE TEST-CASE #############################################################
 ## Generate a test-case
 function gen_test_case {
-	curr_seed=$1		#seed
-	prog=$2		#program name
-	genrator=$3		#csmith_exec
-	args=$4		#csmith_args
+	curr_seed=$1			#seed
+	prog=$2					#program name
+	genrator=$3				#csmith_exec
+	args=$4					#csmith_args
+	test_name=$5			#Csmith tests
+	dumpfile_inGene=$6		#dump123
 	
 	# set, clean, and generate
 	cd $curr_folder; rm -f $prog
-	(ulimit -St 150; $genrator $args $CSMITH_USER_OPTIONS --seed $curr_seed > $prog)
+	ulimit -St 150; $genrator $args $CSMITH_USER_OPTIONS --seed $curr_seed > $prog
 }
 
 ## Generate probablity per test-case
@@ -347,10 +413,10 @@ function gen_test_case {
 # 2 --> --dangling-ptr-deref-prob
 # 3-end --> array to a file: $wa_probs (0,1,2,3 as 3,4,5,6)
 function gen_probs_WA {
-	sizeWA=$1	# Size of the array to generate
+	sizeWA=$1		# Size of the array to generate
 	seed_curr=$2	# current seed
 	threshold=$3	# threshold to ativate WA options
-	probArr=()	# Start with an empty array
+	probArr=()		# Start with an empty array
 	
 	## Create the probablities ##
 	#############################
@@ -370,7 +436,7 @@ function gen_probs_WA {
 		fi
 	done
 	# Bug in csmith, try to avoid it; /home/user42/git/csmith/build/src/csmith --dangling-ptr-deref-prob 1 --seed 2517861355
-	#                                 /home/user42/git/csmith/build/src/csmith  --seed 2120095187  --null-ptr-deref-prob 1
+	#							      /home/user42/git/csmith/build/src/csmith  --seed 2120095187  --null-ptr-deref-prob 1
 	# ad-hoc patch
 	if [[ ${probArr[1]} -gt 990 ]]; then
 		probArr[1]=990
@@ -378,6 +444,8 @@ function gen_probs_WA {
 	if [[ ${probArr[2]} -gt 990 ]]; then
 		probArr[2]=990
 	fi
+	## Keep all probablities
+	debugProbs=$( IFS=$','; echo "${probArr[*]}" )
 
 	## Create the command line call to Csmith ##
 	############################################
@@ -434,6 +502,13 @@ function gen_probs_WA {
 			echo '-I$csmith_location/$runtime -I$csmith_location/build/runtime -DUSE_MATH_MIX' >> $probfile_curr
 		fi
 	fi
+
+	#### TEST WHAT TO DO WITH IT: risky or normal ####
+	totalRiskProbs=0	## Discard if great than 3000
+	for (( i=0; i<$sizeWA; i++ ))
+	do
+		totalRiskProbs=$((probArr[$i]+totalRiskProbs))
+	done
 }
 
 function gen_RRS_mix_prob {
@@ -455,13 +530,14 @@ function gen_RRS_mix_prob {
 		done
 		## Test that we really did something
 		if [ ${#res_RRS_Wrapper_type} -eq 0 ]; then
-			echo ">> (WARNING) list is empty! <$res_RRS_Wrapper_type>"
+			echo ">> (WARNING) list is empty! <$res_RRS_Wrapper_type>" >> "$dump123"
 			res_RRS_Wrapper_type="0"
 		fi
 	else
 		res_RRS_Wrapper_type="0" # Just to mark that it is not in use.	
 	fi
 	echo $res_RRS_Wrapper_type >> $probfile_curr
+	echo "List is: <$res_RRS_Wrapper_type>" >> "$dump123"
 }
 
 function get_max_RRS {
@@ -502,7 +578,7 @@ function test_single_seed {
 	# Building original test-case #
 	progA=temp_orig.c
 	tool="CSMITH"
-	gen_test_case $seed $progA $csmith_build/src/csmith "$csmith_args" ## "$tool-tests"
+	gen_test_case $seed $progA $csmith_exec "$csmith_args" "$tool-tests" $dump123
 	linesCsmithProg=`cat $progA | wc -l`
 	
 	###################################
@@ -510,7 +586,7 @@ function test_single_seed {
 	progB=temp_edge.c
 	tool="CSMITH-WA"
 	gen_probs_WA $probSize $seed 500 # 7 $seed 500, but for testing took other parameters (300)
-	gen_test_case $seed $progB $csmith_build/src/csmith "$wa_local_args" ## "$tool-tests"
+	gen_test_case $seed $progB $csmith_exec_wa "$wa_local_args" "$tool-tests" $dump123
 	linesWAProg=`cat $progB | wc -l`
 	if [[ $linesWAProg -eq 14 ]]; then ## Error in generation
 		touch $rrs_folder/'__test'$seed'INVALID'
@@ -520,34 +596,42 @@ function test_single_seed {
 	## If the same program, then no need to validate
 	if [[ $diff_lines_progs -eq 0 ]]; then
 		## Skip --> invalid test for diff-testing
-		gen_RRS_mix_prob $progB $probfile_curr
+		gen_RRS_mix_prob $prog $probfile_curr
 		echo "(same file) Skips validation for $seed"
 	elif [[ $diff_lines_progs -eq 1 ]]; then
 		## Skip --> invalid test for diff-testing
-		gen_RRS_mix_prob $progB $probfile_curr
+		gen_RRS_mix_prob $prog $probfile_curr
 		echo "(same code) Skips validation for $seed"
+	#elif [[ $diff_lines_progs -lt 50 ]]; then
+	#	## Skip --> invalid test for diff-testing
+	#	echo "(similar code) Skips validation for $seed"
+	elif [[ $totalRiskProbs -gt 3000 ]]; then
+		## Try to crash the compiler --> invalid test for diff-testing
+		echo "(risky code) Skips validation for $seed"
+		check_compilations_all
 	else
 		#####################################
 		# Validating new relaxed test-cases #
 
 		# INIT
-		time_out_flag=0		# If hit once timeout, skip all
+		time_out_flag=0			# If hit once timeout, skip all
 		prog=temp_edge.c
 		tool="CSMITH-WA"
 
 		## Plain
-		check_plain	$tool $prog $csmith_build $curr_folder/Plain2.txt
+		check_plain	$tool $prog $csmith_build_wa $curr_folder/Plain2.txt
 		if [[ $time_out_flag -eq 0 ]]; then ## Only if did not crash
 			gen_RRS_mix_prob $prog $probfile_curr
-			is_valid_program $tool $prog "$csmith_build" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
+			is_valid_program $tool $prog "$csmith_build_wa" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
 		else
 			touch $curr_folder/ASANres2.txt $curr_folder/MSANres2.txt $curr_folder/UBSANres2.txt $framac_run_folder/Fres2.txt
+			## cp $curr_folder/temp_edge.c $outputF/__test_invalid$seed.c
 		fi
 		## Keep the flag regarding timeout
 		time_out_flag_edge=$time_out_flag
 
 		# INIT
-		time_out_flag=0		# If hit once timeout, skip all
+		time_out_flag=0			# If hit once timeout, skip all
 		prog=temp_orig.c
 		tool="CSMITH"
 		
@@ -567,61 +651,142 @@ function test_single_seed {
 					is_valid_program $tool $prog "$csmith_build" ASANres1.txt MSANres1.txt UBSANres1.txt Fres1.txt
 				fi
 			fi
+		else
+			check_plain	$tool $prog $csmith_build $curr_folder/Plain1.txt	## Crashed, then we just get the result
 		fi
-		touch $curr_folder/ASANres1.txt $curr_folder/MSANres1.txt $curr_folder/UBSANres1.txt $framac_run_folder/Fres1.txt $curr_folder/Plain1.txt
+		touch $curr_folder/ASANres1.txt $curr_folder/MSANres1.txt $curr_folder/UBSANres1.txt $framac_run_folder/Fres1.txt
+		## Keep the flag regarding timeout
+		time_out_flag_orig=$time_out_flag
+
+		## Try to crash the compiler (Done for risky test-cases + regular test-cases)
+		check_compilations_all
 	fi
 }
+
+## Restore testcase instead of generate it, if configuration files exists
+function restore {
+	## Test if already exists
+	if [ -f "$outputF/__test_annotated$seed.c" ]; then
+		if [ -f "$probfile_curr" ]; then
+			# skip, we already did it
+			echo ">> Testcase already exists. Skip $outputF/__test_annotated$seed.c." 
+			exit
+		else
+			rm -rf "$outputF/__test_annotated$seed.c"
+			echo ">> Testcase already exists but with no configuration file. Repeat generation of $outputF/__test_annotated$seed.c." 
+		fi
+	else
+		## Test if the configuration file already exists, then restore the test-case
+		if [ -f "$probfile_curr" ]; then
+			sizeConfg=`cat "$probfile_curr" | wc -l`
+			if [[ ! "$sizeConfg" -eq "0" ]]; then
+				# skip, we already did it
+				echo ">> Configuration file already exists. Generates $outputF/__test_annotated$seed.c."
+
+				isWA=`grep "relax-anlayses-prob" "$probfile_curr" | wc -l`
+				if [[ "$isWA" -eq "0" ]]; then
+					gen_test_case $seed temp.c $csmith_exec "$csmith_args" "Csmith-tests" $dump123
+				else
+					## Get location of probablities file
+					cmd=`head -1 $probfile_curr`
+					prob_file=`echo "$cmd" | awk '{for(i=1;i<=NF;i++) if ($i=="--relax-anlayses-prob") print $(i+1)}'`
+
+					## Create the probablities file
+					sed '1d;$d' $probfile_curr | sed '$d' > $prob_file
+
+					## Generate the modified testcase
+					wa_local_args=$cmd 
+					gen_test_case $seed temp.c $csmith_exec_wa "$wa_local_args" "WA-tests" $dump123
+				fi
+				
+				## Keep the modified version because it is good
+				cp $curr_folder/temp.c $outputF/__test_annotated$seed.c
+			fi
+
+			# cleaning before exit
+			clean_itr
+			## Exit the script
+			exit
+		fi
+	fi
+}
+
 ## Clear all flies before exit
 function clean_itr {
 	cd $curr_folder
-	rm -f rrs.log $curr_folder/__test* $framac_run_folder/Fres1.txt $framac_run_folder/Fres2.txt $curr_folder/ASANres1.txt $curr_folder/ASANres2.txt $curr_folder/MSANres1.txt $curr_folder/MSANres2.txt $curr_folder/UBSANres1.txt $curr_folder/UBSANres2.txt $curr_folder/Plain1.txt $curr_folder/Plain2.txt $framac_run_folder/cutFres1.txt $framac_run_folder/cutFres2.txt $curr_folder/temp.c $curr_folder/temp_orig.c $curr_folder/temp_edge.c $curr_folder/PlainRRS1.txt $curr_folder/PlainRRS2.txt # cleaning before starting
+	rm -f $framac_run_folder/Fres1.txt $framac_run_folder/Fres2.txt $curr_folder/ASANres1.txt $curr_folder/ASANres2.txt $curr_folder/MSANres1.txt $curr_folder/MSANres2.txt $curr_folder/UBSANres1.txt $curr_folder/UBSANres2.txt $curr_folder/Plain1.txt $curr_folder/Plain2.txt $framac_run_folder/cutFres1.txt $framac_run_folder/cutFres2.txt $curr_folder/temp.c $curr_folder/temp_orig.c $curr_folder/temp_edge.c # cleaning before starting
 }
 
 ####################################### Start Main #######################################
 CSMITH_USER_OPTIONS=" --bitfields --packed-struct "
-seed=$1 		# File with all the seeds to use - shall be only good seeds here!
-base=$2		# base folder
-timeout_bound=$3	# csmith-generated programs timeout when diff-testing
+seed=$1 			# File with all the seeds to use - shall be only good seeds here!
+base=$2			# base folder
+outputF=$3			# Output folder of the programs
+dump123=$4 			# Where to dump123 all results
+testcaselogger=$5 	# Keep reference results
 
+debugflag=1
+debugProbs=""
 probSize=10
-probArrRangesFrom=(0 0 0 0 0 0 0 0 150 0)
-probArrRangesTo=(1000 1000 1000 1 1 350 500 250 1000 1000)
+probArrRangesFrom=(0 0 0 0 0 0 0 0 0 0)
+probArrRangesTo=(1000 1000 1000 1 1 1000 1000 1000 1000 1000)
+#probArrRangesFrom=(   0    0    0 0 0   0   0   0  300    0)
+#probArrRangesTo=  (1000 1000 1000 1 1 350 500 250 1000 1000)
+#                   RRS  Null Dang 0 1 2   3   4   5	6					
+ref_compiler="clang-10 -O0 -w"
+test_compiler1="clang-10 -O1 -w"
+test_compiler2="clang-10 -O2 -w"
+test_compiler3="clang-10 -O3 -w"
+test_compiler4="clang-10 -Os -w"
+test_compiler5="gcc-10 -O1 -w"
+test_compiler6="gcc-10 -O2 -w"
+test_compiler7="gcc-10 -O3 -w"
+test_compiler8="gcc-10 -Os -w"
+test_compiler9="gcc-10 -O0 -w"
 
+#
 ### EXEC & BUILD LOCATION
-csmith_location=$base/csmith
-csmith_build=$csmith_location/build
-scripts_location=$base/scripts/diff_testing_rate
+csmith_exec=$base/csmith/build/src/csmith
+csmith_build=$base/csmith/build
+csmith_exec_wa=$base/csmith/build/src/csmith
+csmith_build_wa=$base/csmith/build
+framac_run_folder=$base/scripts/CsmithEdge/Frama-C-zone
+#
 ### ARGS
 csmith_args="$CSMITH_USER_OPTIONS --annotated-arith-wrappers"
-wa_probs=$scripts_location/seedsProbs/probs_WeakenSafeAnalyse_test.txt
-rrs_folder=$scripts_location/seedsProbs/seedsSafeLists
-framac_run_folder=$scripts_location/Frama-C-zone
+wa_probs=$base/scripts/CsmithEdge/seedsProbs/probs_WeakenSafeAnalyse_test.txt
+rrs_folder=$base/scripts/CsmithEdge/seedsProbs/seedsSafeLists
 wa_args="$csmith_args --relax-anlayses-conditions --relax-anlayses-prob $wa_probs"
 wa_local_args=""
-
 mkdir -p $rrs_folder
-cd $scripts_location
 
 ## Additionl flags and vars
-diff_lines_progs=0	# to test if the programs are the same (and then we don't need validation)
-probfile_curr=""	# 
-time_out_flag=0		# If hit once timeout, skip all
+probfile_curr=""
+time_out_flag=0			# If hit once timeout, skip all
+time_out_flag_orig=0	# to test if a csmith's testcase failed
 time_out_flag_edge=0	# to test if a csmithEdge's testcase failed
-flag_dang_ptr=0		# Only if created dangling pointers shall call Frama-c
-same_result_flage=0	# if results are the same from two compilers
+diff_lines_progs=0		# to test if the programs are the same (and then we don't need validation)
+flag_dang_ptr=0			# Only if created dangling pointers shall call Frama-c
 maxRRS=0
+totalRiskProbs=0		# Discard if great than 3000
 curr_folder=`pwd`
 
 timeS=$(date +"%T")
-echo " ============= START ITR (seed=$seed) ($timeS) ============="
+echo " ============= START ITR ($timeS) =============" >> "$dump123"
 probfile_curr=$wa_probs$seed
-rm -f probfile_curr $wa_probs
+
+## If test already esists, restore it
+restore
+
 #########################################
 # Collect data for testing current seed #
 test_single_seed
+
 ################
 # Print Report #
 cd $curr_folder
 general_report
+
 # cleaning before exit
 clean_itr
+
