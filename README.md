@@ -11,6 +11,8 @@ Requirements
 3. Frama-c 22.0 (Titanium)
 4. Python version 3.8.10
 5. cmake version 3.16.3 
+6. Ninja 1.10.0
+7. GCC 10 (installed and can be accessed as gcc-10, needed only for coverage build of GCC)
 
 ** see subfolders, we modified few files in each. Replace the files in these folders with ours.
 
