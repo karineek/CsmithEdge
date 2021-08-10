@@ -17,6 +17,11 @@ function exit_error {
 	echo " >> (ERROR) Testcase creation failed. <loc=$loc>"
 	touch $fileinvalid
 	clean_itr $xFolder
+	
+	if [[ $debug -eq 1 ]]; then
+		cat $logger
+	fi
+	
 	exit -1
 }
 
@@ -32,9 +37,13 @@ testedCompilerB=$5
 ## Lazy or regular?
 lazy=$6	# lazy=1
 
+## Print Debug information
+debug=$7
+
 scripts_folder=$base/scripts/CsmithEdge
 tool_location=$base/csmith
 
+cd $scripts_folder
 
 # Check if the first parameter is a compiler exist in the machine
 var=`dpkg --list | grep -c "$testedCompilerA"`
@@ -73,7 +82,6 @@ rm -f $confgFile $fileinvalid $safelist $modified_testcase $logger
 # Clean before start
 clean_itr "$scripts_folder"
 
-
 ## Generate WA test-case:
 if [[ "$lazy" == "0" ]] ; then
 	(ulimit -St 9999; ./WA1_gen_test.sh $seed $base "$temp_folder" "$logger" "$logger" $testedCompilerA) >> "$logger" 2>&1
@@ -106,5 +114,5 @@ fi
 # cleaning
 clean_itr "$scripts_folder"
 # Exit
-echo " >> Write test case to $modified_testcase"
+echo " >> Write test case to $modified_testcase with configuration files <$confgFile,$safelist>."
 exit 0

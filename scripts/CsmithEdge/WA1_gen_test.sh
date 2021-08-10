@@ -51,7 +51,7 @@ function general_report {
 		testValid=1	# nothing crashed, same code, hence valid
 	elif [[ $diff_lines_progs == 1 ]]; then
 		testValid=1	# same code, two different way to reproduce it!
-	elif [[ $time_out_flag_edge -eq 1 ]] || [[ $same_res -eq 0 ]] ; then	
+	elif [[ $time_out_flag_edge -eq 1 ]]; then	
 		testValid=0	## save time, if gets time out skips all sanitizers and checkers and marks as not-valid test
 	else
 		## Check the reports:	
@@ -567,11 +567,9 @@ function test_single_seed {
 	diff_lines_progs=`diff -y --suppress-common-lines $progA $progB | wc -l`
 	## If the same program, then no need to validate
 	if [[ $diff_lines_progs -eq 0 ]]; then
-		## Skip --> invalid test for diff-testing
 		gen_RRS_mix_prob $prog $probfile_curr
 		echo "(same file) Skips validation for $seed"
 	elif [[ $diff_lines_progs -eq 1 ]]; then
-		## Skip --> invalid test for diff-testing
 		gen_RRS_mix_prob $prog $probfile_curr
 		echo "(same code) Skips validation for $seed"
 	else
@@ -590,7 +588,6 @@ function test_single_seed {
 			is_valid_program $tool $prog "$tool_build" ASANres2.txt MSANres2.txt UBSANres2.txt Fres2.txt
 		else
 			touch $curr_folder/ASANres2.txt $curr_folder/MSANres2.txt $curr_folder/UBSANres2.txt $framac_run_folder/Fres2.txt
-			## cp $curr_folder/temp_edge.c $outputF/__test_invalid$seed.c
 		fi
 		## Keep the flag regarding timeout
 		time_out_flag_edge=$time_out_flag
@@ -616,10 +613,8 @@ function test_single_seed {
 					is_valid_program $tool $prog "$tool_build" ASANres1.txt MSANres1.txt UBSANres1.txt Fres1.txt
 				fi
 			fi
-		else
-			check_plain	$tool $prog $tool_build $curr_folder/Plain1.txt	## Crashed, then we just get the result
 		fi
-		touch $curr_folder/ASANres1.txt $curr_folder/MSANres1.txt $curr_folder/UBSANres1.txt $framac_run_folder/Fres1.txt
+		touch $curr_folder/Plain1.txt $curr_folder/ASANres1.txt $curr_folder/MSANres1.txt $curr_folder/UBSANres1.txt $framac_run_folder/Fres1.txt
 		## Keep the flag regarding timeout
 		time_out_flag_orig=$time_out_flag
 	fi

@@ -1,5 +1,6 @@
 # CsmithEdge - AE
 
+## Install the Tool with its requirements
 Before starting, please check you have all the requirements installed.
 
 You can do this by running this script, which will also clone Csmith into this project.
@@ -11,7 +12,22 @@ for example:
 ./setupReq.sh /home/user42/git
 ```
 
-## Generating Tests (section 4 in general)
+## Generating a Single Test Case:
+
+To generate a single test case with CsmithEdege, please use the following script (this will not invoke diff-testing scripts):
+```
+/home/user42/git/CsmithEdge/scripts/CsmithEdge.sh <base-folder> <logger> <seed> <compiler A> <compiler B> <Reg. or lazy> <print-debug-information>
+```
+Where compiler B is required only for lazy version. For example:
+```
+/home/user42/git/CsmithEdge/scripts/CsmithEdge.sh /home/user42/git/CsmithEdge/ single_file_gen.log 1235349863 gcc-10 clang-10 1 0
+```
+or
+```
+/home/user42/git/CsmithEdge/scripts/CsmithEdge.sh /home/user42/git/CsmithEdge/ single_file_gen.log 1235349863 clang-11 clang-11 0 0
+```
+
+## Generating Tests (section 4.1 and 4 in general)
 
 CsmithEdge (regular and lazy) diff-testing with two compilers (A and B): 
 ```
@@ -26,20 +42,7 @@ or lazy CsmithEdge with gcc-11 and clang-12
 ./gen_and_diff_testing_csmithedge.sh /home/user42/git/CsmithEdge/ 1 gcc-11 clang-12
 ```
 
-To generate a single test case with CsmithEdege, please use the following script (this will not invoke diff-testing scripts):
-```
-/home/user42/git/CsmithEdge/scripts/CsmithEdge/CsmithEdge.sh <base-folder> <logger> <seed> <compiler A> <compiler B> <Reg. or lazy> 
-```
-Where compiler B is required only for lazy version. For example:
-```
-/home/user42/git/CsmithEdge/scripts/CsmithEdge/CsmithEdge.sh /home/user42/git/CsmithEdge/ single_file_gen.log 1235349863 gcc-10 clang-10 1
-```
-or
-```
-/home/user42/git/CsmithEdge/scripts/CsmithEdge/CsmithEdge.sh /home/user42/git/CsmithEdge/ single_file_gen.log 1235349863 gcc-10 gcc-10 0
-```
-
-## Rate of differential testing (Section 4.2 in the paper)
+## Rate of differential testing (Section 4.2)
 
 This section describes how to restore the results of section 4.2 in the evaluation. The scripts are currently set to run on a small set of programs. To restore similar results to what was reported in the paper, one should use a much larger set (say around 100,000 programs).
 
@@ -74,4 +77,5 @@ for example
 ```
 
 ## Coverage (Section 4.3)
+
 
