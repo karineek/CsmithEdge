@@ -35,7 +35,7 @@ testedCompilerA=$4
 testedCompilerB=$5
 
 ## Lazy or regular?
-lazy=$6	# lazy=1
+lazy=$6	# lazy=1, csmith=9 (but will add unsafe math part/DWA)
 
 ## Print Debug information
 debug=$7
@@ -74,6 +74,7 @@ confgFile=$seedsProbs/'probs_WeakenSafeAnalyse_test.txt'$seed
 fileinvalid=$DA_folder/'__test'$seed'INVALID'
 safelist=$DA_folder/'__test'$seed'Results'
 annotated_testcase=$temp_folder/'__test_annotated'$seed'.c'
+modified_WSA_testcase=$temp_folder/'__test'$seed'M_WSA.c'
 modified_testcase=$temp_folder/'__test'$seed'M.c'
 
 ## Clean old files
@@ -83,10 +84,19 @@ rm -f $confgFile $fileinvalid $safelist $modified_testcase $logger
 clean_itr "$scripts_folder"
 
 ## Generate WA test-case:
-if [[ "$lazy" == "0" ]] ; then
-	(ulimit -St 9999; ./WA1_gen_test.sh $seed $base "$temp_folder" "$logger" "$logger" $testedCompilerA) >> "$logger" 2>&1
-else
+if [[ "$lazy" == "9" ]] ; then
+	## No WSA -> will only add WDA (RRS) part
+	touch $logger
+	genrator=$base/csmith/build/src/csmith
+	CSMITH_USER_OPTIONS=" --bitfields --packed-struct --annotated-arith-wrappers"
+	cp $seedsProbs/probs_OrigSafeAnalyse_test.txt $confgFile
+	ulimit -St 150; $genrator $CSMITH_USER_OPTIONS --seed $seed > $annotated_testcase
+elif [[ "$lazy" == "1" ]] ; then
+	## Lazy WSA CsmithEdge
 	(ulimit -St 9999; ./WA1_gen_test_lazy.sh $seed $base "$temp_folder" "$logger" "$logger" $testedCompilerA $testedCompilerB) >> "$logger" 2>&1
+else
+	## Regular WSA CsmithEdge
+	(ulimit -St 9999; ./WA1_gen_test.sh $seed $base "$temp_folder" "$logger" "$logger" $testedCompilerA) >> "$logger" 2>&1
 fi
 
 fileinvalid=$DA_folder/'__test'$seed'INVALID'
@@ -96,10 +106,11 @@ fi
 cat "$confgFile" | grep . > test.tmp; cp -f test.tmp "$confgFile"; rm -f test.tmp ## Delete space lines
 sizeConfg=`cat "$confgFile" | wc -l` ## test all is ok now, need 10 lines
 if [[ "$sizeConfg" -eq "0" ]] || [[ ! "$sizeConfg" -eq "10" ]]; then ## Bad seed
+	echo "sizeConfg=$sizeConfg"
 	exit_error "$scripts_folder" 2
 fi
 
-## Apply RRS on it (generate a list of must-be-safe locations)		
+## Apply RRS on it (generate a list of must-be-safe locations)
 (ulimit -St 9999; ./DA2_math_unsafe_list.sh $testedCompilerA $seed $base "$annotated_testcase" "$safelist" "$confgFile") >> "$logger" 2>&1
 if [ ! -f "$safelist" ] ; then
 	exit_error "$scripts_folder" 3
@@ -110,6 +121,9 @@ fi
 if [ ! -f "$confgFile" ] || [ ! -f "$annotated_testcase" ] || [ ! -f "$modified_testcase" ] || [ ! -f "$safelist" ] ; then
 	exit_error "$scripts_folder" 4
 fi
+
+# Kepp data without WDA (only WSA part)
+cp $annotated_testcase $modified_WSA_testcase
 
 # cleaning
 clean_itr "$scripts_folder"

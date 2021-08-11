@@ -1,0 +1,10 @@
+--no-paranoid --null-ptr-deref-prob 0 --dangling-ptr-deref-prob 0.96 --no-return-dead-pointer --dangling-global-pointers --bitfields --packed-struct --annotated-arith-wrappers --relax-anlayses-conditions --relax-anlayses-prob /home/user42/git/CsmithEdge//scripts/CsmithEdge/seedsProbs/probs_WeakenSafeAnalyse_test.txt --relax-anlayses-seed 3241284535
+0
+0
+0
+0
+0
+0.905
+0.2
+-I$csmith_location/$runtime -I$csmith_location/build/runtime
+0

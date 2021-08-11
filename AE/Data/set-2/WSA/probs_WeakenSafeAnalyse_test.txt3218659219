@@ -1,0 +1,10 @@
+--bitfields --packed-struct --annotated-arith-wrappers --relax-anlayses-conditions --relax-anlayses-prob /home/user42/git/CsmithEdge//scripts/CsmithEdge/seedsProbs/probs_WeakenSafeAnalyse_test.txt --relax-anlayses-seed 3218659219
+0
+0
+0
+0.093
+0
+0
+0.904
+-I$csmith_location/$runtime -I$csmith_location/build/runtime -DUSE_MATH_MIX
+10 18 27 39 53 55 64 72 74 82 85 114 115 121 134 163 177 197
