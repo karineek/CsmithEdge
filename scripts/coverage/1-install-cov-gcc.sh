@@ -32,7 +32,9 @@ do
  
 	### Update Csmith settings
 	cd $working_folder/gcc-csmith-$i
-	echo $working_folder/gcc-csmith-$i"/gcc-install/bin/gcc -O2" > ./csmith/scripts/compiler_test.in
+	mkdir -p $working_folder/csmith/scripts/
+	touch $working_folder/csmith/scripts/compiler_test.in
+	echo $working_folder/gcc-csmith-$i"/gcc-install/bin/gcc -O2" > $working_folder/csmith/scripts/compiler_test.in
 	
  	### GCC PART: with instrumentation
 	# Setting the env. + cov. and keeping information of the versions

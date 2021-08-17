@@ -14,6 +14,7 @@ cd $TMP_SOURCE_FOLDER
 git clone git://gcc.gnu.org/git/gcc.git
 cd gcc
 git checkout releases/gcc-10
+cd ..
 ## Get pre-req. isl-0.18.tar.bz2;gmp-6.1.0.tar.bz2;mpc-1.0.3.tar.gz; mpfr-3.1.4.tar.bz2 => works for gcc-10
 ## GMP
 wget ftp://gcc.gnu.org/pub/gcc/infrastructure/gmp-6.1.0.tar.bz2
