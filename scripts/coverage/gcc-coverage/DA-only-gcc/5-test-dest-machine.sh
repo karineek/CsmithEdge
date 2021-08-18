@@ -16,6 +16,7 @@ fi
 base=$project_folder
 seed_location=$base/Data/seeds/seeds-$process_number.txt 		# seed location
 csmith_location=$base/csmith						# csmith location
+wda_folder=$base/AE/Data/set-3/WDA/					# location of dynamic anlysis results for this set
 configuration_location=$working_folder/csmith/scripts/compiler_test.in	# config file locatoin
 outputs_location=../../../ # where we will put all outputs
 
@@ -83,7 +84,7 @@ do
 	# Run compiler and save coverage data
  	export GCOV_PREFIX=$working_folder/coverage_gcda_files/application_run-$modify
 	export GCOV_PREFIX_STRIP=0
- 	./RRS5_1-compiler_test.sh $process_number $nb_gen_progs $nb_progs_to_gen_per_step $modify $seed_location $csmith_location $configuration_location $outputs_location "$compile_line" "$csmith_flags"
+ 	./RRS5_1-compiler_test.sh $process_number $nb_gen_progs $nb_progs_to_gen_per_step $modify $seed_location $csmith_location $configuration_location $outputs_location "$compile_line" "$csmith_flags" $wda_folder
 	unset GCOV_PREFIX
 	unset GCOV_PREFIX_STRIP
 		
