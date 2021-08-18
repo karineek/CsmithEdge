@@ -26,12 +26,9 @@ function keep_required_safe {
 			else
 				locF=$loc
 		    fi
-			#echo "[$loc]"
 		done
-		#echo "location is: [$locF]"
-		#echo "Function number is: [$funcF]"
 
-        #Replace the rest of the calls to unsafe macros
+        	#Replace the rest of the calls to unsafe macros
 		keyword_raw='/* ___REMOVE_SAFE__OP *//*'$locF'*//* ___SAFE__OP */('
 		keyword_regexp="$(printf '%s' "$keyword_raw" | sed -e 's/[]\/$*.^|[]/\\&/g')"
 
@@ -54,16 +51,6 @@ function replace2unsafe {
 	replacement_raw='_unsafe_macro'
 	replacement_regexp="$(printf '%s' "$replacement_raw" | sed -e 's/[\/&]/\\&/g')"
 	sed -i "s/$keyword_regexp/$replacement_regexp/g" $testcaseModify
-
-
-	#Add missing header unsafe macros
-	#echo "#include \"unsafe_math_macros.h\""|cat - $testcaseModify > /tmp/out && mv /tmp/out $testcaseModify
-	#keyword_raw='#include "csmith.h"'
-	#keyword_regexp="$(printf '%s' "$keyword_raw" | sed -e 's/[]\/$*.^|[]/\\&/g')"
-
-	#replacement_raw='#include "unsafe_math_macros_eCast.h"'
-	#replacement_regexp="$(printf '%s' "$replacement_raw" | sed -e 's/[\/&]/\\&/g')"
-	#sed -i "s/$keyword_regexp/$replacement_regexp/g" $testcaseModify
 }
 
 #################################### Modify TEST ####################################
@@ -123,47 +110,29 @@ function coverage_test_only {
 
 ################### MAIN ###############################
 # Basic parameters
-compiler=$1			# Compiler to test
-process=$2			# To create temp storage for exec
-seed=$3		  	# File with all the seeds to use
-testcaselogger=$4 		# The logger file for the results
-cov=$5				# To test for cov=1, else =0
-modify=$6			# Do we run on modified or original tests
-csmith_location=$7		# Csmith location
-csmith_flags=$8		# Csmith options
-compile_line=$9		# Includes + Duse
-compilerflags=${10}		# compiler flags
+compiler=$1		# Compiler to test
+seed=$2			# File with all the seeds to use
+testcaselogger=$3	# The logger file for the results
+wda_folder=$4		# Folder with Results.txt files
+modify=$5		# Do we run on modified or original tests
+csmith_location=$6	# Csmith location
+csmith_flags=$7		# Csmith options
+compile_line=$8		# Includes + Duse
+compilerflags=$9	# compiler flags
 
 # Single iteration, requires a compiler and a seed
-#CSMITH_USER_OPTIONS=" --bitfields --packed-struct"
 CSMITH_USER_OPTIONS=$csmith_flags
 
-## For debug only
-#echo "Compiler=$compiler"
-#echo "process=$process"
-#echo "seed=$seed"
-#echo "testcaselogger=$testcaselogger"
-#echo "csmith_location=$csmith_location"
-#echo "csmith_flags=$csmith_flags"
-#echo "compile_line=$compile_line"
-#echo "compilerflags=$compilerflags"
 # Check if second parameter is a number
 re='^[0-9]+$'
 if ! [[ $seed =~ $re ]] ; then
 	echo ">> error: Not a number" >&2; exit 1
 fi
-
 # folders for all the results
 folder=$compiler-mainRes
-testcaseRes='../RSS-v2-general/seedsSafeLists_small'/'__test'$seed'Results'
-if [ ! -f $testcaseRes ]
-	then
-	#echo "Seed's list is missing: $testcaseRes"
-	## Only generate and compile test case to measure coverage
-	if [[ "$cov" == "1" ]]
-		then
-		coverage_test_only "$seed"
-	fi
-else 
+testcaseRes=$wda_folder/'__test'$seed'Results'
+if [ ! -f $testcaseRes ] &&  [[ "$modify" == "1" ]] ; then
+	coverage_test_only "$seed" # Just measure coverage if cannot run the program
+else
 	modify_test "$seed" # Run a single test
 fi
