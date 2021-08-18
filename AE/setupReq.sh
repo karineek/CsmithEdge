@@ -65,10 +65,11 @@ eval $(opam config env)
 
 # Getting Csmith
 cd $base
-git clone https://github.com/csmith-project/csmith.git
+git clone https://github.com/csmith-project/csmith.git temp
+cd ./temp ; git checkout d0b585afb1a3de8c11f33c355bbba739dcf1d01a
+cd $base ; cp -rf csmith/* temp/ ; cp -rf temp/* csmith/
 cd ./csmith
-git checkout d0b585afb1a3de8c11f33c355bbba739dcf1d01a 
 mkdir build
-cd bulid/
+cd build/
 cmake ../
 make -j$(nproc)
