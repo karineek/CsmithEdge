@@ -9,8 +9,8 @@ function modify_test {
 	
 	# Test exec	
 	filesize=`stat --printf="%s" $testcaseModify`
-	ulimit -St 500;./$testcaseEXEC >> $testcaselogger
-	echo "seed= $seed, size= $filesize" >> $testcaselogger
+	ulimit -St 500; $testcaseEXEC >> $testcaselogger
+	echo "program= $1, size= $filesize" >> $testcaselogger
 	echo "---" >> $testcaselogger
 	
 	#clean

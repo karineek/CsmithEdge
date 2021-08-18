@@ -25,11 +25,11 @@ if [[ "$modify" == "1" ]] ; then
 	echo "Get programs from from $program_location <CsmithEdge>"
 	## modify=1 : 0-original, 1-modify
 	#compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/RRS_runtime_test -I$csmith_location/build/runtime -lgcov -w" #how we compile it,modify=1
-	compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/RRS_runtime_test -I$csmith_location/build/runtime -DUSE_MATH_MACROS -lgcov -w" #how we compile it,modify=1
+	compile_line="-B$working_folder/gcc-build/gcc/. -lm -I/home/user42/float-headers/runtime/ -I$csmith_location/RRS_runtime_test -I$csmith_location/build/runtime -DUSE_MATH_MACROS -lgcov -w" #how we compile it,modify=1
 else
 	echo "Get seed list from $program_location <Csmith>"
 	## modify=0 : 0-original, 1-modify
-	compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/runtime -I$csmith_location/build/runtime -lgcov -w" #how we compile it,modify=0
+	compile_line="-B$working_folder/gcc-build/gcc/. -lm -I/home/user42/float-headers/runtime/ -I$csmith_location/runtime -I$csmith_location/build/runtime -lgcov -w" #how we compile it,modify=0
 	##compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/runtime -I$csmith_location/build/runtime -lgcov -w -DUSE_MATH_MACROS" #how we compile it,modify=0
 fi
 
