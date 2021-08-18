@@ -10,8 +10,7 @@ compconfg=$7							# Where to take the compiler configuration
 outputs_location=$8						# Where to expect the results
 compile_line=$9						# Include and -D params for testcase
 csmith_flags=${10}						# csmith flags
-# Was: $working_folder/csmith/scripts/compiler_test.in
-#echo "Get compilers lists: $working_folder/csmith/scripts/compiler_test.in"
+
 ### Check we have all the data we need before proceeding:
 if [ "$#" -ne 10 ]; then
 	echo "Illegal number of parameters. Please enter compiler and number of testcases to generate."
@@ -19,11 +18,9 @@ if [ "$#" -ne 10 ]; then
 	exit 1
 fi	
 
-#echo "Get compilers lists: $working_folder/csmith/scripts/compiler_test.in"
 # Sets the logger -general name
 logger=$outputs_location"__logger_cov"
-if [[ "$modify" == "1" ]]
-	then
+if [[ "$modify" == "1" ]] ; then
 	logger=$logger"M"
 fi
 
@@ -60,7 +57,7 @@ while read str; do
 	do 
 		cp=$c'p'
 		seed=`sed -n $cp $seed_location`
-		./RRS5_2_constructModifyTests.sh $compiler $process_number $seed $loggerCurr 1 $modify $csmith_location "$csmith_flags" "$compile_line" "${arr[1]}"
+		./RRS5_2_constructModifyTests.sh $compiler $seed $loggerCurr $wda_folder $modify $csmith_location "$csmith_flags" "$compile_line" "${arr[1]}"
 	done
 	## Per configuartion the loop generates $initc to $nb_gen_progs modified testcases
 done < $compconfg
