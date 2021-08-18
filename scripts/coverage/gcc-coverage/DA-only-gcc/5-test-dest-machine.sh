@@ -94,7 +94,8 @@ do
 	(
 		cd $working_folder/coverage_processed-$modify/x-$i
 		source $project_folder/../graphicsfuzz/gfauto/.venv/bin/activate
-		gfauto_cov_from_gcov --out run_gcov2cov.cov $working_folder/gcc-build/ $working_folder/coverage_gcda_files/application_run-$modify/ --num_threads 32 --gcov_uses_json >> gfauto.log 2>&1 
+		#gfauto_cov_from_gcov --out run_gcov2cov.cov $working_folder/gcc-build/ $working_folder/coverage_gcda_files/application_run-$modify/ --num_threads 32 --gcov_uses_json >> gfauto.log 2>&1 
+		gfauto_cov_from_gcov --out run_gcov2cov.cov $working_folder/gcc-build/ --gcov_prefix_dir $working_folder/coverage_gcda_files/application_run-$modify/ --num_threads 32 --gcov_uses_json >> gfauto.log 2>&1
 		gfauto_cov_to_source --coverage_out cov.out --cov run_gcov2cov.cov  $working_folder/gcc-build/ >> gfauto.log 2>&1 
 	)
 	cd $current_folder
