@@ -1,9 +1,9 @@
 # CsmithEdge - AE
 
 ## Install the Tool with its requirements
-Before starting, please check you have all the requirements installed.
+Before starting, please check you have all the requirements installed. The installation pulls several packages of python and other standard tools, which may take time if your internet connection is poor. There is no installation of our code at this phase, and you may skip it if you have all the requirements already installed.
 
-You can do this by running this script, which will also clone Csmith into this project.
+You can do this by running this script; this script will also clone Csmith into this project.
 ```
 ./setupReq.sh <path to CsmithEdge folder>
 ```
