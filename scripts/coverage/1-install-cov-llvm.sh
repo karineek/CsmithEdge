@@ -16,10 +16,12 @@ do
 	mkdir $working_folder/llvm-csmith-$i	## Create a new version
 	cp -rf $TMP_SOURCE_FOLDER/* $working_folder/llvm-csmith-$i	## Copy the data from the temp download folder
 	
-	### Update Csmith settings
-	mkdir $working_folder/llvm-csmith-$i/csmith/scripts/ ## Just incase it isn't there
-	cd $working_folder/llvm-csmith-$i
- 	echo $working_folder/llvm-csmith-$i"/llvm-install/usr/local/bin/clang -O3" > ./csmith/scripts/compiler_test.in
+        ### Update Csmith settings
+        cd $working_folder/llvm-csmith-$i
+        mkdir -p $working_folder/llvm-csmith-$i/csmith/scripts/	## Just incase it isn't there
+        touch $working_folder/llvm-csmith-$i/csmith/scripts/compiler_test.in
+        echo $working_folder/llvm-csmith-$i"/llvm-install/usr/local/bin/clang -O2" > $working_folder/llvm-csmith-$i/csmith/scripts/compiler_test.in
+
 
 	## Save information regarding the version and how we compile it
 	mkdir compilation_info

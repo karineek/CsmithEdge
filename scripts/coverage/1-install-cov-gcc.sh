@@ -26,15 +26,15 @@ do
 	echo ">> Copy gcc folder-$i of gcc"
 
 	### Create a working folder with GCC source
-	rm -rf $working_folder/gcc-csmith-$i 						## Remove the old version
-	mkdir $working_folder/gcc-csmith-$i							## Create a new version
+	rm -rf $working_folder/gcc-csmith-$i				## Remove the old version
+	mkdir $working_folder/gcc-csmith-$i				## Create a new version
 	cp -r $TMP_SOURCE_FOLDER/* $working_folder/gcc-csmith-$i	## Copy the data from the temp download folder
  
 	### Update Csmith settings
 	cd $working_folder/gcc-csmith-$i
-	mkdir -p $working_folder/csmith/scripts/
-	touch $working_folder/csmith/scripts/compiler_test.in
-	echo $working_folder/gcc-csmith-$i"/gcc-install/bin/gcc -O2" > $working_folder/csmith/scripts/compiler_test.in
+	mkdir -p $working_folder/gcc-csmith-$i/csmith/scripts/
+	touch $working_folder/gcc-csmith-$i/csmith/scripts/compiler_test.in
+	echo $working_folder/gcc-csmith-$i"/gcc-install/bin/gcc -O2" > $working_folder/gcc-csmith-$i/csmith/scripts/compiler_test.in
 	
  	### GCC PART: with instrumentation
 	# Setting the env. + cov. and keeping information of the versions

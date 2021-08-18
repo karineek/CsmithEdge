@@ -1,38 +1,38 @@
 #!/bin/bash 
-process_number=$1
-baseD=/home/user42
-working_folder=$baseD/gcc-csmith-1 ##$process_number
-nb_progs_to_gen=4 #100000
-nb_progs_to_gen_per_step=2 #20000
-#seed_location=../../Data/seeds_all/seeds_out$process_number.txt # seed location
-
-base=$baseD/RRS_EXPR # $baseD/git/RRS_EXPR
-seed_location=$base/scripts/WA-v2-standalone/seeds/seeds-$process_number.txt # seed location
-csmith_location=$base/csmith							# csmith location
-# csmith_exec=$base/csmith/build/src/csmith					# csmith exec
-configuration_location=$working_folder/csmith/scripts/compiler_test.in # config file locatoin
-outputs_location=../../ # where we will put all outputs
-
-## Change per test:
-#csmith_flags=" --bitfields --packed-struct " #" --bitfields --packed-struct --math-notmp --annotated-arith-wrappers" 
-
-## 0
-#modify=0 # 0-original, 1-modify
-#compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/runtime -I$csmith_location/build/runtime -lgcov -w" #how we compile it,modify=0
-##compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/runtime -I$csmith_location/build/runtime -lgcov -w -DUSE_MATH_MACROS" #how we compile it,modify=0
-#csmith_flags=" --bitfields --packed-struct " #" --bitfields --packed-struct --math-notmp" 
-
-## 1
-modify=1 # 0-original, 1-modify
-compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/RRS_runtime_test -I$csmith_location/build/runtime -lgcov -w" #how we compile it,modify=1
-#compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/RRS_runtime_test -I$csmith_location/build/runtime -DUSE_MATH_MACROS -lgcov -w" #how we compile it,modify=1
-csmith_flags=" --bitfields --packed-struct --annotated-arith-wrappers" #" --bitfields --packed-struct --math-notmp" 
+process_number=$1		# Seeds set number
+working_folder=$2		# compiler installed with coverage
+project_folder=$3		# project folder location (where CsmithEdge is)
+nb_progs_to_gen=$4		#100000
+nb_progs_to_gen_per_step=$5	#20000
+modify=$6			# 0 - regular Csmith, 1 - CsmithEdge
 
 ## Check we have process number
 if [ -z "$1" ]
   then
-	echo "No process number supplied."
-	exit 1
+        echo "No process number supplied."
+        exit 1
+fi
+
+base=$project_folder
+seed_location=$base/Data/seeds/seeds-$process_number.txt 		# seed location
+csmith_location=$base/csmith						# csmith location
+configuration_location=$working_folder/csmith/scripts/compiler_test.in	# config file locatoin
+outputs_location=../../../ # where we will put all outputs
+
+## Change per test:
+#csmith_flags=" --bitfields --packed-struct " #" --bitfields --packed-struct --math-notmp --annotated-arith-wrappers" 
+if [[ "$modify" == "1" ]] ; then
+	echo "Get seed list from $seed_location <CsmithEdge>"
+	## modify=1 : 0-original, 1-modify
+	#compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/RRS_runtime_test -I$csmith_location/build/runtime -lgcov -w" #how we compile it,modify=1
+	compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/RRS_runtime_test -I$csmith_location/build/runtime -DUSE_MATH_MACROS -lgcov -w" #how we compile it,modify=1
+	csmith_flags=" --bitfields --packed-struct --annotated-arith-wrappers" #" --bitfields --packed-struct --math-notmp" 
+else
+	echo "Get seed list from $seed_location <Csmith>"
+	## modify=0 : 0-original, 1-modify
+	compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/runtime -I$csmith_location/build/runtime -lgcov -w" #how we compile it,modify=0
+	##compile_line="-B$working_folder/gcc-build/gcc/. -I$csmith_location/runtime -I$csmith_location/build/runtime -lgcov -w -DUSE_MATH_MACROS" #how we compile it,modify=0
+	csmith_flags=" --bitfields --packed-struct " #" --bitfields --packed-struct --math-notmp" 
 fi
 
 time1=$(date +"%T")
@@ -56,17 +56,17 @@ current_folder=`pwd`
 
 ######################################## Prepare the env. for using GCC compiler ########################################
 # Restore softlink linker lto
-#cd $working_folder/gcc-build/gcc/
-#ln -sf liblto_plugin.so.0.0.0 liblto_plugin.so
-#ln -sf liblto_plugin.so.0.0.0 liblto_plugin.so.0
+cd $working_folder/gcc-build/gcc/
+ln -sf liblto_plugin.so.0.0.0 liblto_plugin.so
+ln -sf liblto_plugin.so.0.0.0 liblto_plugin.so.0
 
 ## Assure we are using the gcov in the gcc built:
-#usrLib=$working_folder/gcc-install
-#sudo rm -f /usr/local/bin/gcov /usr/bin/gcov 
-#sudo ln -s $usrLib/bin/gcov /usr/bin/gcov
+usrLib=$working_folder/gcc-install
+sudo rm -f /usr/local/bin/gcov /usr/bin/gcov 
+sudo ln -s $usrLib/bin/gcov /usr/bin/gcov
 
 # Back to original folder
-#cd $current_folder
+cd $current_folder
 
 ######################################## Start Cov. ########################################
 # Loop over compilation and coverage measurement
@@ -92,7 +92,7 @@ do
 	mkdir -p $working_folder/coverage_processed-$modify/x-$i
 	(
 		cd $working_folder/coverage_processed-$modify/x-$i
-		source $baseD/graphicsfuzz/gfauto/.venv/bin/activate
+		source $project_folder/../graphicsfuzz/gfauto/.venv/bin/activate
 		gfauto_cov_from_gcov --out run_gcov2cov.cov $working_folder/gcc-build/ $working_folder/coverage_gcda_files/application_run-$modify/ --num_threads 32 --gcov_uses_json >> gfauto.log 2>&1 
 		gfauto_cov_to_source --coverage_out cov.out --cov run_gcov2cov.cov  $working_folder/gcc-build/ >> gfauto.log 2>&1 
 	)
@@ -103,5 +103,5 @@ echo "DONE. RESULTS AVAILABLE IN $working_folder/coverage_processed-$modify/x-$i
 ls -l $working_folder/coverage_processed-$modify/x-$i
 
 ## Revert back all gcc changes: restore gcov
-##sudo rm -f /usr/local/bin/gcov /usr/bin/gcov 
-##sudo ln -s /usr/bin/gcov-10 /usr/bin/gcov
+sudo rm -f /usr/local/bin/gcov /usr/bin/gcov 
+sudo ln -s /usr/bin/gcov-10 /usr/bin/gcov
