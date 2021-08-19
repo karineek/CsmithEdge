@@ -64,6 +64,7 @@ opam install frama-c.22.0 -y
 eval $(opam config env)
 
 # Getting Csmith
+sudo apt-get install libboost-all-dev
 cd $base
 git clone https://github.com/csmith-project/csmith.git temp
 cd ./temp ; git checkout d0b585afb1a3de8c11f33c355bbba739dcf1d01a
