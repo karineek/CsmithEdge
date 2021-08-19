@@ -77,5 +77,37 @@ for example
 ```
 
 ## Coverage (Section 4.3)
+Section 4.3 compares coverage of four different sets of programs (CsmithEdge, CsmithEdge with WSA only, CsmithEdge with WDA only and Csmith). To reproduce with a smaller set (set of 10 programs instead of 135k):
 
+### Set 1 - CsmithEdge
+TODO 
 
+### Set 2 - CsmithEdge
+TODO
+
+### Set 3 - CsmithEdge
+Run the fillowing script for GCC coverage:
+```
+./../scripts/coverage/gcc-coverage/DA-only-gcc/5-test-dest-machine.sh 3 <compiler-under-measure> <CsmithEdge-folder> <total-programs> <measure-cov-each-n-programs> 1
+```
+and for LLVM:
+```
+./../scripts/coverage/llvm-coverage/DA-only-gcc/5-test-dest-machine.sh 3 <compiler-under-measure> <CsmithEdge-folder> <total-programs> <measure-cov-each-n-programs> 1
+```
+for example:
+```
+./../scripts/coverage/gcc-coverage/DA-only-gcc/5-test-dest-machine.sh 3 /home/user42/GCC/gcc-csmith-1/ /home/user42/CsmithEdge/ 10 5 1
+```
+### Set 4 - Csmith
+Run the fillowing script for GCC coverage:
+```
+./../scripts/coverage/gcc-coverage/DA-only-gcc/5-test-dest-machine.sh 4 <compiler-under-measure> <CsmithEdge-folder> <total-programs> <measure-cov-each-n-programs> 0
+```
+and for LLVM:
+```
+./../scripts/coverage/llvm-coverage/DA-only-gcc/5-test-dest-machine.sh 4 <compiler-under-measure> <CsmithEdge-folder> <total-programs> <measure-cov-each-n-programs> 0
+```
+for example:
+```
+./../scripts/coverage/gcc-coverage/DA-only-gcc/5-test-dest-machine.sh 4 /home/user42/GCC/gcc-csmith-1/ /home/user42/CsmithEdge/ 10 5 0
+```
