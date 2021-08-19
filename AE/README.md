@@ -82,10 +82,10 @@ Section 4.3 compares coverage of four different sets of programs (CsmithEdge, Cs
 ### Set 1 - CsmithEdge
 TODO 
 
-### Set 2 - CsmithEdge
+### Set 2 - CsmithEdge with only weaking the static analysis results
 TODO
 
-### Set 3 - CsmithEdge
+### Set 3 - CsmithEdge with only weaking the dynamic analysis results
 Run the fillowing script for GCC coverage:
 ```
 ./../scripts/coverage/gcc-coverage/DA-only-gcc/5-test-dest-machine.sh 3 <compiler-under-measure> <CsmithEdge-folder> <total-programs> <measure-cov-each-n-programs> 1
