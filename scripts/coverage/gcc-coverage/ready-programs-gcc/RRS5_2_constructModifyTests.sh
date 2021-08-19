@@ -5,11 +5,11 @@ function modify_test {
 	testcaseEXEC=$1.o
 
 	# Compile and test modify program: (with input compiler flags or with defualts)
-	ulimit -St 500;$compiler $compile_line ${compilerflags} $testcaseModify -o $testcaseEXEC
+	ulimit -St 150;$compiler $compile_line ${compilerflags} $testcaseModify -o $testcaseEXEC
 	
 	# Test exec	
 	filesize=`stat --printf="%s" $testcaseModify`
-	ulimit -St 500; $testcaseEXEC >> $testcaselogger
+	ulimit -St 30; $testcaseEXEC >> $testcaselogger
 	echo "program= $1, size= $filesize" >> $testcaselogger
 	echo "---" >> $testcaselogger
 	
