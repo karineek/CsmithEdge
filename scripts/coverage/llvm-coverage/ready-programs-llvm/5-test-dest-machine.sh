@@ -6,6 +6,7 @@ nb_progs_to_gen=$4		#100000
 nb_progs_to_gen_per_step=$5	#20000
 modify=$6			# 0 - regular Csmith, 1 - CsmithEdge, 2 - CsmithEdge+float
 macros=$7			# 0 - functions, 1 - macros
+csmith_location=$8		# Csmith location
 basic_flags=" -lgcov -w"
 include_flags="-I$csmith_location/runtime -I$csmith_location/build/runtime"
 include_flags_RRS="-I$csmith_location/RRS_runtime_test -I$csmith_location/build/runtime"
