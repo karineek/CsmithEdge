@@ -21,7 +21,7 @@ if [ -z "$1" ]
 fi
 
 base=$project_folder
-program_location=$base'/Data/programs-float/set'$process_number		# seed location
+program_location=$base'/Data/programs/set'$process_number		# seed location
 csmith_location=$base/csmith						# csmith location
 configuration_location=$working_folder/csmith/scripts/compiler_test.in	# config file locatoin
 outputs_location=../../../ # where we will put all outputs
