@@ -1,12 +1,6 @@
 #!/bin/bash
-shopt -s extglob # Activate extended pattern matching in bash
-
 working_folder=$1
 version=$2
-
-sudo apt-get install make
-sudo apt-get install flex -y
-sudo apt-get install -y bison
 
 # Downloading LLVM and Csmith sources, building Csmith
 TMP_SOURCE_FOLDER=$(mktemp -d $working_folder/.sources.XXXXXXX.tmp)
