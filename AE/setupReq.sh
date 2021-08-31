@@ -9,6 +9,9 @@ sudo apt install gcc-10 g++-10 -y
 sudo apt-get install clang-11 -y
 
 ## Csmith Req.
+sudo apt-get install make
+sudo apt-get install flex -y
+sudo apt-get install -y bison
 sudo apt install -y rename
 sudo apt install -y cmake
 sudo apt install -y m4
