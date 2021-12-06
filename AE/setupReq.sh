@@ -77,3 +77,13 @@ mkdir build
 cd build/
 cmake ../
 make -j$(nproc)
+
+# Get Csmith for comparison
+cd $base/../
+git clone https://github.com/csmith-project/csmith.git
+cd ./csmith ; git checkout d0b585afb1a3de8c11f33c355bbba739dcf1d01a
+mkdir build
+cd build/
+cmake ../
+make -j$(nproc)
+## DONE
