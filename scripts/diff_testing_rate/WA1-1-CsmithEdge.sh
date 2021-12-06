@@ -191,7 +191,7 @@ fi
 ## Safe math relaxation
 gen_RRS_mix_prob $TMPFILE $probfile_curr	## Generate the probablities
 cd $scripts_location; mkdir -p $rrs_folder ; TMPFILE_RRS=$base/$(mktemp)
-(ulimit -St 250; ./WA4_restore_RRS_given_prog.sh "clang-11" "$seed" "$rrs_folder" $TMPFILE $csmith_location $timeout_bound) > $TMPFILE_RRS 2>&1	# Generate the to-relax list
+(ulimit -St 250; ./WA4_restore_RRS_given_prog.sh "clang-10" "$seed" "$rrs_folder" $TMPFILE $csmith_location $timeout_bound) > $TMPFILE_RRS 2>&1	# Generate the to-relax list
 if [[ `grep ">> Plain Failed" $TMPFILE_RRS` == *">> Plain Failed"* ]] ; then
 	cat $TMPFILE_RRS ; rm $TMPFILE_RRS ; exit
 fi

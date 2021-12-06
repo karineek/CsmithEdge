@@ -94,7 +94,7 @@ if [[ $valid -eq 1 ]]; then
 		## Run modify
 		filesize=`stat --printf="%s" $progM`	
 		timeSTEX1=$(date +"%T")
-		execute_test $progM $csmith_build "$scripts_location/Plain11.txt" "clang-11 -O2 -w"	
+		execute_test $progM $csmith_build "$scripts_location/Plain11.txt" "clang-10 -O2 -w"	
 		timeSTEX2=$(date +"%T")	
 		execute_test $progM $csmith_build "$scripts_location/Plain10.txt" "gcc-10 -O2 -w"
 		timeSTEX3=$(date +"%T")

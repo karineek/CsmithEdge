@@ -7,7 +7,7 @@ function check_wt_ASAN {
 
 	# ASAN
 	rm -f a.out
-	(ulimit -St 300; clang-11 -fsanitize=address -O0 -w -fno-omit-frame-pointer -g $compile_line $prog)
+	(ulimit -St 300; clang-10 -fsanitize=address -O0 -w -fno-omit-frame-pointer -g $compile_line $prog)
 	if [[ ! -f "a.out" ]]; then ## check if the file exists
 	        echo ">> ASAN Failed Compilation"
 	        exit
@@ -33,7 +33,7 @@ function check_wt_MSAN {
 
 	# MSAN
 	rm -f a.out
-	(ulimit -St 300; clang-11 -fsanitize=memory -fno-omit-frame-pointer -g -O0 -w $compile_line $prog)
+	(ulimit -St 300; clang-10 -fsanitize=memory -fno-omit-frame-pointer -g -O0 -w $compile_line $prog)
 	if [[ ! -f "a.out" ]]; then ## check if the file exists
 		echo ">> MSAN Failed Compilation"
 		exit
@@ -59,7 +59,7 @@ function check_wt_UBSAN {
 
 	# UBSAN
 	rm -f a.out
-	(ulimit -St 300; clang-11 -fsanitize=undefined -g -O1 -lgcc_s --rtlib=compiler-rt -w $compile_line $prog)
+	(ulimit -St 300; clang-10 -fsanitize=undefined -g -O1 -lgcc_s --rtlib=compiler-rt -w $compile_line $prog)
 	if [[ ! -f "a.out" ]]; then ## check if the file exists
 		echo ">> UBSAN Failed Compilation"
 		exit
