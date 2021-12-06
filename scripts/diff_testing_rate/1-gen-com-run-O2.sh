@@ -32,8 +32,9 @@ do
 	(ulimit -St $timeout_bound; ./a1.out) > res1.txt 2>&1  ## Csmith original paper offered 5 seconds.
         if [[ `grep -e'time limit' -e'Killed' res1.txt | wc -l` -gt 0 ]] ; then
                 ## Timeout skip to make if far with CsmithEdge
-		echo ">>i>>>> Csmith, $i, $res1, $res2, $seed, $filesize, $time1, $time4, $time1, $time2, $time3, $time4, $time3, $time4, $time4, $time4, $time4, $time4"
-        else        
+		time5=$(date +"%T")
+        	echo ">> Csmith, $i, $res1, $res2, $seed, $filesize, $time1, $time5, $time1, $time2, $time3, $time5, $time3, $time4, $time5, $time5, $time5, $time5"
+	else        
                 res1=`cat res1.txt`
                 time5=$(date +"%T")
                 ## Test -O2

@@ -2,9 +2,8 @@
 
 ##### Keep all the safe ops we need
 function keep_required_safe {
-	testcaseName=$1
-	testcaseModify=$folder/'__'$testcaseName'M.c'
-	filename="$testcaseRes"
+	testcaseModify=$folder/'__'$1'M.c'
+	testcaseRes=$2
 	while read -r line; do
 		data="$line"
 
@@ -35,14 +34,12 @@ function keep_required_safe {
 		replacement_raw='('
 		replacement_regexp="$(printf '%s' "$replacement_raw" | sed -e 's/[\/&]/\\&/g')"
 		sed -i "s/$keyword_regexp/$replacement_regexp/g" $testcaseModify
-	done < "$filename"
+	done < "$testcaseRes"
 }
 
 #### Remove safe calls when not required
 function replace2unsafe {
-	testcaseName=$1
-	
-	testcaseModify=$folder/'__'$testcaseName'M.c'
+	testcaseModify=$folder/'__'$1'M.c'
 
 	#Replace the rest of the calls to unsafe macros
 	keyword_raw='/* ___REMOVE_SAFE__OP */'
@@ -59,31 +56,25 @@ function modify_test {
 	testcaseName='test'$1
 	testcaseModify=$folder/'__'$testcaseName'M.c'
 	original_testcase=$2
+	testcaseRes=$3
 	# Modify the test (the preprocessed file) 	
 	cp $original_testcase $testcaseModify 
 	# Keep ops required to be safe
-	keep_required_safe $testcaseName
+	keep_required_safe $testcaseName $testcaseRes
 	#Replace the rest of the calls to unsafe macros
 	replace2unsafe $testcaseName
 }
 
 ################### MAIN ###############################
 # Basic parameters
-seed=$1		# File with all the seeds to use
+seed=$1	# File with all the seeds to use
 testfile=$2	# original testcase
-
-# Check if second parameter is a number
-re='^[0-9]+$'
-if ! [[ $seed =~ $re ]] ; then
-	echo ">> error: Not a number" >&2; exit 1
-fi
+testcaseRes=$3	# Relax safe math relaxation analysis results
 
 # folders for all the results
 folder=`pwd`
-testcaseRes='seedsProbs/seedsSafeLists'/'__test'$seed'Results'
-if [ ! -f $testcaseRes ]
-	then
-	echo " >> Cannot find testcase list <$testcaseRes>"
-else 
-	modify_test "$seed" $testfile # Run a single test
+if [ ! -f $testcaseRes ]; then
+	echo " >> Cannot find testcase list <$testcaseRes>"; exit
 fi
+modify_test "$seed" $testfile $testcaseRes # Run a single test
+# Done

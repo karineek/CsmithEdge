@@ -60,6 +60,15 @@ replacement_regexp="$(printf '%s' "$replacement_raw" | sed -e 's/[\/&]/\\&/g')"
 sed -i "s/$keyword_regexp/$replacement_regexp/g" $testcase
 }
 
+############################## RUN CODE ###########################################
+function execute_program {
+	timeout_bound=$1
+	testcaseEXEC=$2
+	TMPFILE_LOGGER=$base$(mktemp).txt
+	(ulimit -St $timeout_bound; $testcaseEXEC) > $TMPFILE_LOGGER 2>&1
+	grep -e 'Condition' -e 'checksum' $TMPFILE_LOGGER | sort | uniq | head -9999 > /tmp/out
+	grep -ve'Condition' -ve'checksum' $TMPFILE_LOGGER > /tmp/err
+}
 #################################### GEN  Must SAFE location ######################
 function gen_loc {
 testcaseName='test'$1
@@ -67,34 +76,60 @@ testcase=$folder/'__'$testcaseName'.c'
 testcaseEXEC=$folder/'__'$testcaseName'Exec'
 testcaseRes=$folder/'__'$testcaseName'Results'
 rm -f $testcaseRes
+testcase=$2
 
 # DO the test: 
-(ulimit -St 300;$compiler -I$csmith_location/RRS_runtime_gen -I$csmith_location/build/runtime -O -w $testcase -o $testcaseEXEC)
-(ulimit -St $timeout_bound; $testcaseEXEC 2> /tmp/err | grep -e 'Condition' -e 'checksum' | sort | uniq | head -9999 > /tmp/out)
-
-# 1. Check no error
-res=`cat /tmp/err | wc -l`
-rm /tmp/err
-if (($res > 0)); 
-	then
-	echo 'Skip the test' $testcaseRes 'due to timeout/error.'
+(ulimit -St 150; $compiler -I$csmith_location/RRS_runtime_gen -I$csmith_location/build/runtime -O -w $testcase -o $testcaseEXEC)
+if [[ ! -f $testcaseEXEC ]]; then ## check if the file exists
+	echo ">> Plain Failed Compilation"
+	touch $folder/'__'$testcaseName'INVALID'
+	rm $testcase ; exit
 else
+	#(ulimit -St $timeout_bound; $testcaseEXEC 2> /tmp/err | grep -e 'Condition' -e 'checksum' | sort | uniq | head -9999) > /tmp/out
+	(execute_program $timeout_bound $testcaseEXEC) > /tmp/out
+	# 1. Check no error
+	printoutput=/tmp/err
+	timeout=`grep "time limit" $printoutput | wc -l`
+	if [[ $timeout -gt 0 ]]; then
+		echo ">> Plain Failed TIMEOUT"
+		touch $folder/'__'$testcaseName'INVALID'
+		rm $testcaseEXEC $testcase ; exit
+	fi
+	segf=`grep "Segmentation fault" $printoutput | wc -l`
+	if [[ $segf -gt 0 ]]; then
+		echo ">> Plain Failed Segmentation fault"
+		touch $folder/'__'$testcaseName'INVALID'
+		rm $testcaseEXEC $testcase ; exit
+	fi
+	illinst=`grep "Illegal instruction" $printoutput | wc -l`
+	if [[ $illinst -gt 0 ]]; then
+		echo ">> Plain Failed Illegal instruction"
+		touch $folder/'__'$testcaseName'INVALID'
+		rm $testcaseEXEC $testcase ; exit
+	fi      
+	res=`cat /tmp/err | wc -l`
+	#rm /tmp/err
+	if (($res > 0));  then
+		echo ">> Plain Failed due to other errors"
+		touch $folder/'__'$testcaseName'INVALID'
+		rm $testcaseEXEC $testcase ; exit
+	fi
+	
 	# 2. Check we have a result 
 	checksumEx=`cat /tmp/out | grep 'checksum' | wc -l`
-    	#echo "checksum counter is" $checksumEx
-	if (($checksumEx == 0)); 
-		then
-		echo 'Skip the test' $testcaseRes 'due to an error (no checksum).'
+	if (($checksumEx == 0)); then
+		echo '>> Plain Failed. Skip the test' $testcaseRes 'due to an error (no checksum).'
 		touch $folder/'__'$testcaseName'INVALID'
+		#rm $testcaseEXEC $testcase ; exit
+		exit
 	else
-       		# 3. Test if the list is complete
+		# 3. Test if the list is complete
 		# Test if there is a large loop and we had to cut the info.
 		cat /tmp/out | grep 'Condition' | sort | uniq | head -9999 > $testcaseRes
-       		rm /tmp/out
+		rm /tmp/out
 		LC=`cat $testcaseRes | wc -l`
-		if (($LC >= 9999)); 
-			then
-			echo '(error) Not all locations written to' $testcaseRes
+		if (($LC >= 9999)); then
+			echo '(warning) Not all locations written to' $testcaseRes
 		fi
 	fi
 fi
@@ -121,7 +156,7 @@ inject_flags "$testcase" "$lastline"
 amend_testcase "$testcase"
 
 # Generate locations SAFE required
-gen_loc "$seed"
+gen_loc "$seed" "$testcase"
 
 #clean
 rm $testcase

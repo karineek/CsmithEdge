@@ -7,5 +7,7 @@ timeout_bound=$3	# csmith-generated programs timeout when diff-testing
 while IFS= read -r seed
 do
 	## Generate
-	./WA1_post_gen_test.sh $seed $baseD $timeout_bound
+	./WA1_post_gen_test_v2.sh $seed $baseD $timeout_bound 1
 done < "$seeds"
+time2=$(date +"%T")
+echo "DONE."
