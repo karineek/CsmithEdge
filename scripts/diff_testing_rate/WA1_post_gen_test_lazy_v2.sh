@@ -74,25 +74,35 @@ if [[ $is_testcase -eq 0 ]] ; then
 else
 	## We assume we generated a UB-free program
 	## We later - after excuting the tests check this assumption.
+	valid=1
 fi
+## Set to default
+timeSV=$timeEG
+timeEV=$timeEG
+diff_lines_progs=0
+linesWAProg=0
+linesCsmithProg=0	
 timeEGnV=$(date +"%T")
+
 timeST=$timeEGnV
 ## Run Tests x2
 if [[ $valid -eq 1 ]]; then
-	(./WA5_restore_testcase_given_prog.sh $seed __temp_edge.c)
-	progM=__test$seed"M.c"
 	testcaseRes='seedsProbs/seedsSafeLists'/'__test'$seed'Results'
-	if [[ $progM -eq 0 ]] && [ -f $testcaseRes ] ; then
+	err_rrs=`(./WA5_restore_testcase_given_prog.sh "$seed" "__temp_edge.c" "$testcaseRes")`
+	progM=__test$seed"M.c"
+	if [ -f $progM ] && [ -f $testcaseRes ] ; then
 		## Run modify
-		filesize=`stat --printf="%s" $progM`
-		echo "seed= $seed, size= $filesize"
-	
-		execute_test $progM $csmith_build "$scripts_location/Plain11.txt" "clang-11 -O2 -w"		
+		filesize=`stat --printf="%s" $progM`	
+		timeSTEX1=$(date +"%T")
+		execute_test $progM $csmith_build "$scripts_location/Plain11.txt" "clang-11 -O2 -w"	
+		timeSTEX2=$(date +"%T")	
 		execute_test $progM $csmith_build "$scripts_location/Plain10.txt" "gcc-10 -O2 -w"
-		cat $scripts_location/Plain11.txt
-		cat $scripts_location/Plain10.txt
+		timeSTEX3=$(date +"%T")
+		res1=`cat $scripts_location/Plain10.txt`
+		res2=`cat $scripts_location/Plain11.txt`
 		## Test diff
-		if [[ `cat $scripts_location/Plain11.txt` != `cat $scripts_location/Plain10.txt` ]] ; then 
+		if [[ $res1 != $res2 ]] ; then
+			echo ">> Diff: <$res1> vs. <$res2>"
 			# First test if UB-free
 			## Check if generated a UB-Free program
 			timeSV=$(date +"%T")
@@ -117,20 +127,23 @@ if [[ $valid -eq 1 ]]; then
 				## Failed Validation of UB-free program: result already in UBfreedom_RC
 				## Don't print the diff in this case
 			fi
+		else
+			valid=2
 		fi
 	else 
 		valid=0
 		UBfreedom_RC=">> Failed Generating $progM"
 		## Failed Restoring Program after RRS
 	fi
+	rm -rf $progM # Don't need it now
 fi
 timeET=$(date +"%T")
 
 ###################################
 ## Output Final
 ###################################
-params=`cat "$wa_probs$seed" | tr "\n" ","`
-(rm __temp_edge.c __temp_orig.c test1e.txt test2e.txt test3e.txt test4e.txt test5e.txt temp.c res1.txt res2.txt probs_WeakenSafeAnalyse.txt platform.info output.txt csmith_test.c) > /tmp/err 2>&1
+params=`cat "$wa_probs$seed" | tr "\n" "|"`
+(rm Plain10.txt Plain11.txt __temp_edge.c __temp_orig.c test1e.txt test2c.txt test2e.txt test3c.txt test3e.txt test4c.txt test4e.txt test5c.txt test5e.txt temp.c res1.txt res2.txt probs_WeakenSafeAnalyse.txt platform.info output.txt csmith_test.c) > /tmp/err 2>&1
 timeE=$timeET
-echo ">> ($seed) | timeS: $timeS | timeE: $timeE | timeSV: $timeSV | timeEV: $timeEV | timeGenS: $timeS | timeGenE: $timeEG | timeExeS: $timeEG | timeExeE: $timeE | #line csmith: $linesCsmithProg | #lines wa: $linesWAProg | Delta: $diff_lines_progs | Valid: $valid | UB-NON-FREEDOM REASON ($UBfreedom_RC) | FaildRRS: $err_rrs | Parameters: $params"
+echo ">> CsmithEdge-Lazy, $res1, $res2, $seed, $filesize, $timeS, $timeE, $timeSV, $timeEV, $timeS, $timeEG, $timeEG, $timeE, $timeSTEX1, $timeSTEX2, $timeSTEX2, $timeSTEX3, $linesCsmithProg, $linesWAProg, $diff_lines_progs, $valid, ($UBfreedom_RC), ($err_rrs), ($params)"
 ## END

@@ -63,8 +63,8 @@ function gen_probs_WA {
 		fi 
 
 		## write to file $wa_probs
-		resulti=$(awk '{print $1/$2}' <<<"${probArr[$i]} 1000")
-		echo $resulti >> $wa_probs
+		result_i=$(awk '{print $1/$2}' <<<"${probArr[$i]} 1000")
+		echo $result_i >> $wa_probs
 	done
 	if [[ $activeWA -gt 0 ]]; then
 		args_other_WA="$wa_args --relax-anlayses-seed $seed_curr"
@@ -111,7 +111,7 @@ function gen_RRS_mix_prob {
 		done
 		## Test that we really did something
 		if [ ${#res_RRS_Wrapper_type} -eq 0 ]; then
-			echo ">> (WARNING) list is empty! <$res_RRS_Wrapper_type>"
+			#echo ">> (WARNING) list is empty! <$res_RRS_Wrapper_type>"
 			res_RRS_Wrapper_type="0"
 		fi
 	else

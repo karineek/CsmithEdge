@@ -4,37 +4,46 @@
 function keep_required_safe {
 	testcaseModify=$folder/'__'$1'M.c'
 	testcaseRes=$2
-	while read -r line; do
-		data="$line"
 
-		# Get locations:
-		temp=${#data}
-		size=$((temp - 44 -1)) 
-		var="${data:44:$size}"
-	 
-		isFirst=1
-		locF=0
-		funcF=0
-		locations=$(echo $var | tr "," " \n")
-		for loc in $locations
-		do
-		    if (($isFirst==1))
-		    	then
-		  		isFirst=0
-				funcF=$loc
-			else
-				locF=$loc
-		    fi
-		done
+	if [[ ${#testcaseRes} -eq 0 ]] ; then
+		echo " >> Empty testcase list A <$testcaseRes>"; exit
+	elif [ ! -f $testcaseRes ] ; then
+		echo " >> Cannot find testcase list A <$testcaseRes>"; exit
+	elif [ ! -f $testcaseModify ] ; then
+		echo " >> Cannot find testcase file A <$testcaseModify>"; exit
+	else
+		while read -r line; do
+			data="$line"
+			
+			# Get locations:
+			temp=${#data}
+			size=$((temp - 44 -1)) 
+			var="${data:44:$size}"
+			 
+			isFirst=1
+			locF=0
+			funcF=0
+			locations=$(echo $var | tr "," " \n")
+			for loc in $locations
+			do
+			    if (($isFirst==1))
+			    	then
+			  		isFirst=0
+					funcF=$loc
+				else
+					locF=$loc
+			    fi
+			done
 
-		#Replace the rest of the calls to unsafe macros
-		keyword_raw='/* ___REMOVE_SAFE__OP *//*'$locF'*//* ___SAFE__OP */('
-		keyword_regexp="$(printf '%s' "$keyword_raw" | sed -e 's/[]\/$*.^|[]/\\&/g')"
+			#Replace the rest of the calls to unsafe macros
+			keyword_raw='/* ___REMOVE_SAFE__OP *//*'$locF'*//* ___SAFE__OP */('
+			keyword_regexp="$(printf '%s' "$keyword_raw" | sed -e 's/[]\/$*.^|[]/\\&/g')"
 
-		replacement_raw='('
-		replacement_regexp="$(printf '%s' "$replacement_raw" | sed -e 's/[\/&]/\\&/g')"
-		sed -i "s/$keyword_regexp/$replacement_regexp/g" $testcaseModify
-	done < "$testcaseRes"
+			replacement_raw='('
+			replacement_regexp="$(printf '%s' "$replacement_raw" | sed -e 's/[\/&]/\\&/g')"
+			sed -i "s/$keyword_regexp/$replacement_regexp/g" $testcaseModify
+		done < "$testcaseRes"
+	fi
 }
 
 #### Remove safe calls when not required
@@ -73,8 +82,13 @@ testcaseRes=$3	# Relax safe math relaxation analysis results
 
 # folders for all the results
 folder=`pwd`
-if [ ! -f $testcaseRes ]; then
+if [[ ${#testcaseRes} -eq 0 ]] ; then
+	echo " >> Empty testcase list <$testcaseRes>"; exit
+elif [ ! -f $testcaseRes ] ; then
 	echo " >> Cannot find testcase list <$testcaseRes>"; exit
+elif [ ! -f $testfile ] ; then
+	echo " >> Cannot find testcase file <$testfile>"; exit
+else
+	modify_test "$seed" $testfile $testcaseRes # Run a single test
 fi
-modify_test "$seed" $testfile $testcaseRes # Run a single test
 # Done

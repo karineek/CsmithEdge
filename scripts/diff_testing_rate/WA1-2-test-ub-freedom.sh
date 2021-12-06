@@ -82,8 +82,8 @@ function check_wt_UBSAN {
 function check_wt_FramaC {	
 	progOrig=$1
 	output=$2
-	progFile==${progOrig##*/}
-	progRMv=$framac_run_folder/_rmv_$progFile
+	progFile=${progOrig##*/}
+	progRMv="$framac_run_folder/_rmv_$progFile"
 
 	# FRAMA-C
 	cd $framac_run_folder
@@ -166,7 +166,7 @@ else
 		check_wt_ASAN $csmithprog $outputFolder/$asan_output_x
 		diff_lines_ASAN=`diff -y --suppress-common-lines $outputFolder/$asan_output $outputFolder/$asan_output_x | wc -l`
 		if [[ $diff_lines_ASAN -gt 0 ]] ; then
-			echo ">> Failed ASAN"
+			echo ">> Failed ASAN Analysis"
 			exit
 		fi
 	fi ## ASAN
@@ -179,7 +179,7 @@ else
 		check_wt_MSAN $csmithprog $outputFolder/$msan_output_x
 		diff_lines_MSAN=`diff -y --suppress-common-lines $outputFolder/$msan_output $outputFolder/$msan_output_x | wc -l`
 		if [[ $diff_lines_MSAN -gt 0 ]] ; then
-			echo ">> Failed MSAN"
+			echo ">> Failed MSAN Analysis"
 			exit
 		fi
 	fi ## MSAN
@@ -192,20 +192,20 @@ else
 		check_wt_UBSAN $csmithprog $outputFolder/$ubsan_output_x
 		diff_lines_UBSAN=`diff -y --suppress-common-lines $outputFolder/$ubsan_output $outputFolder/$ubsan_output_x | wc -l`
 		if [[ $diff_lines_UBSAN -gt 0 ]] ; then
-			echo ">> Failed UBSAN"
+			echo ">> Failed UBSAN Analysis"
 			exit
 		fi
 	fi ## UBSAN
 	
 	## FRAMA-C
 	touch $framac_run_folder/$framac_output
-	check_wt_FramaC $program $framac_run_folder/$framac_output
+	check_wt_FramaC "$program" "$framac_run_folder/$framac_output"
 	count5=`cat "$framac_run_folder/$framac_output" | wc -l`
 	if [[ $count5 -gt 0 ]] ; then
-		check_wt_FramaC $csmithprog $framac_run_folder/$framac_output_x
-		diff_lines_FramaC=`diff -y --suppress-common-lines $framac_run_folder/$framac_output $framac_run_folder/$framac_output_x`
+		check_wt_FramaC "$csmithprog" "$framac_run_folder/$framac_output_x"
+		diff_lines_FramaC=`diff -y --suppress-common-lines "$framac_run_folder/$framac_output" "$framac_run_folder/$framac_output_x" | wc -l`
 		if [[ $diff_lines_FramaC -gt 0 ]] ; then
-			echo ">> Failed Frama-c"
+			echo ">> Failed Frama-c Analysis"
 			exit
 		fi
 	fi ## Frama-c

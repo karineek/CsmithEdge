@@ -10,7 +10,7 @@ i=0
 ######################################## Start Cov. ########################################
 # Loop over compilation and coverage measurement
 prog=csmith_test.c
-echo ">> Tool, Iteration, Result GCC O2, Result CLANG O2, SEED, File-Size, Start, End, Gen-Start, Gen-End, DIFF-Start, DIFF-END, TEST1-Comp-Start, TEST1-RUN-Start, TEST1-RUN-end, TEST2-Comp-Start, TEST2-Comp-end/TEST2-RUN-Start, TEST2-RUN-end"
+echo ">> Tool, Iteration, Result GCC O2, Result CLANG O2, SEED, File-Size, Start, End, Gen-Start, Gen-End, DIFF-Start, DIFF-END, TEST1-Comp-Start, TEST1-RUN-Start, TEST1-RUN-end, TEST2-Comp-Start, TEST2-Comp-end/TEST2-RUN-Start, TEST2-RUN-end, Valid?"
 while (( $i < $nb_progs_to_gen ));
 do
         ## Generat
@@ -33,7 +33,7 @@ do
 	if [[ `grep -e'time limit' -e'Killed' res1.txt | wc -l` -gt 0 ]] ; then
                 ## Timeout skip to make if far with CsmithEdge
 		time5=$(date +"%T")
-        	echo ">> Csmith, $i, $res1, $res2, $seed, $filesize, $time1, $time5, $time1, $time2, $time3, $time5, $time3, $time4, $time5, $time5, $time5, $time5"
+        	echo ">> Csmith, $i, $res1, $res2, $seed, $filesize, $time1, $time5, $time1, $time2, $time3, $time5, $time3, $time4, $time5, $time5, $time5, $time5, 0"
 	else        
                 res1=`cat res1.txt`
                 time5=$(date +"%T")
@@ -49,7 +49,7 @@ do
                         echo ">> Diff: <$res1> vs. <$res2>"
                 fi
                 time9=$(date +"%T")
-                echo ">> Csmith, $i, $res1, $res2, $seed, $filesize, $time1, $time9, $time1, $time2, $time3, $time9, $time3, $time4, $time5, $time6, $time7, $time8"
+                echo ">> Csmith, $i, $res1, $res2, $seed, $filesize, $time1, $time9, $time1, $time2, $time3, $time9, $time3, $time4, $time5, $time6, $time7, $time8, 1"
         fi
 done
 time2=$(date +"%T")
