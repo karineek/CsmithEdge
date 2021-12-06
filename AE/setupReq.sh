@@ -63,7 +63,7 @@ opam install alt-ergo.2.2.0
 opam install depext -y
 opam depext frama-c -y
 #opam install frama-c -y ==> till know bugs with Ocaml are solved
-opam install frama-c.22.0 -y
+opam install frama-c.24.0 -y
 eval $(opam config env)
 
 # Getting Csmith
@@ -77,3 +77,13 @@ mkdir build
 cd build/
 cmake ../
 make -j$(nproc)
+
+# Get Csmith for comparison
+cd $base/../
+git clone https://github.com/csmith-project/csmith.git
+cd ./csmith ; git checkout d0b585afb1a3de8c11f33c355bbba739dcf1d01a
+mkdir build
+cd build/
+cmake ../
+make -j$(nproc)
+## DONE
