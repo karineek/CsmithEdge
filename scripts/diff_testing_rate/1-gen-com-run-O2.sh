@@ -30,7 +30,7 @@ do
         (ulimit -St 300; clang-10 -O2 -w -I$csmith_location/build/runtime/ -I$csmith_location/runtime/ $prog -o a1.out)
         time4=$(date +"%T")
 	(ulimit -St $timeout_bound; ./a1.out) > res1.txt 2>&1  ## Csmith original paper offered 5 seconds.
-        if [[ `grep -e'time limit' -e'Killed' res1.txt | wc -l` -gt 0 ]] ; then
+	if [[ `grep -e'time limit' -e'Killed' res1.txt | wc -l` -gt 0 ]] ; then
                 ## Timeout skip to make if far with CsmithEdge
 		time5=$(date +"%T")
         	echo ">> Csmith, $i, $res1, $res2, $seed, $filesize, $time1, $time5, $time1, $time2, $time3, $time5, $time3, $time4, $time5, $time5, $time5, $time5"
