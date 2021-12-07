@@ -55,9 +55,10 @@ wa_probs=$scripts_location/seedsProbs/probs_WeakenSafeAnalyse_test.txt
 rrs_folder=$scripts_location/seedsProbs/seedsSafeLists
 framac_run_folder=$scripts_location/Frama-C-zone
 UBfreedom_RC=""
-###
+BUGS=$scripts_location/BUGS
+####
 
-mkdir -p $rrs_folder
+mkdir -p $rrs_folder $BUGS
 cd $scripts_location
 rm -f $wa_probs$seed $wa_probs __temp_edge.c __temp_orig.c
 
@@ -119,6 +120,7 @@ if [[ $execute_diff_testing -eq 1 ]]  && [[ $valid -eq 1 ]]; then
 		res2=`cat $scripts_location/Plain11.txt`
 		if [[ $res1 != $res2 ]] ; then
 			echo ">> Diff: <$res1> vs. <$res2>"
+			cp $progM $BUGS/
 		fi
 	else 
 		valid=0

@@ -54,9 +54,10 @@ wa_probs=$scripts_location/seedsProbs/probs_WeakenSafeAnalyse_test.txt
 rrs_folder=$scripts_location/seedsProbs/seedsSafeLists
 framac_run_folder=$scripts_location/Frama-C-zone
 UBfreedom_RC=""
-###
+BUGS=$scripts_location/BUGS
+####
 
-mkdir -p $rrs_folder
+mkdir -p $rrs_folder $BUGS
 cd $scripts_location
 rm -f $wa_probs$seed $wa_probs __temp_edge.c __temp_orig.c
 
@@ -102,7 +103,6 @@ if [[ $valid -eq 1 ]]; then
 		res2=`cat $scripts_location/Plain11.txt`
 		## Test diff
 		if [[ $res1 != $res2 ]] ; then
-			echo ">> Diff: <$res1> vs. <$res2>"
 			# First test if UB-free
 			## Check if generated a UB-Free program
 			timeSV=$(date +"%T")
@@ -122,6 +122,7 @@ if [[ $valid -eq 1 ]]; then
 				
 				# IF UB-free, print the diff
 				echo ">> Diff: <$res1> vs. <$res2>"
+				cp $progM $BUGS/
 			else
 				valid=0
 				## Failed Validation of UB-free program: result already in UBfreedom_RC
