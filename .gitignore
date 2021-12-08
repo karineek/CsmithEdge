@@ -1,0 +1,35 @@
+.gitignore~
+
+# Mac OS file
+.DS_store
+
+# CLion related folder
+.idea
+
+# /
+/*.d
+/*.o
+/*.swp
+/*.c~
+/*.h~
+/*.txt~
+/*.csv
+/*.out
+/*.o
+/*.zip
+/*.tar.*
+/*a.out
+
+# Remove tests files
+*platform.info*
+
+# Ignore build folders
+build/*
+*/scripts/*/corpus*/*
+
+# Frama-c temp files and logs
+scripts/diff_testing_rate/seedsProbs/*
+*/Frama-C-zone/*
+*/input*/*
+scripts/*/*.tar.xz
+scripts/*/a.out
