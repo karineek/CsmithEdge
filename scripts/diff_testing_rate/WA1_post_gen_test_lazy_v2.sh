@@ -83,9 +83,8 @@ timeEV=$timeEG
 diff_lines_progs=0
 linesWAProg=0
 linesCsmithProg=0	
-timeEGnV=$(date +"%T")
 
-timeST=$timeEGnV
+timeST=$(date +"%T")
 ## Run Tests x2
 if [[ $valid -eq 1 ]]; then
 	testcaseRes='seedsProbs/seedsSafeLists'/'__test'$seed'Results'
@@ -130,6 +129,8 @@ if [[ $valid -eq 1 ]]; then
 			fi
 		else
 			valid=2
+			timeSV=$timeSTEX3
+			timeEV=$timeSTEX3
 		fi
 	else 
 		valid=0
@@ -137,6 +138,12 @@ if [[ $valid -eq 1 ]]; then
 		## Failed Restoring Program after RRS
 	fi
 	rm -rf $progM # Don't need it now
+else
+	timeSTEX1=$timeST
+	timeSTEX2=$timeST
+	timeSTEX3=$timeST
+	timeSV=$timeSTEX3
+	timeEV=$timeSTEX3
 fi
 timeET=$(date +"%T")
 
@@ -146,5 +153,5 @@ timeET=$(date +"%T")
 params=`cat "$wa_probs$seed" | tr "\n" "|"`
 (rm Plain10.txt Plain11.txt __temp_edge.c __temp_orig.c test1e.txt test2c.txt test2e.txt test3c.txt test3e.txt test4c.txt test4e.txt test5c.txt test5e.txt temp.c res1.txt res2.txt probs_WeakenSafeAnalyse.txt platform.info output.txt csmith_test.c) > /tmp/err 2>&1
 timeE=$timeET
-echo ">> CsmithEdge-Lazy, $res1, $res2, $seed, $filesize, $timeS, $timeE, $timeSV, $timeEV, $timeS, $timeEG, $timeEG, $timeE, $timeSTEX1, $timeSTEX2, $timeSTEX2, $timeSTEX3, $linesCsmithProg, $linesWAProg, $diff_lines_progs, $valid, ($UBfreedom_RC), ($err_rrs), ($params)"
+echo ">> CsmithEdge-Lazy, $res1, $res2, $seed, $filesize, $timeS, $timeE, $timeSV, $timeEV, $timeSG, $timeEG, $timeST, $timeET, $timeSTEX1, $timeSTEX2, $timeSTEX2, $timeSTEX3, $linesCsmithProg, $linesWAProg, $diff_lines_progs, $valid, ($UBfreedom_RC), ($err_rrs), ($params)"
 ## END

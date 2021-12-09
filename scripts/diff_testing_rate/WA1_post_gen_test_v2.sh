@@ -99,9 +99,8 @@ else
 		## Failed Generation of UB-free program: result already in UBfreedom_RC
 	fi
 fi
-timeEGnV=$(date +"%T")
 
-timeST=$timeEGnV
+timeST=$(date +"%T")
 ## Run Tests x2
 if [[ $execute_diff_testing -eq 1 ]]  && [[ $valid -eq 1 ]]; then
 	testcaseRes='seedsProbs/seedsSafeLists'/'__test'$seed'Results'
@@ -137,5 +136,6 @@ timeET=$(date +"%T")
 params=`cat "$wa_probs$seed" | tr "\n" "|"`
 (rm Plain10.txt Plain11.txt __temp_edge.c __temp_orig.c test1e.txt test2c.txt test2e.txt test3c.txt test3e.txt test4c.txt test4e.txt test5c.txt test5e.txt temp.c res1.txt res2.txt probs_WeakenSafeAnalyse.txt platform.info output.txt csmith_test.c) > /tmp/err 2>&1
 timeE=$timeET
-echo ">> CsmithEdge, $res1, $res2, $seed, $filesize, $timeS, $timeE, $timeSV, $timeEV, $timeS, $timeEG, $timeEG, $timeE, $timeSTEX1, $timeSTEX2, $timeSTEX2, $timeSTEX3, $linesCsmithProg, $linesWAProg, $diff_lines_progs, $valid, ($UBfreedom_RC), ($err_rrs), ($params)"
+## >> Tool, Result GCC O2, Result CLANG O2, SEED, File-Size, Start, End, Ver-Start, Ver-End, Gen-Start, Gen-End, DIFF-Start, DIFF-END, TEST1-Comp-Start, TEST1-RUN-Start, TEST1-RUN-end, TEST2-Comp-Start, #line csmith, #lines wa, Delta, Valid, UB-NON-FREEDOM REASON, FaildRRS, Parameters
+echo ">> CsmithEdge, $res1, $res2, $seed, $filesize, $timeS, $timeE, $timeSV, $timeEV, $timeSG, $timeEG, $timeST, $timeET, $timeSTEX1, $timeSTEX2, $timeSTEX2, $timeSTEX3, $linesCsmithProg, $linesWAProg, $diff_lines_progs, $valid, ($UBfreedom_RC), ($err_rrs), ($params)"
 ## END
