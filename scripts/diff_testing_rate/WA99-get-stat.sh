@@ -89,49 +89,89 @@ if [[ $tool -eq 0 ]] ;then
 	avgS=`grep ">> Csmith" $logger | cut -d',' -f6  | awk '{if ($1 != "") {line+=1; sum+=$1;}} END{print sum/line}'`
 	echo ">> AVG. size (valid only): $avgS"
 	
-	avgT=`grep ">> Csmith" $logger | cut -d',' -f7,8 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s mean 1`
-	echo ">> AVG. time: $avgT"
+	avgT=`grep ">> Csmith" $logger | cut -d',' -f7,8 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm mean 1`
+	echo ">> AVG. Total time: $avgT"
 	
-	medianT=`grep ">> Csmith" $logger | cut -d',' -f7,8 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s median 1`
-	echo ">> Median time: $medianT"
+	medianT=`grep ">> Csmith" $logger | cut -d',' -f7,8 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm median 1`
+	echo ">> Median Total time: $medianT"
 	
-	avgTG=`grep ">> Csmith" $logger | cut -d',' -f9,10 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s mean 1`
+	minT=`grep ">> Csmith" $logger | cut -d',' -f7,8 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm min 1`
+	echo ">> MIN Total time: $minT"
+	
+	maxT=`grep ">> Csmith" $logger | cut -d',' -f7,8 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm max 1`
+	echo ">> MAX Total time: $maxT"
+	
+	avgTG=`grep ">> Csmith" $logger | cut -d',' -f9,10 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm mean 1`
 	echo ">> Generation AVG. time: $avgTG"
 	
-	medianTG=`grep ">> Csmith" $logger | cut -d',' -f9,10 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s median 1`
+	medianTG=`grep ">> Csmith" $logger | cut -d',' -f9,10 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm median 1`
 	echo ">> Generation Median time: $medianTG"
 	
-	avgTD=`grep ">> Csmith" $logger | cut -d',' -f11,12 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s mean 1`
+	avgTD=`grep ">> Csmith" $logger | cut -d',' -f11,12 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm mean 1`
 	echo ">> Testing AVG. time: $avgTD"
 	
-	medianTD=`grep ">> Csmith" $logger | cut -d',' -f11,12 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s median 1`
+	medianTD=`grep ">> Csmith" $logger | cut -d',' -f11,12 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm median 1`
 	echo ">> Testing Median time: $medianTD"
+	
+	q3TD=`grep ">> Csmith" $logger | cut -d',' -f11,12 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm q3 1`
+	echo ">> Testing Q3 time: $q3TD"
+	
+	minTD=`grep ">> Csmith" $logger | cut -d',' -f11,12 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm min 1`
+	echo ">> Testing MIN time: $minTD"
+	
+	maxTD=`grep ">> Csmith" $logger | cut -d',' -f11,12 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm max 1`
+	echo ">> Testing MAX time: $maxTD"
+################################################################################
 else
+################################################################################
 	avgS=`grep ">> Csmith" $logger | cut -d',' -f5  | awk '{if ($1 != "") {line+=1; sum+=$1;}} END{print sum/line}'`
 	echo ">> AVG. size (valid only): $avgS"
 	
-	#avgT=`grep ">> Csmith" $logger | cut -d',' -f6,7 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {sum+=1; gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); timeTot+=gap} END{print timeTot/sum}'`
-	avgT=`grep ">> Csmith" $logger | cut -d',' -f6,7 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s mean 1`
+	avgT=`grep ">> Csmith" $logger | cut -d',' -f6,7 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm mean 1`
 	echo ">> AVG. time: $avgT"
 	
-	medianT=`grep ">> Csmith" $logger | cut -d',' -f6,7 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s median 1`
+	medianT=`grep ">> Csmith" $logger | cut -d',' -f6,7 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm median 1`
 	echo ">> Median time: $medianT"
 	
-	avgTG=`grep ">> Csmith" $logger | cut -d',' -f10,11 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s mean 1`
+	minT=`grep ">> Csmith" $logger | cut -d',' -f6,7 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm min 1`
+	echo ">> MIN Total time: $minT"
+	
+	maxT=`grep ">> Csmith" $logger | cut -d',' -f6,7 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm max 1`
+	echo ">> MAX Total time: $maxT"
+	
+	avgTG=`grep ">> Csmith" $logger | cut -d',' -f10,11 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm mean 1`
 	echo ">> Generation AVG. time: $avgTG"
 	
-	medianTG=`grep ">> Csmith" $logger | cut -d',' -f10,11 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s median 1`
+	medianTG=`grep ">> Csmith" $logger | cut -d',' -f10,11 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm median 1`
 	echo ">> Generation Median time: $medianTG"
 	
-	avgTV=`grep ">> Csmith" $logger | cut -d',' -f8,9 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s mean 1`
+	avgTV=`grep ">> Csmith" $logger | cut -d',' -f8,9 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm mean 1`
 	echo ">> UB-freedom checks AVG. time: $avgTV"
 	
-	medianTV=`grep ">> Csmith" $logger | cut -d',' -f8,9 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s median 1`
+	medianTV=`grep ">> Csmith" $logger | cut -d',' -f8,9 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm median 1`
 	echo ">> UB-freedom checks Median time: $medianTV"
+	
+	q3TV=`grep ">> Csmith" $logger | cut -d',' -f8,9 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm q3 1`
+	echo ">> UB-freedom checks Q3 time: $q3TV"
+	
+	minTV=`grep ">> Csmith" $logger | cut -d',' -f8,9 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm min 1`
+	echo ">> UB-freedom checks MIN time: $minTV"
+	
+	maxTV=`grep ">> Csmith" $logger | cut -d',' -f8,9 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm max 1`
+	echo ">> UB-freedom checks MAX time: $maxTV"
 
-	avgTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s mean 1`
+	avgTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm mean 1`
 	echo ">> Testing AVG. time: $avgTD"
 	
-	medianTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s median 1`
+	medianTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm median 1`
 	echo ">> Testing Median time: $medianTD"
+	
+	q3TD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm q3 1`
+	echo ">> Testing Q3 time: $q3TD"
+	
+	minTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm min 1`
+	echo ">> Testing MIN time: $minTD"
+	
+	maxTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm max 1`
+	echo ">> Testing MAX time: $maxTD"
 fi
