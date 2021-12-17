@@ -1,6 +1,7 @@
 #!/bin/bash
 tool=$1	# 0 - Csmith, 1 - CsmithEdge, and 2 - CsmithEdge-Lazy
 logger=$2	# Logger of the 24 H experiment
+res_file=$3	# Where to print the table to 
 ################## START ######################
 
 ### TOTAL
@@ -71,6 +72,7 @@ rrs_5=`grep -a " >> Empty testcase list" $logger | wc -l`
 rrs_6=`grep -a " >> Cannot find testcase list" $logger | wc -l`
 rrs_7=`grep -a " >> Cannot find testcase file" $logger | wc -l`
 env_1=`grep -a ">>>>>> PLEASE re-insall frama-C!" $logger | wc -l`
+env_2=`grep -a ": Assertion " $logger | wc -l`
 
 all=`grep -a ">> Csmith" $logger | cut -d',' -f22 | grep -ve"()" | wc -l`
 
@@ -80,11 +82,12 @@ echo ">>> MSAN: $msan_comp, $msan_timeout, $msan_analysis, ($msan)"
 echo ">>> UBSAN: $ubsan_comp, $ubsan_timeout, $ubsan_analysis, ($ubsan)"
 echo ">>> Frama-C: $env_1, $framac_analysis, $framac"
 echo ">>> Plain: $plain_comp, $plain_timeout, $plain_seg, $plain_ill_inst, ($plain)"
-echo ">>> General-Plain: $rrs_1, $general_2, $general_3"
+echo ">>> General-Plain: $rrs_1, $general_2, $general_3, $env_2"
 echo ">>> General-RRS: $general_1, $rrs_2, $rrs_3, $rrs_4, $rrs_5, $rrs_6, $rrs_7"
 echo "..."
 echo ">> Hourly rate: $(($sample_size/ 24))"
 echo ">> Hourly rate - valid : $(($all_valid / 24))"
+
 if [[ $tool -eq 0 ]] ;then
 	avgS=`grep ">> Csmith" $logger | cut -d',' -f6  | awk '{if ($1 != "") {line+=1; sum+=$1;}} END{print sum/line}'`
 	echo ">> AVG. size (valid only): $avgS"
@@ -121,6 +124,13 @@ if [[ $tool -eq 0 ]] ;then
 	
 	maxTD=`grep ">> Csmith" $logger | cut -d',' -f11,12 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm max 1`
 	echo ">> Testing MAX time: $maxTD"
+	
+	avgTV=0
+	medianTV=0
+	
+	invalid_no_timeout=0
+	all_timedout=$invalid
+	echo ">> Timed-out rate: $((all_timedout / 24))"
 ################################################################################
 else
 ################################################################################
@@ -166,12 +176,21 @@ else
 	medianTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm median 1`
 	echo ">> Testing Median time: $medianTD"
 	
-	q3TD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm q3 1`
+	q3TD=`grep ">> Csmith" $logger | cut -d',' -f12,13| sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60);  print gap}' | datamash -s --narm q3 1`
 	echo ">> Testing Q3 time: $q3TD"
 	
-	minTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm min 1`
+	minTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60);  print gap}' | datamash -s --narm min 1`
 	echo ">> Testing MIN time: $minTD"
 	
-	maxTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60); print gap}' | datamash -s --narm max 1`
+	maxTD=`grep ">> Csmith" $logger | cut -d',' -f12,13 | sed 's:,::g' | awk 'function to_time(time,t,a) {split(time, a, ":"); t = mktime("1970 1 1 " a[1] " " a[2] " " a[3]);return t} {gap=(to_time($2)-to_time($1)+(24*60*60))%(24*60*60);  print gap}' | datamash -s --narm max 1`
 	echo ">> Testing MAX time: $maxTD"
+
+	invalid_no_timeout=$(($asan_comp+$asan_analysis+$msan_comp+$msan_analysis+$ubsan_comp+$ubsan_analysis+$framac_analysis+$plain_comp+$plain_seg+$plain_ill_inst+$general_1+$general_2+$general_3+$rrs_1+$rrs_2+$rrs_3+$rrs_4+$rrs_5+$rrs_6+$rrs_7+$env_1+$env_2))	
+	
+	all_timedout=$(($asan_timeout + $msan_timeout + $ubsan_timeout + $plain_timeout))
+	echo ">> Timed-out rate: $((all_timedout / 24))"
 fi
+
+echo " >> Generated, Timed-out, invalid, Usable, Usable Avg. Size, Gen. Avg., (median) s, Testing. Avg., (median) s, UB-Validator Avg., (median) s" > $res_file
+echo " $sample_size, $all_timedout, $invalid_no_timeout, $all_valid, $avgS, $avgTG, $medianTG, $avgTD, $medianTD, $avgTV, $medianTV" > $res_file
+# DONE
