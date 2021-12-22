@@ -1,6 +1,4 @@
 >> Tool, Iteration, Result GCC O2, Result CLANG O2, SEED, File-Size, Start, End, Gen-Start, Gen-End, DIFF-Start, DIFF-END, TEST1-Comp-Start, TEST1-RUN-Start, TEST1-RUN-end, TEST2-Comp-Start, TEST2-Comp-end/TEST2-RUN-Start, TEST2-RUN-end, Valid?
-rm: cannot remove 'csmith_test.c': No such file or directory
-rm: cannot remove 'res1.txt': No such file or directory
 >> Csmith, 1, checksum = 6C521310, checksum = 6C521310,  * Seed:      1744812702, 171315, 11:58:53, 11:58:57, 11:58:53, 11:58:55, 11:58:55, 11:58:57, 11:58:55, 11:58:56, 11:58:56, 11:58:56, 11:58:57, 11:58:57, 1
 >> Csmith, 2, checksum = 39D73B2F, checksum = 39D73B2F,  * Seed:      2896879519, 146024, 11:58:57, 11:59:01, 11:58:57, 11:59:00, 11:59:00, 11:59:01, 11:59:00, 11:59:00, 11:59:00, 11:59:00, 11:59:01, 11:59:01, 1
 >> Csmith, 3, checksum = D0A4F3BF, checksum = D0A4F3BF,  * Seed:      2836378954, 68384, 11:59:01, 11:59:03, 11:59:01, 11:59:02, 11:59:02, 11:59:03, 11:59:02, 11:59:03, 11:59:03, 11:59:03, 11:59:03, 11:59:03, 1
