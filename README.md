@@ -18,3 +18,37 @@ Requirements
 ** see subfolders, we modified few files in each. Replace the files in these folders with ours.
 
 See AE folder for instructions how to run the tool.
+
+## Install CsmithEdge from source
+CsmithEdge is built on top of Csmith. You need to first get the source files of csmith:
+```
+cd CsmithEdge
+rm -rf csmith 
+git clone https://github.com/csmith-project/csmith.git
+cd csmith/
+git checkout d0b585a
+cd ..
+git stash
+```
+
+Before build, if you do not have boost installed:
+```
+sudo apt-get install libboost-all-dev
+``` 
+Then build CsmithEdge:
+```
+mkdir build
+cd build
+cmake ../
+make
+```
+
+If you do not have Frama-C installed, use this script:
+```
+./0-install-frama-c.sh 
+```
+
+Check frama-c is installed:
+```
+frama-c --version
+```
