@@ -53,3 +53,16 @@ Check frama-c is installed:
 ```
 frama-c --version
 ```
+
+## Running CsmithEdge:
+To run CsmithEdge:
+```
+cd CsmithEdge/scripts 
+./CsmithEdge.sh <Path where the CsmithEdge project is> <logger-file> <seed> <compiler-A> <compiler-B> <Lazy?> <Extra-debug-info?>
+```
+With 9 for lazy and 0 for regular CsmithEdge. With 1 for extra debug information.
+
+For example:
+```
+./CsmithEdge.sh /home/ubuntu/CsmithEdge/ output-gen.log 3172827853 gcc-10 clang-13 0 1
+```
