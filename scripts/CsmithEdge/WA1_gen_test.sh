@@ -706,13 +706,13 @@ mkdir -p $rrs_folder
 
 ## Additional flags and vars
 probfile_curr=""
-time_out_flag=0			# If hit once timeout, skip all
-time_out_flag_orig=0	# to test if a csmith's testcase failed
-time_out_flag_edge=0	# to test if a csmithEdge's testcase failed
-diff_lines_progs=0		# to test if the programs are the same (and then we don't need validation)
-flag_dang_ptr=0			# Only if created dangling pointers shall call Frama-c
+time_out_flag=0		# If hit once timeout, skip all
+time_out_flag_orig=0	# to test if a csmith's test case failed
+time_out_flag_edge=0	# to test if a csmithEdge's test case failed
+diff_lines_progs=0	# to test if the programs are the same (and then we don't need validation)
+flag_dang_ptr=0		# Only if created dangling pointers shall call Frama-c
 maxRRS=0
-totalRiskProbs=0		# Discard if great than 3000
+totalRiskProbs=0	# Discard if greater than 3000
 curr_folder=`pwd`
 
 timeS=$(date +"%T")
