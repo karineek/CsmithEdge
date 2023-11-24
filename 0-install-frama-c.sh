@@ -32,5 +32,5 @@ opam install alt-ergo.2.2.0
 opam install depext -y
 opam depext frama-c -y
 #opam install frama-c -y ==> till know bugs with Ocaml are solved
-opam install frama-c.25.0 -y
+opam install frama-c.22.0 -y
 eval $(opam config env)
