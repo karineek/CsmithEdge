@@ -48,11 +48,11 @@ function general_report {
 	## General stat.
 	total=$(($total+1))
 	if [[ $diff_lines_progs == 0 ]]; then
-		testValid=1	# nothing crashed, same code, hence valid
+		testValid=1	# Nothing crashed, same code, hence valid
 	elif [[ $diff_lines_progs == 1 ]]; then
-		testValid=1	# same code, two different way to reproduce it!
+		testValid=1	# same code, two different ways to reproduce it!
 	elif [[ $time_out_flag_edge -eq 1 ]]; then	
-		testValid=0	## save time, if gets time out skips all sanitizers and checkers and marks as not-valid test
+		testValid=0	## save time, if gets time out skips all sanitisers and checkers and marks as not-valid test
 	else
 		## Check the reports:	
 		cut $framac_run_folder/Fres1.txt -d':' -f 3- > $framac_run_folder/cutFres1.txt
@@ -157,7 +157,7 @@ function print_line {
 		elif [[ $diff_lines_progs -lt 50 ]]; then
 			echo ">> SIMILAR CODE (with different parameters)" >> $dump123	
 		elif [[ $time_out_flag_edge -eq 1 ]]; then
-			echo ">> Invalid or timeout recieved when validating test case" >> $dump123
+			echo ">> Invalid or timeout received when validating test case" >> $dump123
 		else
 			print_debug_data
 		fi
@@ -214,10 +214,10 @@ function check_wt_FramaC {
 		ulimit -St 300; frama-c -eva -eva-slevel 100 -eva-plevel 256 -eva-precision 5 -eva-warn-undefined-pointer-comparison pointer -eva-no-alloc-returns-null -warn-signed-overflow -eva-no-show-progress -machdep x86_64 $progRMv > $output 2>&1
 		rm -f $progRMv
 
-		## Frama-C installation can easiliy be broken, test it:
+		## Frama-C installation can easily be broken, test it:
 		countError=`cat $output | grep "cannot load module" | wc -l`
 		if [[ $countError -gt 0 ]]; then
-			echo ">>>>>> PLEASE re-insall frama-C!"
+			echo ">>>>>> PLEASE re-install frama-C!"
 			cat $output | grep "cannot load module"
 			exit
 		fi
@@ -273,12 +273,12 @@ function check_plain {
 		timeout=`cat $printoutput | wc -l`
 		if [[ $timeout -eq 0 ]]; then
 			time_out_flag=1
-			echo "Recognized timeout, skip all sanitizers and checkers!"
+			echo "Recognized timeout, skip all sanitisers and checkers!"
 		fi
 		errorGen=`grep "No such file or directory" $printoutput | wc -l`
 		if [[ $errorGen -eq 1 ]]; then
 			time_out_flag=1
-			echo "Recognized error in generating this test-case, skip all sanitizers and checkers!"
+			echo "Recognized error in generating this test case, skip all sanitisers and checkers!"
 		fi
 	}
 }
@@ -300,7 +300,7 @@ function check_wt_ASAN {
 		timeout=`cat $printoutput | wc -l`
 		if [[ $timeout -eq 0 ]]; then
 			time_out_flag=1
-			echo "($tool) Recognized timeout (ASAN), skip other sanitizers and checkers!" 
+			echo "($tool) Recognized timeout (ASAN), skip other sanitisers and checkers!" 
 		fi
 	}
 	else
@@ -326,7 +326,7 @@ function check_wt_MSAN {
 		timeout=`cat $printoutput | wc -l`
 		if [[ $timeout -eq 0 ]]; then
 			time_out_flag=1
-			echo "($tool) Recognized timeout (MSAN), skip other sanitizers and checkers!" 
+			echo "($tool) Recognized timeout (MSAN), skip other sanitisers and checkers!" 
 		fi
 	}
 	else
@@ -352,7 +352,7 @@ function check_wt_UBSAN {
 		timeout=`cat $printoutput | wc -l`
 		if [[ $timeout -eq 0 ]]; then
 			time_out_flag=1
-			echo "($tool) Recognized timeout (UBSAN), skip other sanitizers and checkers!" 
+			echo "($tool) Recognized timeout (UBSAN), skip other sanitisers and checkers!" 
 		fi
 		cat $printoutput | grep ".c:" | grep -ve "SUMMARY: " -ve " misaligned address 0" > $printoutput.tmp
 		cp $printoutput.tmp $printoutput
@@ -379,15 +379,15 @@ function gen_test_case {
 	ulimit -St 150; $genrator $args $CSMITH_USER_OPTIONS --seed $curr_seed > $prog
 }
 
-## Generate probablity per test-case
+## Generate probability per test-case
 # 0 --> RRS with Functions (0) or Macro (1) or Both (2) (we always do RRS but can either use safe/unsafe macros or functions or both)
 # 1 --> --null-ptr-deref-prob
 # 2 --> --dangling-ptr-deref-prob
 # 3-end --> array to a file: $wa_probs (0,1,2,3 as 3,4,5,6)
 function gen_probs_WA {
 	sizeWA=$1		# Size of the array to generate
-	seed_curr=$2	# current seed
-	threshold=$3	# threshold to ativate WA options
+	seed_curr=$2		# current seed
+	threshold=$3		# threshold to activate WA options
 	probArr=()		# Start with an empty array
 	
 	## Create the probablities ##
@@ -416,7 +416,7 @@ function gen_probs_WA {
 	if [[ ${probArr[2]} -gt 990 ]]; then
 		probArr[2]=990
 	fi
-	## Keep all probablities
+	## Keep all probabilities
 	debugProbs=$( IFS=$','; echo "${probArr[*]}" )
 
 	## Create the command line call to Csmith ##
@@ -476,7 +476,7 @@ function gen_probs_WA {
 	fi
 
 	#### TEST WHAT TO DO WITH IT: risky or normal ####
-	totalRiskProbs=0	## Discard if great than 3000
+	totalRiskProbs=0	## Discard if greater than 3000
 	for (( i=0; i<$sizeWA; i++ ))
 	do
 		totalRiskProbs=$((probArr[$i]+totalRiskProbs))
@@ -492,7 +492,7 @@ function gen_RRS_mix_prob {
 	if [[ $resTest -gt 0 ]]; then
 		lastline=`grep "___REMOVE_SAFE__OP" $prog | tail -1`
 		get_max_RRS "$prog" "$lastline"
-		threshold_RRS=$((RANDOM%1000))	## Instead of making in 50/50 mix, makes it more intersting
+		threshold_RRS=$((RANDOM%1000))	## Instead of making in 50/50 mix, makes it more interesting
 		for (( i=1; i<$maxRRS; i++ ))
 		do
 			prob2take=$((RANDOM%1000))
@@ -544,17 +544,17 @@ function get_max_RRS {
 ############################################# TESTCASE - MAIN single seed #############################################
 function test_single_seed {
 
-	## Generate the test-cases:
+	## Generate the test cases:
 
 	###############################
-	# Building original test-case #
+	# Building original test case #
 	progA=temp_orig.c
 	tool="CSMITH"
 	gen_test_case $seed $progA $tool_exec "$csmith_args" "$tool-tests" $dump123
 	linesCsmithProg=`cat $progA | wc -l`
 	
 	###################################
-	# Building new relaxed test-cases #
+	# Building new relaxed test cases #
 	progB=temp_edge.c
 	tool="CSMITH-WA"
 	gen_probs_WA $probSize $seed 500 # 7 $seed 500, but for testing took other parameters (300)
@@ -574,7 +574,7 @@ function test_single_seed {
 		echo "(same code) Skips validation for $seed"
 	else
 		#####################################
-		# Validating new relaxed test-cases #
+		# Validating new relaxed test cases #
 
 		# INIT
 		time_out_flag=0			# If hit once timeout, skip all
@@ -597,7 +597,7 @@ function test_single_seed {
 		prog=temp_orig.c
 		tool="CSMITH"
 		
-		## Collect date to test
+		## Collect data to test
 		if [[ $time_out_flag_edge -eq 0 ]]; then ## Only if did not crash
 			## Check if there is an error at all (else why to continue testing?)
 			ASANresSucc2=`cat $curr_folder/ASANres2.txt  | wc -l`
@@ -620,9 +620,9 @@ function test_single_seed {
 	fi
 }
 
-## Restore testcase instead of generate it, if configuration files exists
+## Restore test instead of generating it, if configuration files exist
 function restore {
-	## Test if already exists
+	## Test if it already exists
 	if [ -f "$outputF/__test_annotated$seed.c" ]; then
 		if [ -f "$probfile_curr" ]; then
 			# skip, we already did it
@@ -633,7 +633,7 @@ function restore {
 			echo ">> Testcase already exists but with no configuration file. Repeat generation of $outputF/__test_annotated$seed.c." 
 		fi
 	else
-		## Test if the configuration file already exists, then restore the test-case
+		## Test if the configuration file already exists, then restore the test case
 		if [ -f "$probfile_curr" ]; then
 			sizeConfg=`cat "$probfile_curr" | wc -l`
 			if [[ ! "$sizeConfg" -eq "0" ]]; then
@@ -644,14 +644,14 @@ function restore {
 				if [[ "$isWA" -eq "0" ]]; then
 					gen_test_case $seed temp.c $tool_exec "$csmith_args" "Csmith-tests" $dump123
 				else
-					## Get location of probablities file
+					## Get the location of probabilities file
 					cmd=`head -1 $probfile_curr`
 					prob_file=`echo "$cmd" | awk '{for(i=1;i<=NF;i++) if ($i=="--relax-anlayses-prob") print $(i+1)}'`
 
-					## Create the probablities file
+					## Create the probabilities file
 					sed '1d;$d' $probfile_curr | sed '$d' > $prob_file
 
-					## Generate the modified testcase
+					## Generate the modified test case
 					wa_local_args=$cmd 
 					gen_test_case $seed temp.c $tool_exec "$wa_local_args" "WA-tests" $dump123
 				fi
@@ -676,12 +676,12 @@ function clean_itr {
 
 ####################################### Start Main #######################################
 CSMITH_USER_OPTIONS=" --bitfields --packed-struct "
-seed=$1 			# File with all the seeds to use - shall be only good seeds here!
+seed=$1 		# File with all the seeds to use - there shall be only good seeds here!
 base=$2			# base folder
-outputF=$3			# Output folder of the programs
-dump123=$4 			# Where to dump123 all results
-testcaselogger=$5 		# Keep reference results
-compA=$6		# Reference compilerA
+outputF=$3		# Output folder of the programs
+dump123=$4 		# Where to dump123 all results
+testcaselogger=$5 	# Keep reference results
+compA=$6		# Reference compiler A
 
 debugflag=1
 debugProbs=""
@@ -704,7 +704,7 @@ wa_args="$csmith_args --relax-anlayses-conditions --relax-anlayses-prob $wa_prob
 wa_local_args=""
 mkdir -p $rrs_folder
 
-## Additionl flags and vars
+## Additional flags and vars
 probfile_curr=""
 time_out_flag=0			# If hit once timeout, skip all
 time_out_flag_orig=0	# to test if a csmith's testcase failed
@@ -719,7 +719,7 @@ timeS=$(date +"%T")
 echo " ============= START ITR ($timeS) =============" >> "$dump123"
 probfile_curr=$wa_probs$seed
 
-## If test already esists, restore it
+## If the test already exists, restore it
 restore
 
 #########################################
@@ -731,6 +731,5 @@ test_single_seed
 cd $curr_folder
 general_report
 
-# cleaning before exit
+# Cleaning before exit
 clean_itr
-
