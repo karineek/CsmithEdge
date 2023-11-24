@@ -61,14 +61,20 @@ To use this script, you also need clang-10. To install clang-10:
 sudo apt install clang-10
 ```
 
+Say FOLDER-CSMITHEDGE is the path to where the CsmithEdge project is (where you cloned this repository).
 To run CsmithEdge:
 ```
 cd CsmithEdge/scripts 
-./CsmithEdge.sh <Path where the CsmithEdge project is> <logger-file> <seed> <compiler-A> <compiler-B> <Lazy?> <Extra-debug-info?>
+./CsmithEdge.sh <FOLDER-CSMITHEDGE> <logger-file> <seed> <compiler-A> <compiler-B> <Lazy?> <Extra-debug-info?>
 ```
 With 9 for lazy and 0 for regular CsmithEdge. With 1 for extra debug information.
 
 For example:
 ```
 ./CsmithEdge.sh /home/ubuntu/CsmithEdge/ output-gen.log 3172827853 gcc-10 clang-13 0 1
+```
+Then you can use it to test compiles. Say GCC-10 and Clang-11:
+```
+gcc-10 -I/home/ubuntu/CsmithEdge/csmith/build/runtime/ -I/home/ubuntu/CsmithEdge/csmith/RRS_runtime_test/ /home/ubuntu/CsmithEdge//scripts/CsmithEdge/seedsProbs/tmp/__test1716897851M.c
+clang-11 -I/home/ubuntu/CsmithEdge/csmith/build/runtime/ -I/home/ubuntu/CsmithEdge/csmith/RRS_runtime_test/ /home/ubuntu/CsmithEdge//scripts/CsmithEdge/seedsProbs/tmp/__test1716897851M.c
 ```
