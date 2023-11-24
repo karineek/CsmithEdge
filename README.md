@@ -55,6 +55,11 @@ frama-c --version
 ```
 
 ## Running CsmithEdge:
+To use this script, you also need clang-10. To install clang-10:
+```
+sudo apt install clang-10
+```
+
 To run CsmithEdge:
 ```
 cd CsmithEdge/scripts 
