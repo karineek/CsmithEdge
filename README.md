@@ -37,6 +37,7 @@ sudo apt-get install libboost-all-dev
 ``` 
 Then build CsmithEdge:
 ```
+cd csmith
 mkdir build
 cd build
 cmake ../
