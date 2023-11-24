@@ -456,7 +456,7 @@ function gen_probs_WA {
 
 	## to use during this test-case generation
 	wa_local_args="$args_pa $args_other_WA"
-	## Save to restore csmith args to create a test-case
+	## Save to restore csmith args to create a test case
 	echo $wa_local_args >> $probfile_curr
 	cat $wa_probs >> $probfile_curr
 
@@ -536,17 +536,17 @@ function get_max_RRS {
 ############################################# TESTCASE - MAIN single seed #############################################
 function test_single_seed {
 
-	## Generate the test-cases:
+	## Generate the test cases:
 
 	###############################
-	# Building original test-case #
+	# Building original test case #
 	progA=temp_orig.c
 	tool="CSMITH"
 	gen_test_case $seed $progA $tool_exec "$csmith_args" "$tool-tests" $dump123
 	linesCsmithProg=`cat $progA | wc -l`
 	
 	###################################
-	# Building new relaxed test-cases #
+	# Building new relaxed test cases #
 	progB=temp_edge.c
 	tool="CSMITH-WA"
 	gen_probs_WA $probSize $seed 500 # 7 $seed 500, but for testing took other parameters (300)
@@ -557,24 +557,24 @@ function test_single_seed {
 	## If the same program, then no need to validate
 	if [[ $diff_lines_progs -eq 0 ]]; then
 		echo "(same file) Skips validation for $seed"
-		gen_RRS_mix_prob $prog $probfile_curr ## but still we need to do the RRS part!
+		gen_RRS_mix_prob $prog $probfile_curr ## but still, we need to do the RRS part!
 		echo "SAME FILE" >> $curr_folder/Plain2.txt
 	elif [[ $diff_lines_progs -eq 1 ]]; then
 		echo "(same code) Skips validation for $seed"
-		gen_RRS_mix_prob $prog $probfile_curr ## but still we need to do the RRS part!
+		gen_RRS_mix_prob $prog $probfile_curr ## but still, we need to do the RRS part!
 		echo "SAME CODE" >> $curr_folder/Plain2.txt
 	else
 		#####################################
-		# Validating new relaxed test-cases #
+		# Validating new relaxed test cases #
 
 		# INIT
 		time_out_flag=0			# If hit once timeout, skip all
-		time_out_flag_edge=0			# If hit once timeout, skip all
-		same_res=0				# to test if same results
+		time_out_flag_edge=0		# If hit once timeout, skip all
+		same_res=0			# to test if the same results
 		prog=temp_edge.c
 		tool="CSMITH-WA"
 		## Plain
-		check_plain	$tool $prog $tool_build $curr_folder/Plain2.txt
+		check_plain $tool $prog $tool_build $curr_folder/Plain2.txt
 		## Quick
 		if [[ $time_out_flag -eq 0 ]]; then		
 			ulimit -St 300; gcc-10 -O2 -w -I$tool_build/../runtime/ -I$tool_build/runtime/ $prog
@@ -607,7 +607,7 @@ function test_single_seed {
 		time_out_flag=0			# If hit once timeout, skip all
 		prog=temp_orig.c
 		tool="CSMITH"
-		## Collect date to test
+		## Collect data to test
 		if [[ $time_out_flag_edge -eq 0 ]] && [[ $same_res -eq 1 ]]; then ## Only if did not crash
 			## Check if there is an error at all (else why to continue testing?)
 			ASANresSucc2=`cat $curr_folder/ASANres2.txt  | wc -l`
@@ -615,8 +615,8 @@ function test_single_seed {
 			UBSANresSucc2=`cat $curr_folder/UBSANres2.txt  | wc -l`
 			FramaCresSucc2=`cat $framac_run_folder/Fres2.txt  | wc -l`
 			if [[ $ASANresSucc2 -eq 1 ]] && [[ $MSANresSucc2 -eq 1 ]] && [[ $UBSANresSucc2 -eq 0 ]] && [[ $FramaCresSucc2 -eq 0 ]] ; then
-				## No problem detected in the new testcase, no need to compare it to the old one!
-				echo "(valid code) Skips validation against original testcase for $seed"
+				## No problem detected in the new test case, no need to compare it to the old one!
+				echo "(valid code) Skips validation against original test case for $seed"
 			else
 				check_plain $tool $prog $tool_build $curr_folder/Plain1.txt
 				if [[ $time_out_flag -eq 0 ]]; then ## Only if did not crash
@@ -628,9 +628,9 @@ function test_single_seed {
 	fi
 }
 
-## Restore testcase instead of generate it, if configuration files exists
+## Restore test instead of generating it if configuration files exist
 function restore {
-	## Test if already exists
+	## Test if it already exists
 	if [ -f "$outputF/__test_annotated$seed.c" ]; then
 		if [ -f "$probfile_curr" ]; then
 			# skip, we already did it
@@ -641,7 +641,7 @@ function restore {
 			echo ">> Testcase already exists but with no configuration file. Repeat generation of $outputF/__test_annotated$seed.c." 
 		fi
 	else
-		## Test if the configuration file already exists, then restore the test-case
+		## Test if the configuration file already exists, then restore the test case
 		if [ -f "$probfile_curr" ]; then
 			sizeConfg=`cat "$probfile_curr" | wc -l`
 			if [[ ! "$sizeConfg" -eq "0" ]]; then
@@ -652,14 +652,14 @@ function restore {
 				if [[ "$isWA" -eq "0" ]]; then
 					gen_test_case $seed temp.c $tool_exec "$csmith_args" "Csmith-tests" $dump123
 				else
-					## Get location of probablities file
+					## Get the location of the probabilities file
 					cmd=`head -1 $probfile_curr`
 					prob_file=`echo "$cmd" | awk '{for(i=1;i<=NF;i++) if ($i=="--relax-anlayses-prob") print $(i+1)}'`
 
-					## Create the probablities file
+					## Create the probabilities file
 					sed '1d;$d' $probfile_curr | sed '$d' > $prob_file
 
-					## Generate the modified testcase
+					## Generate the modified test case
 					wa_local_args=$cmd 
 					gen_test_case $seed temp.c $tool_exec "$wa_local_args" "WA-tests" $dump123
 				fi
@@ -668,7 +668,7 @@ function restore {
 				cp $curr_folder/temp.c $outputF/__test_annotated$seed.c
 			fi
 
-			# cleaning before exit
+			# Cleaning before exit
 			clean_itr
 			## Exit the script
 			exit
@@ -689,7 +689,7 @@ base=$2		# base folder
 outputF=$3		# Output folder of the programs
 dump123=$4 		# Where to dump123 all results
 testcaselogger=$5 	# Keep reference results
-compA=$6		# Reference compilerA
+compA=$6		# Reference compiler A
 compB=$7		# Another compiler to lazy-test UB
 
 debugflag=1
@@ -727,7 +727,7 @@ timeS=$(date +"%T")
 echo " ============= START ITR ($timeS) =============" >> "$dump123"
 probfile_curr=$wa_probs$seed
 
-## If test already esists, restore it
+## If test already exists, restore it
 restore
 
 #########################################
@@ -739,6 +739,5 @@ test_single_seed
 cd $curr_folder
 general_report
 
-# cleaning before exit
+# Cleaning before exit
 clean_itr
-
