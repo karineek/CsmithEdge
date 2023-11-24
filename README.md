@@ -14,6 +14,7 @@ Requirements
 6. cmake version 3.16.3
 7. Ninja 1.10.0
 8. GCC 10 (installed and can be accessed as gcc-10, needed only for coverage build of GCC)
+9. Clang-10 for the scripts
 
 ** see subfolders, we modified few files in each. Replace the files in these folders with ours.
 
