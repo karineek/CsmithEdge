@@ -1,5 +1,5 @@
 #!/bin/bash
-number_of_progs=10	# Set to be 10 for artifact; for accurate reasults please set to 100000
+number_of_progs=10	# Set to be 10 for artifact; for accurate results please set to 100000
 
 function diff_testing {
 	timeout_bound=$1
@@ -33,6 +33,5 @@ diff_testing 120
 rm a.out 
 rm csmith_test.c 
 rm platform.info 
-
 echo " >> Note: for the paper's results we measure the time according to the start/end time in $output. The time in this script is some more general evaluation for short time. To get more accurate results one shall increase the number of generated programs to be a large number."
 echo "DONE."
