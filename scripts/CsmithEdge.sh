@@ -45,7 +45,7 @@ if [[ $debug -eq 1 ]]; then
    	echo "seed=$seed"
     	echo "MainCompiler=$testedCompilerA"
      	echo "ReferenceCompiler=$testedCompilerB"
-      	echo "CsmithEdgeMode=$lazy (default=CsmithEdge Regular Mode; lazy=CsmithEdge Lazy Mode; csmith=CsmithEdge Relex Arithmetic Only Mode (ASE 2020 Paper)."
+      	echo "CsmithEdgeMode=$lazy (--default=CsmithEdge Regular Mode; --lazy=CsmithEdge Lazy Mode; --csmith=CsmithEdge Relex Arithmetic Only Mode (ASE 2020 Paper)."
         echo "Debug=$debug"
 fi
 
@@ -94,7 +94,7 @@ rm -f $confgFile $fileinvalid $safelist $modified_testcase $logger
 clean_itr "$scripts_folder"
 
 ## Generate WA test case:
-if [[ "$lazy" == "9" ]] ; then
+if [[ "$lazy" == "--csmith" ]] ; then
 	## Debug information
 	if [[ $debug -eq 1 ]]; then
 		echo ">> Relax arithmetic mode (only)."
@@ -106,7 +106,7 @@ if [[ "$lazy" == "9" ]] ; then
 	CSMITH_USER_OPTIONS=" --bitfields --packed-struct --annotated-arith-wrappers"
 	cp $seedsProbs/probs_OrigSafeAnalyse_test.txt $confgFile
 	ulimit -St 150; $genrator $CSMITH_USER_OPTIONS --seed $seed > $annotated_testcase
-elif [[ "$lazy" == "1" ]] ; then
+elif [[ "$lazy" == "--lazy" ]] ; then
         ## Debug information
         if [[ $debug -eq 1 ]]; then
                 echo ">> CsmitheEdge Lazy mode."
