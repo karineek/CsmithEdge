@@ -67,7 +67,11 @@ To run CsmithEdge:
 cd CsmithEdge/scripts 
 ./CsmithEdge.sh <FOLDER-CSMITHEDGE> <logger-file> <seed> <compiler-A> <compiler-B> <Lazy?> <Extra-debug-info?>
 ```
-With 9 for lazy and 0 for regular CsmithEdge. With 1 for extra debug information.
+Generation modes of CsmithEdge: three different values
+1. "--default": CsmithEdge Regular Mode
+2. "--lazy": CsmithEdge Lazy Mode
+3. "--csmith": CsmithEdge Relex Arithmetic Only Mode (ASE 2020 Paper).
+Debug information: with 1 for extra debug information.
 
 For example:
 ```
