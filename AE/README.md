@@ -18,16 +18,16 @@ To generate a single test case with CsmithEdege, please use the following script
 ```
 /home/user42/git/CsmithEdge/scripts/CsmithEdge.sh <base-folder> <logger> <seed> <compiler A> <compiler B> <Reg. or lazy> <print-debug-information>
 ```
-Where compiler B is required only for lazy version. For example:
+Where compiler B is required only for the lazy version. For example:
 ```
-/home/user42/git/CsmithEdge/scripts/CsmithEdge.sh /home/user42/git/CsmithEdge/ single_file_gen.log 1235349863 gcc-10 clang-10 1 0
+/home/user42/git/CsmithEdge/scripts/CsmithEdge.sh /home/user42/git/CsmithEdge/ single_file_gen.log 1235349863 gcc-10 clang-10 --lazy 0
 ```
 or
 ```
-/home/user42/git/CsmithEdge/scripts/CsmithEdge.sh /home/user42/git/CsmithEdge/ single_file_gen.log 1235349863 clang-11 clang-11 0 0
+/home/user42/git/CsmithEdge/scripts/CsmithEdge.sh /home/user42/git/CsmithEdge/ single_file_gen.log 1235349863 clang-11 clang-11 --default 0
 ```
 
-## Generating Tests (section 4.1 and 4 in general)
+## Generating Tests (sections 4.1 and 4 in general)
 
 CsmithEdge (regular and lazy) diff-testing with two compilers (A and B): 
 ```
@@ -44,7 +44,7 @@ or lazy CsmithEdge with gcc-11 and clang-12
 
 ## Rate of differential testing (Section 4.2)
 
-This section describes how to restore the results of section 4.2 in the evaluation. The scripts are currently set to run on a small set of programs. To restore similar results to what was reported in the paper, one should use a much larger set (say around 100,000 programs).
+This section describes how to restore the results of section 4.2 in the evaluation. The scripts are currently set to run on a small set of programs. One should use a much larger set (say around 100,000 programs) to restore similar results to what was reported in the paper.
 
 These scripts print the results with 10 s, 50 s and 120 s timeout. Each script run should take around 15-30 minutes.
 
@@ -77,16 +77,16 @@ for example
 ```
 
 ## Coverage (Section 4.3)
-Section 4.3 compares coverage of four different sets of programs (CsmithEdge, CsmithEdge with WSA only, CsmithEdge with WDA only and Csmith). To reproduce with a smaller set (set of 10 programs instead of 135k):
+Section 4.3 compares the coverage of four different sets of programs (CsmithEdge, CsmithEdge with WSA only, CsmithEdge with WDA only and Csmith). To reproduce with a smaller set (set of 10 programs instead of 135k):
 
 ### Set 1 - CsmithEdge
 TODO 
 
-### Set 2 - CsmithEdge with only weaking the static analysis results
+### Set 2 - CsmithEdge with only weakening the static analysis results
 TODO
 
-### Set 3 - CsmithEdge with only weaking the dynamic analysis results
-Run the fillowing script for GCC coverage:
+### Set 3 - CsmithEdge with only weakening the dynamic analysis results
+Run the following script for GCC coverage:
 ```
 ./../scripts/coverage/gcc-coverage/DA-only-gcc/5-test-dest-machine.sh 3 <compiler-under-measure> <CsmithEdge-folder> <total-programs> <measure-cov-each-n-programs> 1
 ```
@@ -99,7 +99,7 @@ for example:
 ./../scripts/coverage/gcc-coverage/DA-only-gcc/5-test-dest-machine.sh 3 /home/user42/GCC/gcc-csmith-1/ /home/user42/CsmithEdge/ 10 5 1
 ```
 ### Set 4 - Csmith
-Run the fillowing script for GCC coverage:
+Run the following script for GCC coverage:
 ```
 ./../scripts/coverage/gcc-coverage/DA-only-gcc/5-test-dest-machine.sh 4 <compiler-under-measure> <CsmithEdge-folder> <total-programs> <measure-cov-each-n-programs> 0
 ```
