@@ -67,15 +67,15 @@ To run CsmithEdge:
 cd CsmithEdge/scripts 
 ./CsmithEdge.sh <FOLDER-CSMITHEDGE> <logger-file> <seed> <compiler-A> <compiler-B> <Lazy?> <Extra-debug-info?>
 ```
-Generation modes of CsmithEdge: three different values
+Generation modes of CsmithEdge: three different values of Lazy?
 1. "--default": CsmithEdge Regular Mode
 2. "--lazy": CsmithEdge Lazy Mode
 3. "--csmith": CsmithEdge Relex Arithmetic Only Mode (ASE 2020 Paper).
-Debug information: with 1 for extra debug information.
+Debug information: with 1 for extra debug information (value via Extra-debug-info?).
 
 For example:
 ```
-./CsmithEdge.sh /home/ubuntu/CsmithEdge/ output-gen.log 3172827853 gcc-10 clang-13 0 1
+./CsmithEdge.sh /home/ubuntu/CsmithEdge/ output-gen.log 3172827853 gcc-10 clang-13 --default 1
 ```
 Then you can use it to test compiles. Say GCC-10 and Clang-11:
 ```
