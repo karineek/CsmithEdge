@@ -37,6 +37,19 @@ lazy=$6	# lazy=1, csmith=9 (but will add unsafe math part/DWA)
 ## Print Debug information
 debug=$7
 
+## Print info
+if [[ $debug -eq 1 ]]; then
+	echo "== Input Arguments =="
+ 	echo "base=$base"
+  	echo "logger=$logger"
+   	echo "seed=$seed"
+    	echo "MainCompiler=$testedCompilerA"
+     	echo "ReferenceCompiler=$testedCompilerB"
+      	echo "CsmithEdgeMode=$lazy (default=CsmithEdge Regular Mode; lazy=CsmithEdge Lazy Mode; csmith=CsmithEdge Relex Arithmetic Only Mode (ASE 2020 Paper)."
+        echo "Debug=$debug"
+fi
+
+## Start script:
 scripts_folder=$base/scripts/CsmithEdge
 tool_location=$base/csmith
 
@@ -80,7 +93,7 @@ rm -f $confgFile $fileinvalid $safelist $modified_testcase $logger
 # Clean before start
 clean_itr "$scripts_folder"
 
-## Generate WA test-case:
+## Generate WA test case:
 if [[ "$lazy" == "9" ]] ; then
 	## Debug information
 	if [[ $debug -eq 1 ]]; then
