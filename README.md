@@ -65,7 +65,7 @@ sudo apt install clang-10
 Say FOLDER-CSMITHEDGE is the path to where the CsmithEdge project is (where you cloned this repository).
 To run CsmithEdge:
 ```
-cd CsmithEdge/scripts 
+cd scripts 
 ./CsmithEdge.sh <FOLDER-CSMITHEDGE> <logger-file> <seed> <compiler-A> <compiler-B> <Lazy?> <Extra-debug-info?>
 ```
 Generation modes of CsmithEdge: three different values of Lazy?
