@@ -52,6 +52,7 @@ If you do not have Frama-C installed, use this script:
 
 Check frama-c is installed:
 ```
+eval $(opam config env)  # this is some systems needed
 frama-c --version
 ```
 
