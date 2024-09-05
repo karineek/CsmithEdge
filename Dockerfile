@@ -163,5 +163,5 @@ RUN /home/ubuntu/graphicsfuzz/gfauto/dev_shell.sh
 
 # Default command
 USER ubuntu
-WORKDIR /home/ubuntu//CsmithEdge
+WORKDIR /home/ubuntu/CsmithEdge
 CMD ["/bin/bash"]
