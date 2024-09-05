@@ -106,10 +106,10 @@ RUN apt update
 RUN apt-get install ocaml ocaml-native-compilers graphviz \
              libzarith-ocaml-dev libfindlib-ocaml-dev \
              liblablgtksourceview2-ocaml-dev liblablgtk2-gnome-ocaml-dev -y -f
-
-USER ubuntu
 RUN apt install opam -f -y
 RUN apt-get install libgtk-3-dev libgtksourceview-3.0-dev -y
+
+USER ubuntu
 RUN opam init --disable-sandboxing -y
 RUN opam update
 RUN opam init --disable-sandboxing -y
