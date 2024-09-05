@@ -117,7 +117,11 @@ RUN eval `opam config env`
 RUN opam install dune ppxlib menhir -y
 RUN opam install why3 why3-ide alt-ergo -y
 RUN eval $(opam env)
+
+USER root
 RUN apt remove ocaml -y
+
+USER ubuntu
 # environment setup
 RUN opam init --disable-sandboxing -y
 RUN eval `opam env`
