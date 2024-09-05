@@ -8,7 +8,7 @@ RUN useradd -ms /bin/bash ubuntu
 
 # Install dependencies
 RUN apt-get update
-RUN  apt-get install software-properties-common -y
+RUN apt-get install software-properties-common -y
 RUN add-apt-repository ppa:ubuntu-toolchain-r/test -y
 RUN add-apt-repository universe -y
 RUN apt-get install -y git build-essential wget curl
@@ -107,6 +107,7 @@ RUN apt-get install ocaml ocaml-native-compilers graphviz \
              libzarith-ocaml-dev libfindlib-ocaml-dev \
              liblablgtksourceview2-ocaml-dev liblablgtk2-gnome-ocaml-dev -y -f
 
+USER ubuntu
 RUN apt install opam -f -y
 RUN apt-get install libgtk-3-dev libgtksourceview-3.0-dev -y
 RUN opam init --disable-sandboxing -y
@@ -157,4 +158,6 @@ RUN chmod +x dev_shell.sh
 RUN /home/ubuntu/graphicsfuzz/gfauto/dev_shell.sh
 
 # Default command
+USER ubuntu
+WORKDIR /home/ubuntu//CsmithEdge
 CMD ["/bin/bash"]
