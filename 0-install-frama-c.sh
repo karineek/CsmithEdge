@@ -34,3 +34,7 @@ opam depext frama-c -y
 #opam install frama-c -y ==> till know bugs with Ocaml are solved
 opam install frama-c.22.0 -y
 eval $(opam config env)
+
+echo ">>> To run CsmithEdge:"
+tail -20 README.md
+echo ">> But first activate frama-c: eval $(opam config env)"
