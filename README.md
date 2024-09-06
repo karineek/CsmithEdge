@@ -2,7 +2,7 @@
 
 Experimental data and scripts to reproduce the results reported for CsmithEdge (updated to July 2021).
 
-Results and data appeared in the paper along with additional details, can be found [here](https://github.com/karineek/CsmithEdge/tree/master/results).
+Results and data that appeared in the paper along with additional details, can be found [here](https://github.com/karineek/CsmithEdge/tree/master/results).
 
 Requirements
 ------------
@@ -16,9 +16,9 @@ Requirements
 8. GCC 10 (installed and can be accessed as gcc-10, needed only for coverage build of GCC)
 9. Clang-10 for the scripts
 
-** see subfolders, we modified few files in each. Replace the files in these folders with ours.
+** see subfolders, we modified a few files in each. Replace the files in these folders with ours.
 
-See AE folder for instructions how to run the tool.
+See the AE folder for instructions on how to run the tool.
 
 ## Install CsmithEdge from source
 CsmithEdge is built on top of Csmith. You need to first get the source files of csmith:
@@ -83,3 +83,32 @@ Then you can use it to test compiles. Say GCC-10 and Clang-11:
 gcc-10 -I/home/ubuntu/CsmithEdge/csmith/build/runtime/ -I/home/ubuntu/CsmithEdge/csmith/RRS_runtime_test/ /home/ubuntu/CsmithEdge//scripts/CsmithEdge/seedsProbs/tmp/__test1716897851M.c
 clang-11 -I/home/ubuntu/CsmithEdge/csmith/build/runtime/ -I/home/ubuntu/CsmithEdge/csmith/RRS_runtime_test/ /home/ubuntu/CsmithEdge//scripts/CsmithEdge/seedsProbs/tmp/__test1716897851M.c
 ```
+
+## Using Docker
+
+Build the image:
+```
+docker build -t dockerfile .
+```
+
+Start a new docker container from the image:
+```
+docker run -it dockerfile
+```
+
+Once inside the docker, fix frama-c:
+```
+eval $(opam config env)
+frama-c --version
+```
+
+You can run the flowing to test all is working well:
+```
+cd scripts/
+./CsmithEdge.sh /home/ubuntu/CsmithEdge/ output-gen.log 3172827853 gcc clang --default 1
+gcc-10 -I/home/ubuntu/CsmithEdge/csmith/build/runtime/ -I/home/ubuntu/CsmithEdge/csmith/RRS_runtime_test/ /home/ubuntu/CsmithEdge//scripts/CsmithEdge/seedsProbs/tmp/__test3172827853M.c -o g.o
+clang -I/home/ubuntu/CsmithEdge/csmith/build/runtime/ -I/home/ubuntu/CsmithEdge/csmith/RRS_runtime_test/ /home/ubuntu/CsmithEdge//scripts/CsmithEdge/seedsProbs/tmp/__test3172827853M.c -o c.o
+./g.o 
+./c.o 
+```
+You can run again with a different seed than 3172827853.
